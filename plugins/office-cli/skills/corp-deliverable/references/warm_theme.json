@@ -1,0 +1,41 @@
+{
+  "name": "Warm Neutral",
+  "use": "A personal house palette. Warm-neutral field, charcoal ink, single coral accent. Built on 60-30-10. Distinct from the Corporate Blue identity — do not mix the two in one deliverable.",
+  "dark": false,
+  "colors": {
+    "bg": "#F5F1ED",
+    "bg_alt": "#E8E4DF",
+    "surface": "#F5F3F1",
+    "ink": "#1F1E1D",
+    "ink_soft": "#5C5650",
+    "ink_invert": "#F5F1ED",
+    "accent": "#CC785C",
+    "accent_ink": "#1F1E1D",
+    "rule": "#D4D0C9",
+    "rule_soft": "#E8E4DF",
+    "series": [
+      "#CC785C",
+      "#5C7B9C",
+      "#6B8E5C",
+      "#C28E3D",
+      "#8B7BAB",
+      "#5C9C8E"
+    ]
+  },
+  "fonts": {
+    "heading": "Arial",
+    "heading_alt": "微軟正黑體",
+    "body": "Arial",
+    "body_alt": "微軟正黑體",
+    "mono": "Consolas",
+    "mono_alt": "Menlo"
+  },
+  "discipline": "Warm neutral field carries roughly 60% of the surface; charcoal ink plus one supporting tint carries 30%; coral appears on about 10% and never more. Low contrast between the neutrals, high contrast between ink and field. No shadows, no coloured backgrounds beyond the neutral family.",
+  "never": [
+    "coral #CC785C as text on the cream field (2.92:1 — fails at every size)",
+    "white text on a coral fill (3.28:1 — use charcoal #1F1E1D at 5.08:1)",
+    "sage mist #B3CBC1 or rule #D4D0C9 as text on any neutral (1.5:1 and 1.4:1)",
+    "more than one accent colour on a page",
+    "mixing this palette with the Corporate Blue identity"
+  ]
+}

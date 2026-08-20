@@ -1,0 +1,50 @@
+{
+  "name": "Corporate Blue",
+  "use": "Corporate decks. Palette and geometry measured from the corporate master deck and reference-architecture deck.",
+  "dark": false,
+  "colors": {
+    "bg": "#FFFFFF",
+    "bg_alt": "#F0F6FC",
+    "surface": "#F0F6FC",
+    "ink": "#1A2230",
+    "ink_soft": "#5A6676",
+    "ink_invert": "#FFFFFF",
+    "accent": "#0B318F",
+    "accent_ink": "#FFFFFF",
+    "rule": "#C3D6EE",
+    "rule_soft": "#E6F2FC",
+    "series": [
+      "#0B318F",
+      "#00A3E6",
+      "#2E5BF0",
+      "#7C4DB8",
+      "#2FA84F",
+      "#AFC0D6"
+    ]
+  },
+  "fonts": {
+    "heading": "Arial",
+    "heading_alt": "微軟正黑體",
+    "body": "Arial",
+    "body_alt": "微軟正黑體",
+    "mono": "Consolas",
+    "mono_alt": "Menlo"
+  },
+  "geometry": {
+    "radius": 18,
+    "rule_w": 1.0,
+    "rule_w_heavy": 3.0,
+    "shadow": false,
+    "margin": 50,
+    "gutter": 18,
+    "card_fill": true
+  },
+  "discipline": "White field, no shadows, tinted rounded panels carrying grouped content, deep-blue circular icon badges, a full-width tinted callout band as the page's closing line. Dense and read-not-projected: type is small and hierarchy is carried by weight and colour, not size.",
+  "never": [
+    "sky #00A3E6 as small text on white (2.84:1 — fails the contrast gate)",
+    "coloured slide backgrounds; the field is always white",
+    "drop shadows or bevels",
+    "Calibri, or any theme-default font",
+    "any colour outside this block"
+  ]
+}

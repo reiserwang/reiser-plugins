@@ -1,0 +1,17 @@
+{
+  "name": "office-cli",
+  "version": "0.4.0",
+  "description": "Corporate deliverable toolkit — routes decks to deck-design/deck-build and documents to the OfficeCLI document DOM, with Corporate Blue house style applied by default.",
+  "keywords": [
+    "officecli",
+    "pptx",
+    "docx",
+    "xlsx",
+    "house-style",
+    "ooxml",
+    "deck-design",
+    "deck-build",
+    "router"
+  ],
+  "license": "Apache-2.0"
+}

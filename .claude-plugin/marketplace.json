@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "reiser-plugins",
+  "description": "Private plugin marketplace — Office document tooling and house style.",
+  "version": "0.4.0",
+  "owner": {
+    "name": "reiser-plugins"
+  },
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "office-cli",
+      "source": "./plugins/office-cli",
+      "description": "Corporate deliverable toolkit — routes decks to deck-design/deck-build and documents to the OfficeCLI document DOM, with Corporate Blue house style applied by default.",
+      "version": "0.4.0",
+      "category": "productivity",
+      "keywords": [
+        "officecli",
+        "pptx",
+        "docx",
+        "xlsx",
+        "house-style",
+        "ooxml",
+        "deck-design",
+        "deck-build"
+      ]
+    }
+  ]
+}
