@@ -1,12 +1,7 @@
 {
   "name": "office-cli",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Office document toolkit — routes decks to a style template, deck-design/deck-build or the OfficeCLI document DOM, with interchangeable house-style templates (ANA Blue, Reiser Warm) applied by default.",
-  "author": {
-    "name": "reiserwang",
-    "url": "https://github.com/reiserwang"
-  },
-  "homepage": "https://github.com/reiserwang/reiser-plugins",
   "keywords": [
     "officecli",
     "pptx",
