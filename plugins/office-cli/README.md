@@ -40,6 +40,8 @@ skills/house-style/
 
 Geometry is shared and identical across templates: **1440 × 810 pt** canvas, 56pt margins, 1328pt content band, 16.2pt gutter, 19 layouts with the same names and order in both. Restyling a deck from one template to the other is a master swap, not a rebuild.
 
+Both palettes are built on **60-30-10 by area** — 60% field and tints, 30% ink, 10% accent — declared in each `palette.md` and machine-readable in each `theme.json`. They diverge in one place: coral cannot be text, so Reiser Warm's accent band is fills only; deep blue is text-safe, so it counts as supporting when it is type and accent when it is area.
+
 Note that these decks are **read, not projected** — 30pt titles and 18pt body on a 1440pt canvas, equivalent to 20pt / 12pt on a conventional 960pt deck. This deliberately overrides the upstream OfficeCLI pptx skill's "titles ≥ 36pt" rule.
 
 ## Two install traps this plugin exists to prevent

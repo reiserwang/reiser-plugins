@@ -45,15 +45,37 @@
     "rule_w_hair": 0.75,
     "radius_note": "deck-build takes one radius; the template's own panels run 2.0-26.0pt by role. See references/grid.md."
   },
-  "discipline": "White field, no shadows, tinted rounded panels carrying grouped content, a 1.5pt accent rule under every title, accent spines coding category, and a full-width tinted band as the page's closing line. Dense and read-not-projected: type is small for its canvas and hierarchy is carried by weight and colour, not size.",
+  "discipline": "Built on 60-30-10 by area. 60% field: white page with #F0F6FC panel, #E6F2FC callout and #C3D6EE rules, all within 1.5:1 of each other so the tints read as one family. 30% supporting: #1A2230 headline ink, #5A6676 muted ink, and #0B318F where deep blue is type. 10% accent: #0B318F as area — title rules, spines, badges, fills, chart series 1 — plus #00A3E6 as a fill. Deep blue is text-safe at 11.35:1, so unlike Reiser Warm's coral it occupies both the 30% and the 10%; the ceiling governs blue as area, not blue as type. Cover, Section Divider and Closing are full-bleed accent by design and exempt. No shadows, no coloured field beyond those three layouts. Dense and read-not-projected: type is small for its canvas and hierarchy is carried by weight and colour, not size.",
   "never": [
     "sky #00A3E6 as text at any size (2.84:1 on white — fill only)",
     "green #2FA84F as body text (3.07:1 — display sizes only)",
-    "coloured slide backgrounds; the field is always white",
+    "muted ink #647084 on the #E6F2FC callout tint (4.41:1 — use #5A6676 at 5.14:1)",
+    "more than one accent as area per page; four blue-filled blocks is decoration, not an accent",
+    "charcoal text on a deep-blue fill — deep blue takes white at 11.35:1, unlike Reiser Warm's coral",
+    "coloured slide fields outside Cover / Section Divider / Closing",
     "drop shadows or bevels",
     "Calibri, or any theme-default font",
     "中文 without font.ea set to 微軟正黑體",
     "any colour outside palette.md",
     "mixing this identity with Reiser Warm in one file"
-  ]
+  ],
+  "proportions": {
+    "field_60": [
+      "#FFFFFF",
+      "#F0F6FC",
+      "#E6F2FC",
+      "#C3D6EE",
+      "#AFC0D6"
+    ],
+    "supporting_30": [
+      "#1A2230",
+      "#5A6676",
+      "#0B318F"
+    ],
+    "accent_10": [
+      "#0B318F",
+      "#00A3E6"
+    ],
+    "note": "#0B318F appears in both bands: as type it is supporting, as area it is accent."
+  }
 }

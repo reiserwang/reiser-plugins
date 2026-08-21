@@ -1,6 +1,6 @@
 # ANA Blue
 
-The brand-facing template. White field, deep blue accent, dense analyst-style pages.
+The brand-facing template. White field, deep blue accent, dense analyst-style pages, built on 60-30-10.
 
 **Use for** anything going out under the organisation's mark: board papers, regulator submissions, investor briefings, customer and partner decks, ESG material.
 **Do not use for** personal drafts or internal thinking documents — that is [`reiser-warm`](../reiser-warm/TEMPLATE.md). Never mix the two in one file.
@@ -24,6 +24,18 @@ officecli add deck.pptx slide --layout 'Cover'
 ```
 
 The 19 layouts, their placeholder indices and exact geometry are in [`../../references/layouts.md`](../../references/layouts.md). The grid is in [`../../references/grid.md`](../../references/grid.md).
+
+## The 60-30-10 split
+
+The rule is about *area*, not importance. Sixty percent is the surface you barely notice; ten percent is the thing you notice first.
+
+- **60% field** — `#FFFFFF` white, `#F0F6FC` panel, `#E6F2FC` callout, `#C3D6EE` rules, plus the `#AFC0D6` muted fill for inactive states. Their separation is deliberately low; white against panel is 1.09:1. The tints are one family, and the eye should not be asked to parse them as distinct zones. If you need a hard boundary, use a `#C3D6EE` rule, not a fill change.
+- **30% supporting** — `#1A2230` headline ink, `#5A6676` muted ink, and deep blue `#0B318F` *as text*.
+- **10% accent** — deep blue `#0B318F` *as area*, plus sky `#00A3E6` as a fill. One accent per page. Ten percent is a ceiling, not a target: a page with no blue fill at all is fine; a page with four blue-filled blocks has no accent, only decoration.
+
+**Deep blue sits in two bands, and this is the one way ANA Blue is not parallel to Reiser Warm.** Coral cannot be text, so the warm accent is unambiguously the 10%. Deep blue is text-safe at 11.35:1, so it is 30% when it is type — section titles, panel headings, table header text — and 10% when it is area. **The ceiling governs blue as area, not blue as type.** A page can carry blue headings throughout and still be on-discipline.
+
+**Cover, Section Divider and Closing are the deliberate exception** — full-bleed `#0B318F`, 100% accent area. The ceiling is a per-content-page rule; those three layouts exist to spend the accent all at once.
 
 ## Type scale
 

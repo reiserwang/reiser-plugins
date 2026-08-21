@@ -17,13 +17,16 @@ templates/<name>/
 
 Geometry is shared — see [`../references/grid.md`](../references/grid.md) and [`../references/layouts.md`](../references/layouts.md). The templates differ **only in colour**, which is what makes restyling a deck from one to the other a master swap rather than a rebuild.
 
+Both are built on **60-30-10 by area**: 60% field and tints, 30% ink, 10% accent, with the three divider layouts exempt. Each `palette.md` declares its own bands, and each `theme.json` carries the same split as a machine-readable `proportions` block.
+
 ## Adding a template
 
 1. `mkdir templates/<name>` and write the four files. Keep the geometry identical unless you have a reason not to — divergent geometry makes the layout reference wrong for your template, and you then owe a per-template geometry file.
 2. Build `<name>.pptx` by copying an existing template and replacing the theme's `clrScheme` plus the hard-coded `srgbClr` values in the master and the 19 layouts. Keep the layout **names** and **order** identical so `--layout 'Title and Content'` resolves in every template.
-3. Compute every contrast ratio rather than estimating — the snippet is in [`../references/contrast.md`](../references/contrast.md). Name the fill-only colours explicitly at the top of `palette.md`; that omission is the most common source of failed decks.
-4. Add a row to the table above and to the table in `../SKILL.md` § 1.
-5. Verify: open the file, confirm 19 layouts and the right theme name, render a slide per layout to PNG and look at it.
+3. Declare the 60-30-10 bands. `palette.md` needs a `60% — the field`, `30% — the supporting layer` and `10% — the accent` section, and `theme.json` needs the matching `proportions` block. State which band each colour belongs to; a colour that is text in one band and area in another (as ANA Blue's deep blue is) must say so explicitly.
+4. Compute every contrast ratio rather than estimating — the snippet is in [`../references/contrast.md`](../references/contrast.md). Name the fill-only colours explicitly at the top of `palette.md`; that omission is the most common source of failed decks.
+5. Add a row to the table above and to the table in `../SKILL.md` § 1.
+6. Verify: open the file, confirm 19 layouts and the right theme name, render a slide per layout to PNG and look at it.
 
 ## What must not go in a template
 

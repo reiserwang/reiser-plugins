@@ -55,5 +55,23 @@
     "中文 without font.ea set to 微軟正黑體",
     "the dark deck-build styles — dark-tech, data-journalism, chalkboard",
     "mixing this identity with ANA Blue in one file"
-  ]
+  ],
+  "proportions": {
+    "field_60": [
+      "#F5F1ED",
+      "#F5F3F1",
+      "#E8E4DF",
+      "#D4D0C9"
+    ],
+    "supporting_30": [
+      "#1F1E1D",
+      "#5C5650",
+      "#B3CBC1"
+    ],
+    "accent_10": [
+      "#CC785C",
+      "#9D5C47"
+    ],
+    "note": "coral is fill-only, so the accent band never carries type; #9D5C47 is its text-safe stand-in."
+  }
 }

@@ -18,6 +18,10 @@ Read this file, then read exactly one `templates/<name>/TEMPLATE.md`. Everything
 
 **Never mix them in one file.** Different fields (pure white vs. warm cream) and different accents; the mixture reads as a mistake, not a blend. When the route is genuinely unclear, ask.
 
+**Both are built on 60-30-10, by area.** 60% is the field and its tints, 30% is ink, 10% is the accent. The ceiling is a ceiling, not a target — a page with no accent at all is fine; a page with the accent in four places has no accent, only decoration. Cover, Section Divider and Closing are the deliberate exception in both templates: full-bleed accent, spending it all at once.
+
+The one place they diverge: **Reiser Warm's coral cannot be text** (2.92:1 on cream), so its accent band is unambiguous. **ANA Blue's deep blue is text-safe** (11.35:1), so `#0B318F` sits in the 30% when it is type and the 10% when it is area — the ceiling governs blue as area, not blue as type. Each template's `palette.md` states its own bands; read that before pushing an accent anywhere.
+
 Each template folder holds the same four things, so the two are interchangeable at the folder level:
 
 ```
