@@ -15,7 +15,7 @@ This plugin wraps that capability and adds the style layer — palette, type sca
 | `house-style` | **Start here.** Picks the style template, then routes the request: copy the template `.pptx`, run `deck-design` → `deck-build`, or edit in place. Hosts one folder per template under `skills/house-style/templates/`. |
 | `officecli-setup` | Install and verify the binary. Handles the two environment-specific traps below. Run first in any fresh session. |
 | `pptx-cli` | Decks — build, edit, audit, render. |
-| `docx-cli` | Reports, memos, board papers, 簽呈, template merges, tracked changes. |
+| `docx-cli` | Reports, memos, board papers, approval routing forms, template merges, tracked changes. |
 | `xlsx-cli` | Financial models, KPI workbooks, pivots, charts, with live formula evaluation. |
 
 Each format skill carries the relevant upstream OfficeCLI skills under `references/` for the full element schema, loaded on demand.

@@ -1,6 +1,6 @@
 ---
 name: house-style
-description: Universal entry point for any styled deliverable — decks, reports, memos, board papers, 簽呈, workbooks. Picks a style template (ANA Blue or Reiser Warm), routes the request to the right tool (deck-design/deck-build for new decks, the officecli skills for editing existing files) and applies the template's palette, type scale and slide grid. Use whenever the user asks for a presentation, deck, report, document, workbook or meeting record, or says "on-brand", "in our style", "for the board" or "for the investor briefing".
+description: Universal entry point for any styled deliverable — decks, reports, memos, board papers, workbooks. Picks a style template (ANA Blue or Reiser Warm), routes the request to the right tool (deck-design/deck-build for new decks, the officecli skills for editing existing files) and applies the template's palette, type scale and slide grid. Use whenever the user asks for a presentation, deck, report, document, workbook or meeting record, or says "on-brand", "in our style", "for the board" or "for the investor briefing".
 ---
 
 # house style — entry point
@@ -37,7 +37,7 @@ Adding a third template means adding a folder with those four files and one row 
 | A **new deck** where the template's layouts fit | `cp templates/<name>/<name>.pptx deck.pptx`, then `pptx-cli`. Fastest path, and the only one that inherits the master and theme. |
 | A **new deck** from a brief or source docs, with a bespoke narrative | `deck-design` → `deck-build` with `theme.json` → officecli finish pass ([`references/pipelines.md`](references/pipelines.md) § A) |
 | **Edit / restyle / audit an existing** `.pptx` | `pptx-cli` directly. Never rebuild a deck that already exists. |
-| A **report, memo, board paper, 簽呈, meeting record** | `docx-cli` ([`references/pipelines.md`](references/pipelines.md) § B) |
+| A **report, memo, board paper, meeting record** | `docx-cli` ([`references/pipelines.md`](references/pipelines.md) § B) |
 | A **financial model, KPI workbook, budget** | `xlsx-cli` |
 | "Which layout should this be?" | [`references/layouts.md`](references/layouts.md) — 19 named layouts with exact geometry |
 

@@ -1,6 +1,6 @@
 ---
 name: docx-cli
-description: Create and edit Word documents through the officecli document DOM — paragraph and run-level control, tables, headers/footers, styles, comments, and tracked changes. Use for corporate reports, memos, board papers, 簽呈 and policy documents, for editing or proofreading an existing .docx in place, for filling form templates, and for merging data into {{placeholder}} templates. Distinct from the python-based docx skill — prefer this one for editing existing files, tracked changes, and house style.
+description: Create and edit Word documents through the officecli document DOM — paragraph and run-level control, tables, headers/footers, styles, comments, and tracked changes. Use for reports, memos, board papers, approval routing forms and policy documents, for editing or proofreading an existing .docx in place, for filling form templates, and for merging data into {{placeholder}} templates. Distinct from the python-based docx skill — prefer this one for editing existing files, tracked changes, and house style.
 ---
 > Routed here by `house-style`. If you arrived directly and the task might involve a **new deck**, check `house-style` first — it picks the style template and decides between copying the template `.pptx`, running `deck-design` → `deck-build`, or editing in place.
 
@@ -13,7 +13,7 @@ description: Create and edit Word documents through the officecli document DOM �
 |---|---|
 | Editing or proofreading an **existing** .docx in place | **this skill** |
 | Tracked changes, comments, review workflow | **this skill** |
-| Filling a corporate form or 簽呈 template | **this skill** — `merge` with `{{key}}` placeholders |
+| Filling a recurring form template | **this skill** — `merge` with `{{key}}` placeholders |
 | brand-compliant report or board paper | **this skill** + `house-style` |
 | Generating a long document from scratch, no template | either |
 
@@ -53,7 +53,7 @@ Upstream snapshot — drifts from the installed binary. `officecli help docx <el
 
 ## Template merge
 
-For 簽呈, offer letters, and any recurring corporate form:
+For offer letters, approval routing forms, and any recurring form:
 
 ```bash
 officecli merge template.docx output.docx --data '{"applicant":"<applicant name>","date":"2026-08-17","subject":"..."}'
