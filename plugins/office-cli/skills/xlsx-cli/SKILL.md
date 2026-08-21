@@ -2,7 +2,7 @@
 name: xlsx-cli
 description: Build and edit Excel workbooks through the officecli document DOM with a built-in formula engine — formulas evaluate without Excel installed. Use for corporate financial models, budget and performance workbooks, KPI dashboards, pivot tables and charts, for editing or auditing an existing .xlsx, and for importing CSV data into a formatted sheet. Distinct from the python-based xlsx skill — prefer this one for live formula evaluation, editing existing files, and house style.
 ---
-> Routed here by `corp-deliverable`. If you arrived directly and the task might involve a **new deck**, check `corp-deliverable` first — new decks go through `deck-design` → `deck-build`, not through this skill.
+> Routed here by `house-style`. If you arrived directly and the task might involve a **new deck**, check `house-style` first — it picks the style template and decides between copying the template `.pptx`, running `deck-design` → `deck-build`, or editing in place.
 
 
 # xlsx (officecli)

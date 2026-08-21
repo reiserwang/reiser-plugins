@@ -2,7 +2,7 @@
 name: docx-cli
 description: Create and edit Word documents through the officecli document DOM — paragraph and run-level control, tables, headers/footers, styles, comments, and tracked changes. Use for corporate reports, memos, board papers, 簽呈 and policy documents, for editing or proofreading an existing .docx in place, for filling form templates, and for merging data into {{placeholder}} templates. Distinct from the python-based docx skill — prefer this one for editing existing files, tracked changes, and house style.
 ---
-> Routed here by `corp-deliverable`. If you arrived directly and the task might involve a **new deck**, check `corp-deliverable` first — new decks go through `deck-design` → `deck-build`, not through this skill.
+> Routed here by `house-style`. If you arrived directly and the task might involve a **new deck**, check `house-style` first — it picks the style template and decides between copying the template `.pptx`, running `deck-design` → `deck-build`, or editing in place.
 
 
 # docx (officecli)
@@ -20,7 +20,7 @@ description: Create and edit Word documents through the officecli document DOM �
 ## Order of operations
 
 1. **Setup.** Run `officecli-setup` if `officecli --version` is not a bare semver.
-2. **House style** for anything brand-facing — load `house-style`. Body Arial 10.5pt `#1A2230`; H1 16pt bold `#0B318F`; table headers filled `#0B318F` with white text; banding `#F0F6FC`; footer `<Company>  |  <title>` at 9pt `#5A6676`.
+2. **House style** for anything brand-facing — load `house-style`. Body Arial 10.5pt `#1A2230`; H1 16pt bold `#0B318F`; table headers filled `#0B318F` with white text; banding `#F0F6FC`; footer `{{ORG}}  |  {{DECK_TITLE}}` at 9pt `#5A6676`.
 3. **Inspect before editing:**
    ```bash
    officecli view report.docx outline           # heading structure

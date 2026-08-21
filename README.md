@@ -2,7 +2,16 @@
 
 Claude plugin marketplace — Office document tooling and house style.
 
-> **Private repository. Keep it private.** These plugins encode house brand style. Before any change to visibility, re-read every skill for company names, product names, roadmap language, partner names, device SKUs, internal file paths and personal identifiers — none belong in a public repo.
+> **Private repository.** These plugins encode house design style. Before any change to visibility, re-read every skill **and unzip every bundled `.pptx`** looking for organisation names, product names, roadmap language, partner names, device SKUs, classification markings, internal file paths and personal identifiers — none belong in a public repo. `docProps/core.xml` inside a `.pptx` records the last editor's name; check it.
+>
+> ```bash
+> # leak check across markdown and every bundled template
+> grep -rniE '<your org and product names>' --include='*.md' --include='*.json' .
+> for f in $(find . -name '*.pptx'); do
+>   d=$(mktemp -d); unzip -qo "$f" -d "$d"
+>   grep -rl --include='*.xml' -iE '<your org and product names>' "$d" && echo "LEAK in $f"
+> done
+> ```
 
 ## Install
 
@@ -40,7 +49,7 @@ An SSH remote with a key in `ssh-agent` avoids the problem entirely — backgrou
 
 | Plugin | What it does |
 |---|---|
-| [`office-cli`](plugins/office-cli) | Office document creation and editing through the [OfficeCLI](https://github.com/iOfficeAI/OfficeCLI) document DOM, with the Corporate Blue house style and slide grid applied by default. Six skills, incl. a router over `deck-design` / `deck-build`. |
+| [`office-cli`](plugins/office-cli) | Office document creation and editing through the [OfficeCLI](https://github.com/iOfficeAI/OfficeCLI) document DOM, with interchangeable house-style templates applied by default. Five skills; `house-style` is both the router over `deck-design` / `deck-build` and the host for the template folders. |
 
 ## Repo layout
 
@@ -51,9 +60,16 @@ reiser-plugins/
 ├── plugins/
 │   └── office-cli/
 │       ├── .claude-plugin/plugin.json
-│       └── skills/…
+│       └── skills/
+│           ├── house-style/    # router + shared references + templates/<name>/
+│           ├── officecli-setup/
+│           ├── pptx-cli/
+│           ├── docx-cli/
+│           └── xlsx-cli/
 └── README.md
 ```
+
+Style templates live one-per-folder under `plugins/office-cli/skills/house-style/templates/`, each shipping `TEMPLATE.md`, `palette.md`, `theme.json` and a `.pptx`. Adding a template touches only its own folder plus two index tables — see `templates/README.md`.
 
 `metadata.pluginRoot` is set to `./plugins`, so plugin `source` values are bare directory names (`"source": "office-cli"`) rather than full relative paths.
 
@@ -63,7 +79,7 @@ Users only receive an update when the **version field changes** — pushing edit
 
 1. Edit files under `plugins/<name>/`.
 2. Bump `version` in **both** `plugins/<name>/.claude-plugin/plugin.json` and the matching entry in `.claude-plugin/marketplace.json`. Keep them equal; a mismatch is the most common cause of "my change didn't ship".
-3. Validate: `claude plugin validate .` from the repo root.
+3. Validate: `claude plugin validate .` from the repo root. If a template `.pptx` changed, also open it and confirm the layout count, layout names and theme name before committing.
 4. Commit and push.
 5. Users run `/plugin marketplace update reiser-plugins`.
 

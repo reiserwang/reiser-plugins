@@ -1,81 +1,109 @@
 ---
 name: house-style
-description: Corporate house style — Corporate Blue palette, Arial typography scale, bilingual EN·中文 conventions and layout grid. Load before producing any brand-compliant deck, report, memo, or workbook, and whenever the user asks for something "on-brand", "in our style" or "for the board".
+description: Universal entry point for any styled deliverable — decks, reports, memos, board papers, 簽呈, workbooks. Picks a style template (ANA Blue or Reiser Warm), routes the request to the right tool (deck-design/deck-build for new decks, the officecli skills for editing existing files) and applies the template's palette, type scale and slide grid. Use whenever the user asks for a presentation, deck, report, document, workbook or meeting record, or says "on-brand", "in our style", "for the board" or "for the investor briefing".
 ---
-> Routed here by `corp-deliverable`. If you arrived directly and the task might involve a **new deck**, check `corp-deliverable` first — new decks go through `deck-design` → `deck-build`, not through this skill.
 
+# house style — entry point
 
-# house style
+One skill, two jobs: **pick the template**, then **pick the pipeline**. Do neither by feel — a deck built with the wrong tool has to be rebuilt, not patched, and a deliverable in the wrong palette is off-brand, not a stylistic variation.
 
-Apply to every brand-facing deliverable. Values below were extracted from the live corporate decks (`corporate_master_deck.pptx`, `reference_architecture.pptx`), not invented — treat them as the source of truth.
+Read this file, then read exactly one `templates/<name>/TEMPLATE.md`. Everything else is loaded on demand.
 
-Load `references/palette.md` for the full token table and `references/slide-grid.md` for exact geometry and copy-paste officecli recipes.
+## 1. Pick the template
 
-## Non-negotiables
-
-**Typeface: Arial.** Latin and 中文, everywhere, all weights. Futura Medium appears only inside the locked corporate wordmark artwork — never set live text in it. Never Calibri, never a theme default.
-
-**Canvas: 960 × 540 pt** (16:9). Content band `x = 37.4 → 918`. Base spacing unit **10.8pt**; all offsets are multiples of it.
-
-**Core palette:**
-
-| Role | Hex |
-|---|---|
-| Deep blue (primary) | `#0B318F` |
-| Sky (accent, eyebrows, links) | `#00A3E6` |
-| Panel tint | `#F0F6FC` |
-| Callout tint | `#E6F2FC` |
-| Headline ink | `#1A2230` |
-| Body / muted ink | `#5A6676` |
-| Background | `#FFFFFF` |
-
-Never introduce a color outside `references/palette.md`. Charts draw from the categorical ramp there, in order.
-
-**These decks are read, not projected.** The upstream OfficeCLI pptx skill mandates ≥36pt titles — **that rule does not apply here and must be overridden.** house decks are dense, analyst-style documents reviewed on a laptop or printed. The real scale:
-
-| Element | Size | Weight | Color |
+| Template | Field | Accent | Use for |
 |---|---|---|---|
-| Page tagline / hero | 24pt | regular | `#1A2230` |
-| Section title | 19–22pt | bold | `#0B318F` or `#1A2230` |
-| Eyebrow (above content) | 14pt | bold | `#00A3E6` |
-| Card / block title | 16–16.5pt | bold | `#0B318F` |
-| Body | 11.5–12.5pt | regular | `#5A6676` |
-| Callout band | 14.5pt | lead-in bold | `#0B318F` + `#1A2230` |
-| Caption / footer | 9–10.5pt | regular | `#5A6676` |
+| **ANA Blue** — [`templates/ana-blue/`](templates/ana-blue/TEMPLATE.md) | white `#FFFFFF` | deep blue `#0B318F` | Anything going out under the organisation's mark: board, regulator, investor briefing, customer, partner, ESG |
+| **Reiser Warm** — [`templates/reiser-warm/`](templates/reiser-warm/TEMPLATE.md) | warm cream `#F5F1ED` | coral `#CC785C` | Personal work, drafts, internal thinking documents, anything that is not brand-facing |
 
-## Standing slide furniture
+**Never mix them in one file.** Different fields (pure white vs. warm cream) and different accents; the mixture reads as a mistake, not a blend. When the route is genuinely unclear, ask.
 
-Every content slide carries these. Omitting them is an incomplete deliverable.
+Each template folder holds the same four things, so the two are interchangeable at the folder level:
 
-- **Wordmark** top-left at `x=20.3, y=26.4, w=432.6, h=59.7` (reuse the picture from an existing deck; do not redraw it).
-- **Tagline** top-right at `x=467.3, y=26.4`, 24pt — one lowercase line, e.g. `next-generation resilient security, on a smart cloud`.
-- **Eyebrow** at `x=42.5, y=123.0`, 14pt bold `#00A3E6` — bilingual, ` · `-separated: `<English tagline>  ·  <中文標語>`.
-- **Footer** at `x=43.2, y=509.8`, 9pt `#5A6676`: `<Company>   |   <deck title>`.
-- **Page number** at `x=874.8, y=509.8`, 9pt `#5A6676`, right-aligned.
+```
+templates/<name>/
+├── TEMPLATE.md      the layout inventory, standing furniture, and what this template is for
+├── palette.md       every token, with verified WCAG ratios
+├── theme.json       drop-in theme_overrides for deck-build
+└── <name>.pptx      one master, 19 layouts, one blank starter slide — copy this as a starting file
+```
 
-## Bilingual convention
+Adding a third template means adding a folder with those four files and one row to the table above. See [`templates/README.md`](templates/README.md).
 
-English leads, 中文 follows, separated by ` · ` (space-middot-space) or on a second line. Traditional characters only — this is a Taiwan-market company. Keep the pairing at eyebrow and section-title level; body copy is single-language, matched to the audience. Board, regulator, and investor-relations material is bilingual throughout; internal working documents may be English-only.
+## 2. Pick the pipeline
 
-## Positioning discipline
+| What the user wants | Route |
+|---|---|
+| A **new deck** where the template's layouts fit | `cp templates/<name>/<name>.pptx deck.pptx`, then `pptx-cli`. Fastest path, and the only one that inherits the master and theme. |
+| A **new deck** from a brief or source docs, with a bespoke narrative | `deck-design` → `deck-build` with `theme.json` → officecli finish pass ([`references/pipelines.md`](references/pipelines.md) § A) |
+| **Edit / restyle / audit an existing** `.pptx` | `pptx-cli` directly. Never rebuild a deck that already exists. |
+| A **report, memo, board paper, 簽呈, meeting record** | `docx-cli` ([`references/pipelines.md`](references/pipelines.md) § B) |
+| A **financial model, KPI workbook, budget** | `xlsx-cli` |
+| "Which layout should this be?" | [`references/layouts.md`](references/layouts.md) — 19 named layouts with exact geometry |
 
-Getting this wrong is worse than getting the colors wrong.
+Two routing mistakes account for most wasted work:
 
-**This plugin encodes no product or positioning language, by design.** Product names, service descriptions, SKUs, partner platforms, roadmap claims and taglines all live in the approved source your organisation maintains — read them from there for every deliverable, and never infer or invent them.
+- **Rebuilding instead of editing.** If a `.pptx` exists and the ask is "fix / update / restyle", it is `pptx-cli`. `deck-build` writes new files; it does not ingest templates or existing decks.
+- **Building before designing.** `deck-build` without a spec produces a card grid with a title on top. Its own documentation says so. Run `deck-design` first — unless you are starting from the template `.pptx`, in which case the layouts *are* the spec.
 
-Two failure modes to watch for regardless of the source:
+## 3. Non-negotiables, both templates
 
-- **Shipping product vs. vision.** Do not describe what the company sells today in the language of the roadmap. Forward-looking pillars belong on slides labelled as such.
+**Typeface: Arial** for Latin, **微軟正黑體** for 中文, everywhere, all weights. Never Calibri, never a theme default. Arial carries no CJK glyphs — set both faces or Windows falls back to a serif (新細明體) and the file looks wrong to every reviewer on a PC while looking fine on the Mac it was authored on.
+
+**Canvas: 1440 × 810 pt** (16:9). Margin 56pt, content band `x = 56 → 1384` (width 1328), gutter 16.2pt. Full geometry in [`references/grid.md`](references/grid.md).
+
+**Read, not projected.** The upstream OfficeCLI pptx skill mandates ≥36pt titles — **that rule does not apply here and must be overridden.** These are dense, analyst-style documents reviewed on a laptop or printed. Titles are 30pt on a 1440pt canvas, which is 20pt on a conventional 960pt canvas. The measured scale is in each template's `palette.md`.
+
+**Standing furniture.** Every content slide carries an eyebrow, a title, the rule under it, a footer and a page number. Omitting them is an incomplete deliverable, not a minimal one. Three layouts are deliberate exceptions: **Quote** and **Blank** ship without the eyebrow / title / rule trio, and **Cover** / **Section Divider** / **Closing** carry their own furniture instead.
+
+**Bilingual convention.** Traditional characters (zh-Hant) only, and the two are separated by ` · ` (space-middot-space) or set on a second line. Keep the pairing at eyebrow and section-title level; body copy is single-language, matched to the audience. Board, regulator and investor material is bilingual throughout; internal working documents may be English-only.
+
+Which language leads depends on the slot, and the shipped layouts are the reference:
+
+- **Eyebrows lead with 中文** — `風險 · RISK`, `數據 · DATA`, `專案進度 · PROJECTS`. `AGENDA · 議程` is the one shipped exception, because the English word is the label.
+- **Panel headings pair 中文 then English** across an ideographic space — `事件概要　Summary`, `現況　Before`.
+- **Cover** sets `{{DECK_TITLE}}　|　{{DECK_TITLE_EN}}` — 中文, ideographic space, pipe, English.
+- **Titles and body** are single-language.
+
+Match the slot rather than applying one rule everywhere.
+
+**Contrast is a gate, not a preference.** Each palette has at least one colour that fails as text and is fill-only. Read the template's `palette.md` before setting any coloured text, and [`references/contrast.md`](references/contrast.md) before overriding a checker.
+
+## 4. No content is encoded here
+
+**This skill carries no product, positioning or organisational language, by design.** Product names, service descriptions, SKUs, partner platforms, roadmap claims, taglines, org names and unit names all live in the approved source the organisation maintains — read them from there for every deliverable, and never infer or invent them.
+
+The template `.pptx` files ship with placeholders for exactly this reason:
+
+| Placeholder | Fill with |
+|---|---|
+| `{{ORG}}` | the organisation name as it appears in the footer |
+| `{{UNIT}}` | the issuing department or unit |
+| `{{DECK_TITLE}}` / `{{DECK_TITLE_EN}}` | the deliverable's title, 中文 and English |
+| `{{CLASSIFICATION}}` | the handling marking, if the deliverable carries one |
+
+Replace every one before delivery. A shipped file containing `{{` is a defect.
+
+Two content failure modes to watch for regardless of the source:
+
+- **Shipping product vs. vision.** Do not describe what the organisation sells today in the language of the roadmap. Forward-looking pillars belong on slides labelled as such.
 - **Pillar-specific taglines.** A line written for one pillar does not transfer to a current-product slide.
 
-## Before delivering
+## 5. Before delivering anything
 
-1. `officecli view <file> issues` — catches overflow, low contrast, stale fields.
-2. `officecli view <file> screenshot --grid --out contact.png`, then read the PNG. Grid drift and text overflow are invisible in the DOM.
-3. Confirm wordmark, eyebrow, footer, and page number are on every content slide.
-4. Confirm no Calibri survived and no off-palette color crept in.
-5. `officecli close <file>` before `SendUserFile` or `device_commit_files` — otherwise the delivered file is the pre-edit version.
+1. Run the format skill's own verification — `officecli view <file> issues`, `check_deck.py`, `officecli validate`.
+2. **Render it and look at it.** `officecli view <file> screenshot --grid --out contact.png`, then read the PNG. Grid drift and text overflow are invisible in the DOM and obvious in an image.
+3. Confirm eyebrow, title rule, footer and page number are on every content slide.
+4. Confirm no Calibri survived, no off-palette colour crept in, and 中文 has a real CJK face set.
+5. `grep` the file for `{{` — no placeholder may ship.
+6. Check every product, roadmap and market claim against the approved source. This skill does not carry one.
+7. `officecli close <file>` before `SendUserFile` or `device_commit_files` — otherwise you deliver the pre-edit version.
+8. Flag anything you could not verify rather than presenting it as done.
 
-## Word and Excel
+## References
 
-The palette, typeface, and positioning rules carry over unchanged. Documents: Arial 10.5pt body, headings in `#0B318F`, table header rows filled `#0B318F` with white text, banding in `#F0F6FC`. Workbooks: header row `#0B318F` on white bold, `#F0F6FC` banding, `#00A3E6` for highlighted totals, freeze the header, no gridline-colored borders. Details in `references/palette.md`.
+- [`references/grid.md`](references/grid.md) — canvas, margins, the column arithmetic, vertical rhythm, unit conversions to `deck-build`
+- [`references/layouts.md`](references/layouts.md) — all 19 layouts, every shape, exact coordinates
+- [`references/pipelines.md`](references/pipelines.md) — the `deck-design` → `deck-build` pipeline, and the Word / Excel path
+- [`references/contrast.md`](references/contrast.md) — the contrast gate, verified ratios, the recompute snippet
+- Sibling skills: `pptx-cli`, `docx-cli`, `xlsx-cli`, `officecli-setup`

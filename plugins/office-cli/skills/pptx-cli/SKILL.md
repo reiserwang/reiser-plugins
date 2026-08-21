@@ -2,7 +2,7 @@
 name: pptx-cli
 description: Build and edit PowerPoint decks through the officecli document DOM — precise shape-level control, layout inspection, and PNG rendering to verify the result. Use for brand-compliant decks, for editing or auditing an existing .pptx (extracting content, fixing layout, restyling, checking overflow), for merging or splitting decks, and whenever slide geometry must land exactly. Distinct from the python-based pptx skill — prefer this one for editing existing files and for anything on house style.
 ---
-> Routed here by `corp-deliverable`. If you arrived directly and the task might involve a **new deck**, check `corp-deliverable` first — new decks go through `deck-design` → `deck-build`, not through this skill.
+> Routed here by `house-style`. If you arrived directly and the task might involve a **new deck**, check `house-style` first — it picks the style template and decides between copying the template `.pptx`, running `deck-design` → `deck-build`, or editing in place.
 
 
 # pptx (officecli)
@@ -51,21 +51,30 @@ These are an upstream snapshot and **drift from the installed binary**. When a p
 - **Quote every path.** `"/slide[1]/shape[@id=100000]"` — unquoted `[1]` gets globbed by zsh.
 - **Single-quote currency.** `--prop text='$15M'`; inside an unquoted batch heredoc escape as `\$`. Then `view text` and confirm the `$` survived — this fails silently.
 - **`\n` in `text=` starts a new paragraph; `\v` is a line break within one.**
-- **Set sizes explicitly on every text shape.** Theme defaults drift between masters. The house decks carry an Office theme with Calibri as its default — anything not explicitly set to Arial comes out wrong.
+- **Set sizes explicitly on every text shape.** Theme defaults drift between masters. Decks that started life in another tool often carry an Office theme with Calibri as its default — anything not explicitly set to Arial comes out wrong.
 - **Check after structural ops.** After adding a slide, chart, or table, `get` it before stacking more on top.
 - **Clean-slate replay:** `close` → `rm` → `create` → `batch` → `close`. `create` refuses to overwrite, and ignoring its exit code silently replays onto the previous run's file.
 
-## Starting from the corporate deck
+## Starting from a style template
 
-The most reliable way to get an on-brand deck is to inherit the master, theme, and wordmark rather than rebuilding them:
+The most reliable way to get an on-style deck is to inherit the master, theme and layouts rather than rebuilding them. `house-style` ships one template file per style, each with 19 named layouts:
 
 ```bash
-cp corporate_master_deck.pptx new_deck.pptx
-officecli view new_deck.pptx outline          # pick a slide whose layout matches the need
-officecli remove new_deck.pptx '/slide[8]'    # trim down
+cp <house-style-skill>/templates/ana-blue/ana-blue.pptx deck.pptx
+officecli open  deck.pptx
+officecli query deck.pptx 'slideLayout' --json          # confirm the 19 layouts arrived
+officecli add   deck.pptx slide --layout 'Title and Content'
 ```
 
-Then rebuild content shapes on the retained slides using the geometry in `house-style/references/slide-grid.md`.
+Fill placeholders by index — the indices and exact geometry are in `house-style/references/layouts.md`, the grid in `house-style/references/grid.md`. Replace `{{ORG}}`, `{{UNIT}}`, `{{DECK_TITLE}}`, `{{DECK_TITLE_EN}}` and `{{CLASSIFICATION}}` before delivery; a file containing `{{` is a defect.
+
+When starting from an **existing** deck instead, trim rather than rebuild:
+
+```bash
+cp existing_deck.pptx new_deck.pptx
+officecli view   new_deck.pptx outline        # pick a slide whose layout matches the need
+officecli remove new_deck.pptx '/slide[8]'    # trim down
+```
 
 ## Delivering
 

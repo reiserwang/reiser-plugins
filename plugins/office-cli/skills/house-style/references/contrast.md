@@ -1,0 +1,85 @@
+# The contrast gate
+
+`deck-build`'s `check_deck.py` H4 rule, and the standard this house style holds itself to:
+
+> **≥ 4.5:1 below 24px, ≥ 3.0:1 at or above.**
+
+`officecli view <file> issues` flags low contrast in built files. The gate measures **text only** — a colour that fails as text is still correct as a chart series, a rule, an icon badge or a panel fill.
+
+## Each template has a fill-only colour
+
+This is the single most common defect in both palettes, so it is stated in three places.
+
+| Template | Fill-only colour | On its field | Text-safe substitute |
+|---|---|---|---|
+| ANA Blue | sky `#00A3E6` | **2.84:1** — fails at every size | `#0B318F` (11.35:1), or `#00719E` (5.45:1) when the sky hue is the point |
+| Reiser Warm | coral `#CC785C` | **2.92:1** — fails at every size | `#9D5C47` (4.61:1) |
+
+Two counterintuitive consequences:
+
+- **The live source decks set 14pt sky eyebrows on white.** Those would be flagged. New eyebrows go in `#0B318F` — which is what the shipping template does.
+- **A coral fill takes charcoal text, not white.** White on coral is 3.28:1 (display sizes only); charcoal `#1F1E1D` on coral is 5.08:1 (any size). The instinct to put white on a saturated fill is wrong here, because coral is a mid-tone. The Reiser Warm master's Cover, Section Divider and Closing layouts all set charcoal on the coral field for this reason.
+
+## ANA Blue — verified ratios
+
+| Foreground | on `#FFFFFF` | on `#F0F6FC` | Verdict |
+|---|---|---|---|
+| `#1A2230` ink | 15.96 | 14.67 | any size |
+| `#0B318F` accent | 11.35 | 10.43 | any size |
+| `#7C4DB8` purple | 5.82 | — | any size |
+| `#5A6676` muted ink | 5.84 | 5.36 | any size |
+| `#2E5BF0` blue | 5.43 | — | any size |
+| `#2FA84F` green | 3.07 | — | **≥ 24px only** |
+| `#00A3E6` sky | **2.84** | — | **fails at every size** |
+| `#FFFFFF` on `#0B318F` | 11.35 | — | any size |
+| `#00A3E6` on `#0B318F` | 3.99 | — | ≥ 24px only |
+
+## Reiser Warm — verified ratios
+
+Field is `#F5F1ED`.
+
+| Foreground | on field | Verdict |
+|---|---|---|
+| `#1F1E1D` charcoal | 14.81 | any size |
+| `#5C5650` muted ink | 6.44 | any size |
+| `#9D5C47` coral deep | 4.61 | any size |
+| `#557190` blue text-safe | 4.50 | any size |
+| `#CC785C` coral | 2.92 | **fill only** |
+| `#B3CBC1` sage mist | 1.53 | **fill only** |
+| `#D4D0C9` stone | 1.37 | **rules only** |
+| `#1F1E1D` on `#CC785C` | 5.08 | any size |
+| `#FFFFFF` on `#CC785C` | 3.28 | ≥ 24px only |
+| `#1F1E1D` on `#5C5650` | 2.30 | **fails at every size** — see below |
+
+The categorical fills all pass as fills and all fail as small text on the field, so each carries a derived text-safe variant — the table is in `templates/reiser-warm/palette.md`.
+
+## The one substitution that is not a colour swap
+
+Restyling ANA Blue → Reiser Warm is a straight token swap everywhere except **text sitting on a dark band**, because the two templates' dark bands are different colours:
+
+| Band | ANA Blue | its label | Reiser Warm | its label |
+|---|---|---|---|---|
+| Accent (table headers, "After" column, Cover / Section / Closing field) | `#0B318F` | `#FFFFFF` — 11.35 | `#CC785C` | `#1F1E1D` — 5.08 |
+| Muted ink (Two-Column "Before" column) | `#5A6676` | `#FFFFFF` — 5.84 | `#5C5650` | `#F5F1ED` — 6.44 |
+
+Applying the accent rule ("coral takes dark text") to the muted-ink band gives charcoal on `#5C5650` at **2.30:1**, which fails at every size. The shipped templates get both right; a hand-restyle is where this breaks.
+
+## Recompute rather than estimate
+
+Every ratio on this page was computed against WCAG relative luminance. Re-run after any palette change:
+
+```python
+def lum(h):
+    h = h.lstrip('#')
+    c = [int(h[i:i+2], 16) / 255 for i in (0, 2, 4)]
+    c = [x / 12.92 if x <= 0.03928 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+
+def cr(a, b):
+    l1, l2 = sorted([lum(a), lum(b)], reverse=True)
+    return (l1 + 0.05) / (l2 + 0.05)
+```
+
+## Do not silence the checker
+
+Editing a spec until the finding disappears is not a fix. Change the colour or the geometry. If a page can only pass by changing what it argues, say so rather than shipping it quietly — and if a deliverable genuinely needs a colour outside its palette (a risk red, an alert amber — neither palette has one), ask rather than inventing it.
