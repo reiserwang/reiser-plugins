@@ -1,0 +1,99 @@
+{
+  "name": "Yukima",
+  "name_ja": "雪間",
+  "use": "The seasonal template. Cool blue-grey field, slate accent, an earth-and-growth categorical ramp, built on 60-30-10. For research write-ups, ESG and sustainability reporting, long-form analysis — anything wanting a quieter, more natural register than ANA Blue. Do not mix with another template in one file.",
+  "dark": false,
+  "canvas_pt": [
+    1440,
+    810
+  ],
+  "colors": {
+    "bg": "#F1F6FA",
+    "bg_alt": "#C8DAE8",
+    "surface": "#F5F3F1",
+    "ink": "#22333D",
+    "ink_soft": "#3B576A",
+    "ink_invert": "#FFFFFF",
+    "accent": "#4B6F87",
+    "accent_ink": "#FFFFFF",
+    "accent_2": "#558860",
+    "accent_text": "#4B6F87",
+    "rule": "#AACEE7",
+    "rule_soft": "#C8DAE8",
+    "series": [
+      "#4B6F87",
+      "#558860",
+      "#86B655",
+      "#9A9641",
+      "#BD7E1A",
+      "#D2AD52"
+    ]
+  },
+  "fonts": {
+    "heading": "Arial",
+    "heading_alt": "微軟正黑體",
+    "body": "Arial",
+    "body_alt": "微軟正黑體",
+    "mono": "Consolas",
+    "mono_alt": "Menlo"
+  },
+  "geometry": {
+    "radius": 18,
+    "rule_w": 1.5,
+    "rule_w_hair": 0.75,
+    "rule_w_heavy": 3.0,
+    "shadow": false,
+    "margin": 50,
+    "gutter": 14,
+    "card_fill": true,
+    "radius_note": "deck-build takes one radius; the template's own panels run 2.0-26.0pt by role. See references/grid.md."
+  },
+  "proportions": {
+    "field_60": [
+      "#F1F6FA",
+      "#F5F3F1",
+      "#C8DAE8",
+      "#AACEE7",
+      "#CAD2C4",
+      "#E1EDD5"
+    ],
+    "supporting_30": [
+      "#22333D",
+      "#3B576A",
+      "#4B6F87"
+    ],
+    "accent_10": [
+      "#4B6F87",
+      "#558860"
+    ],
+    "note": "#4B6F87 appears in both bands: as type it is supporting, as area it is accent. #22333D and #3B576A are derived — the source palette contains no ink."
+  },
+  "derived": {
+    "#22333D": "headline ink — #4B6F87 darkened on the same hue to 12.00:1 on the field",
+    "#3B576A": "muted ink — #4B6F87 darkened on the same hue to 7.00:1 on the field",
+    "#4D7B57": "text-safe 常磐木 — #558860 darkened to 4.50:1 on the field"
+  },
+  "japanese_names": {
+    "#F1F6FA": "寒の戻り kan-no-modori — the cold's return",
+    "#C8DAE8": "雪解け yukidoke — snowmelt",
+    "#E1EDD5": "三寒四温 sankan-shion — three cold days, four warm",
+    "#558860": "常磐木 tokiwagi — evergreen",
+    "#86B655": "萌黄 moegi — fresh bud green",
+    "#7C754F": "憩い ikoi — repose"
+  },
+  "discipline": "Built on 60-30-10 by area. 60% field: #F1F6FA page with #C8DAE8 inset, #F5F3F1 lifted and #AACEE7 rules, all within 1.52:1 of each other so the tints read as one family. 30% supporting: derived inks #22333D and #3B576A, plus #4B6F87 where the blue is type. 10% accent: #4B6F87 as area with #558860 as a second fill. The accent is text-safe, so like ANA Blue it occupies both the 30% and the 10%; the ceiling governs area, not type. Cover, Section Divider and Closing are full-bleed accent by design and exempt. Cool-to-warm categorical ramp reads snow through growth to earth. No shadows, no coloured field beyond those three layouts.",
+  "never": [
+    "white text on a #86B655 萌黄 or #D2AD52 gold fill (2.38:1 and 2.13:1 — both take #22333D ink at 5.49 and 6.12)",
+    "#558860 常磐木 as text below 24px (3.80:1 on the field — use the derived #4D7B57 at 4.50)",
+    "#7499BA, #AACEE7, #C8DAE8, #CAD2C4, #E1EDD5, #86B655, #9A9641 or #D2AD52 as text at any size",
+    "any source colour other than #4B6F87 as body text — this palette has no native ink, which is why two are derived",
+    "a green or gold fill behind a table header row; use #4B6F87 or #3B576A",
+    "more than one accent as area per page",
+    "coloured slide fields outside Cover / Section Divider / Closing",
+    "drop shadows or bevels",
+    "Calibri, or any theme-default font",
+    "中文 without font.ea set to 微軟正黑體",
+    "any colour outside palette.md",
+    "mixing this identity with ANA Blue or Reiser Warm in one file"
+  ]
+}

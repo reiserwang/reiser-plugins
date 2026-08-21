@@ -10,7 +10,7 @@ Claude 外掛市集 — Office 文件工具與版型樣式範本。
 
 ## 內容概要
 
-一個外掛 `office-cli`，包含五個 skill 與兩套可互換的設計範本。
+一個外掛 `office-cli`，包含五個 skill 與三套可互換的設計範本。
 
 | Skill | 用途 |
 |---|---|
@@ -23,9 +23,12 @@ Claude 外掛市集 — Office 文件工具與版型樣式範本。
 | 範本 | 底色 | 強調色 | 適用情境 |
 |---|---|---|---|
 | **ANA Blue** | 白色 | 深藍 `#0B318F` | 對外具品牌識別的文件 —— 董事會、主管機關、投資人、客戶、合作夥伴 |
+| **Yukima 雪間** | 冷調藍灰 | 石板藍 `#4B6F87` | 研究報告、ESG 與永續議題、長篇分析 |
 | **Reiser Warm** | 暖米色 | 珊瑚色 `#CC785C` | 個人作業、草稿、內部思考文件 |
 
-兩者採用相同的 19 個具名版面配置，同樣的 1440 × 810 pt 格線，因此在兩套範本之間切換屬於改樣式，而非重新製作。
+三者採用相同的 19 個具名版面配置，同樣的 1440 × 810 pt 格線，因此在範本之間切換屬於改樣式，而非重新製作。三者皆依 60-30-10 的面積比例建構，且所有色彩對比值一律由程式產生至 `references/contrast-matrix.md`，不以人工填寫。
+
+**雪間**（ゆきま）是日本初春的季語，指積雪融化後露出的地面。這套配色正是如此：由雪的藍調，經新芽的綠，走到溫暖的土色；各色票也保留原本的日文季節名稱。
 
 ---
 
@@ -140,10 +143,14 @@ plugins/office-cli/skills/house-style/
 │   ├── grid.md              版面尺寸、邊界、欄寬計算、垂直節奏
 │   ├── layouts.md           全部 19 個版面配置、每個物件、精確座標
 │   ├── pipelines.md         複製範本 · deck-design/deck-build · Word 與 Excel
-│   └── contrast.md          對比度門檻與所有已驗證的比值
+│   ├── contrast.md          對比度門檻與各範本的注意事項
+│   └── contrast-matrix.md   程式產生 —— 三套配色的所有對比值
+├── scripts/
+│   └── contrast.py          重新產生對比表；--check 驗證色票與 .pptx 是否一致
 └── templates/
-    ├── README.md            如何新增第三套範本
+    ├── README.md            如何新增範本
     ├── ana-blue/            TEMPLATE.md · palette.md · theme.json · ana-blue.pptx
+    ├── yukima/              TEMPLATE.md · palette.md · theme.json · yukima.pptx
     └── reiser-warm/         TEMPLATE.md · palette.md · theme.json · reiser-warm.pptx
 ```
 
@@ -181,7 +188,7 @@ reiser-plugins/
 1. 修改 `plugins/<name>/` 底下的檔案。
 2. **同時**更新 `plugins/<name>/.claude-plugin/plugin.json` 與 `.claude-plugin/marketplace.json` 中對應項目的 `version`。兩者必須一致；不一致是「我的修改沒生效」最常見的原因。
 3. 驗證：在儲存庫根目錄執行 `claude plugin validate .`。
-4. 若範本 `.pptx` 有變動，請開啟檔案確認版面配置數量、名稱與主題名稱，並執行下方的外洩檢查。
+4. 若範本 `.pptx` 有變動，請開啟檔案確認版面配置數量、名稱與主題名稱，接著執行 `python3 scripts/contrast.py --check` 與下方的外洩檢查。
 5. 提交並推送。
 6. 使用者執行 `/plugin marketplace update reiser-plugins`。
 

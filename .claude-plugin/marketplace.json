@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "reiser-plugins",
   "description": "Private plugin marketplace — Office document tooling and house-style templates.",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "owner": {
     "name": "reiser-plugins"
   },
@@ -13,8 +13,8 @@
     {
       "name": "office-cli",
       "source": "./plugins/office-cli",
-      "description": "Office document toolkit — routes decks to a style template, deck-design/deck-build or the OfficeCLI document DOM, with interchangeable house-style templates (ANA Blue, Reiser Warm) applied by default.",
-      "version": "0.6.0",
+      "description": "Office document toolkit — routes decks to a style template, deck-design/deck-build or the OfficeCLI document DOM, with three interchangeable house-style templates (ANA Blue, Yukima 雪間, Reiser Warm) applied by default.",
+      "version": "0.7.0",
       "category": "productivity",
       "keywords": [
         "officecli",

@@ -10,7 +10,7 @@ Claude plugin marketplace — Office document tooling and house-style templates.
 
 ## What you get
 
-One plugin, `office-cli`, with five skills and two interchangeable design templates.
+One plugin, `office-cli`, with five skills and three interchangeable design templates.
 
 | Skill | What it does |
 |---|---|
@@ -23,9 +23,12 @@ One plugin, `office-cli`, with five skills and two interchangeable design templa
 | Template | Field | Accent | Use it for |
 |---|---|---|---|
 | **ANA Blue** | white | deep blue `#0B318F` | anything brand-facing — board, regulator, investor, customer, partner |
+| **Yukima 雪間** | cool blue-grey | slate `#4B6F87` | research, ESG and sustainability, long-form analysis |
 | **Reiser Warm** | warm cream | coral `#CC785C` | personal work, drafts, internal thinking documents |
 
-Both carry the same 19 named layouts on the same 1440 × 810 pt grid, so switching between them is a restyle, not a rebuild.
+All three carry the same 19 named layouts on the same 1440 × 810 pt grid, so switching between them is a restyle, not a rebuild. Each is built on 60-30-10 by area, and every contrast ratio for every palette is generated into `references/contrast-matrix.md` rather than typed by hand.
+
+*Yukima* (雪間) is the early-spring word for bare ground appearing through melting snow — the palette runs snow-blues through fresh greens to warm earth, and its swatches keep their Japanese seasonal names.
 
 ---
 
@@ -140,10 +143,14 @@ plugins/office-cli/skills/house-style/
 │   ├── grid.md              canvas, margins, column arithmetic, vertical rhythm
 │   ├── layouts.md           all 19 layouts, every shape, exact coordinates
 │   ├── pipelines.md         template copy · deck-design/deck-build · Word & Excel
-│   └── contrast.md          the contrast gate and every verified ratio
+│   ├── contrast.md          the contrast gate and the per-template traps
+│   └── contrast-matrix.md   generated — every ratio in every palette
+├── scripts/
+│   └── contrast.py          regenerates the matrix; --check verifies tokens
 └── templates/
-    ├── README.md            how to add a third template
+    ├── README.md            how to add another template
     ├── ana-blue/            TEMPLATE.md · palette.md · theme.json · ana-blue.pptx
+    ├── yukima/              TEMPLATE.md · palette.md · theme.json · yukima.pptx
     └── reiser-warm/         TEMPLATE.md · palette.md · theme.json · reiser-warm.pptx
 ```
 
@@ -181,7 +188,7 @@ Users only receive an update when the **version field changes** — pushing edit
 1. Edit files under `plugins/<name>/`.
 2. Bump `version` in **both** `plugins/<name>/.claude-plugin/plugin.json` and the matching entry in `.claude-plugin/marketplace.json`. Keep them equal; a mismatch is the most common cause of "my change didn't ship".
 3. Validate: `claude plugin validate .` from the repo root.
-4. If a template `.pptx` changed, open it and confirm the layout count, layout names and theme name — and run the leak check below.
+4. If a template `.pptx` changed, open it and confirm the layout count, layout names and theme name, then run `python3 scripts/contrast.py --check` and the leak check below.
 5. Commit and push.
 6. Users run `/plugin marketplace update reiser-plugins`.
 
