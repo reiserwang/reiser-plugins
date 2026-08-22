@@ -1,0 +1,19 @@
+{
+  "name": "tw-legal-rag",
+  "version": "0.1.0",
+  "description": "Semantic retrieval of Taiwan court judgments and administrative interpretations via the TLR endpoint, with strict citation discipline and bundle-level citation checking. Retrieval-only — no legal advice.",
+  "author": {
+    "name": "Reiser Wang"
+  },
+  "homepage": "https://github.com/aa0101181514/tw-legal-rag",
+  "repository": "https://github.com/aa0101181514/tw-legal-rag",
+  "license": "MIT",
+  "keywords": [
+    "taiwan",
+    "legal",
+    "judgments",
+    "retrieval",
+    "rag",
+    "citation-check"
+  ]
+}

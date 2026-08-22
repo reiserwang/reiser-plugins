@@ -2,7 +2,7 @@
 
 **English** · [繁體中文](README.zh-TW.md)
 
-Claude plugin marketplace — Office document tooling and house-style templates.
+Claude plugin marketplace — Office document tooling, house-style templates, and Taiwan legal research.
 
 > **Private repository.** These plugins encode house design style. Before any change to visibility, re-read every skill **and unzip every bundled `.pptx`** looking for organisation names, product names, roadmap language, partner names, device SKUs, classification markings, internal file paths and personal identifiers — none belong in a public repo. `docProps/core.xml` inside a `.pptx` records the last editor's name; check it. See [Leak check](#leak-check).
 
@@ -10,7 +10,14 @@ Claude plugin marketplace — Office document tooling and house-style templates.
 
 ## What you get
 
-One plugin, `office-cli`, with five skills and three interchangeable design templates.
+Two plugins.
+
+| Plugin | What it's for |
+|---|---|
+| `office-cli` | Decks, reports and workbooks in a house style — five skills, three interchangeable design templates. |
+| `tw-legal-rag` | Taiwan court judgments and 行政函釋 — semantic retrieval with citation discipline wired in. |
+
+### office-cli
 
 | Skill | What it does |
 |---|---|
@@ -32,11 +39,31 @@ All three carry the same 19 named layouts on the same 1440 × 810 pt grid, so sw
 
 ---
 
+### tw-legal-rag
+
+Semantic retrieval over ~22M Taiwan court judgments plus administrative interpretations (行政函釋, 稅務函釋, 憲法解釋), fronted by the public TLR endpoint. Retrieval only — it generates no legal advice and endorses no model's output.
+
+| Skill | What it does |
+|---|---|
+| `judgment-research` | Search judgments and 函釋, read full text, answer with verifiable citations. |
+| `citation-check` | Package judgments for another AI, and audit an answer's citations for fabricated case numbers. |
+
+Two constraints are wired into the skills rather than left to good intentions. Search returns structured listings with **no judicial reasoning**, so full text must be read before any holding is described; and citations must be emitted as the server's own `citation_markdown` string rather than a hand-typed case number. Empty results are reported as empty.
+
+`citation-check` is deliberately modest about itself: a `pass` means the cited case numbers match bundle identities — not that a quote came from the judgment it is attributed to, and not that the reasoning was read correctly.
+
+The bundled MCP server (`https://tlr.dr-lawbot.com/mcp`) needs a one-time OAuth authorization — approve it via `/mcp`. The REST endpoints behind it need no key, and the skills fall back to those until then.
+
+Wraps [aa0101181514/tw-legal-rag](https://github.com/aa0101181514/tw-legal-rag) (MIT). Query text reaches a third-party endpoint that may log it, so abstract confidential facts to their legal issue first.
+
+---
+
 ## Install
 
 ```
 /plugin marketplace add reiserwang/reiser-plugins
 /plugin install office-cli@reiser-plugins
+/plugin install tw-legal-rag@reiser-plugins
 ```
 
 If the install summary says `Run /reload-plugins to activate.`, run that.
@@ -165,14 +192,20 @@ reiser-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json        # the catalog — every plugin must be listed here
 ├── plugins/
-│   └── office-cli/
+│   ├── office-cli/
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── skills/
+│   │       ├── house-style/    # router + shared references + templates/<name>/
+│   │       ├── officecli-setup/
+│   │       ├── pptx-cli/
+│   │       ├── docx-cli/
+│   │       └── xlsx-cli/
+│   └── tw-legal-rag/
 │       ├── .claude-plugin/plugin.json
+│       ├── .mcp.json           # tlr remote MCP server
 │       └── skills/
-│           ├── house-style/    # router + shared references + templates/<name>/
-│           ├── officecli-setup/
-│           ├── pptx-cli/
-│           ├── docx-cli/
-│           └── xlsx-cli/
+│           ├── judgment-research/
+│           └── citation-check/
 ├── README.md
 └── README.zh-TW.md
 ```

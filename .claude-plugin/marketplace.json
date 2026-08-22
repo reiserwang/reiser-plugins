@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "reiser-plugins",
-  "description": "Private plugin marketplace — Office document tooling and house-style templates.",
-  "version": "0.7.0",
+  "description": "Private plugin marketplace — Office document tooling, house-style templates, and Taiwan legal research.",
+  "version": "0.8.0",
   "owner": {
     "name": "reiser-plugins"
   },
@@ -26,6 +26,23 @@
         "ooxml",
         "deck-design",
         "deck-build"
+      ]
+    },
+    {
+      "name": "tw-legal-rag",
+      "source": "./plugins/tw-legal-rag",
+      "description": "Taiwan legal research — semantic retrieval over ~22M court judgments plus administrative interpretations via the TLR endpoint, with enforced citation discipline and bundle-level citation checking. Retrieval only; generates no legal advice.",
+      "version": "0.1.0",
+      "category": "research",
+      "keywords": [
+        "taiwan",
+        "legal",
+        "judgments",
+        "函釋",
+        "retrieval",
+        "rag",
+        "citation-check",
+        "mcp"
       ]
     }
   ]

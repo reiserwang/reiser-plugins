@@ -2,7 +2,7 @@
 
 [English](README.md) · **繁體中文**
 
-Claude 外掛市集 — Office 文件工具與版型樣式範本。
+Claude 外掛市集 — Office 文件工具、版型樣式範本，以及台灣法律檢索。
 
 > **私有儲存庫。** 這些外掛內含版型樣式設定。在變更儲存庫可見性之前，請重新檢視每一個 skill，**並解壓縮每一個隨附的 `.pptx`**，確認沒有機構名稱、產品名稱、藍圖規劃用語、合作夥伴名稱、設備型號、機密等級標示、內部檔案路徑與個人識別資訊 —— 這些都不該出現在公開儲存庫。`.pptx` 內的 `docProps/core.xml` 會記錄最後編輯者姓名，務必檢查。請參閱 [外洩檢查](#外洩檢查)。
 
@@ -10,7 +10,14 @@ Claude 外掛市集 — Office 文件工具與版型樣式範本。
 
 ## 內容概要
 
-一個外掛 `office-cli`，包含五個 skill 與三套可互換的設計範本。
+兩個外掛。
+
+| 外掛 | 用途 |
+|---|---|
+| `office-cli` | 以固定版型樣式產出簡報、報告與工作表 —— 五個 skill、三套可互換的設計範本。 |
+| `tw-legal-rag` | 台灣裁判與行政函釋 —— 語義檢索，並將引用紀律寫進 skill。 |
+
+### office-cli
 
 | Skill | 用途 |
 |---|---|
@@ -32,11 +39,31 @@ Claude 外掛市集 — Office 文件工具與版型樣式範本。
 
 ---
 
+### tw-legal-rag
+
+以語義檢索連接約 2,200 萬筆台灣裁判，以及行政函釋、稅務函釋與憲法解釋，後端為公開的 TLR 端點。**僅提供檢索** —— 不產生法律意見，也不為任何模型的輸出背書。
+
+| Skill | 用途 |
+|---|---|
+| `judgment-research` | 檢索裁判與函釋、讀取全文，並以可驗證的引用作答。 |
+| `citation-check` | 將判決打包給其他 AI，並查核答案是否引用了捏造的字號。 |
+
+有兩項限制是寫進 skill 裡的，而非仰賴自律：搜尋只回傳結構化清單，**不含法院論理**，因此在描述任何法院見解之前必須先讀取全文；引用必須原樣輸出伺服器回傳的 `citation_markdown`，不可自行拼寫字號。查無結果就回報查無。
+
+`citation-check` 對自身的能力刻意保守：`pass` 只代表引用的字號與 bundle 內的判決身份對得上 —— 不代表該段引文確實出自它所指的那一篇，也不代表法院見解被讀對了。
+
+隨附的 MCP 伺服器（`https://tlr.dr-lawbot.com/mcp`）需要一次性的 OAuth 授權，請透過 `/mcp` 完成。其後的 REST 端點免金鑰，在授權完成前 skill 會自動改走該路徑。
+
+封裝自 [aa0101181514/tw-legal-rag](https://github.com/aa0101181514/tw-legal-rag)（MIT）。查詢字串會送至第三方端點並可能被記錄，請先將機密事實抽象化為法律爭點。
+
+---
+
 ## 安裝
 
 ```
 /plugin marketplace add reiserwang/reiser-plugins
 /plugin install office-cli@reiser-plugins
+/plugin install tw-legal-rag@reiser-plugins
 ```
 
 若安裝結果顯示 `Run /reload-plugins to activate.`，請執行該指令。
@@ -165,14 +192,20 @@ reiser-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json        # 目錄檔 —— 每個外掛都必須列在此處
 ├── plugins/
-│   └── office-cli/
+│   ├── office-cli/
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── skills/
+│   │       ├── house-style/    # 路由 + 共用參考文件 + templates/<name>/
+│   │       ├── officecli-setup/
+│   │       ├── pptx-cli/
+│   │       ├── docx-cli/
+│   │       └── xlsx-cli/
+│   └── tw-legal-rag/
 │       ├── .claude-plugin/plugin.json
+│       ├── .mcp.json           # tlr 遠端 MCP 伺服器
 │       └── skills/
-│           ├── house-style/    # 路由 + 共用參考文件 + templates/<name>/
-│           ├── officecli-setup/
-│           ├── pptx-cli/
-│           ├── docx-cli/
-│           └── xlsx-cli/
+│           ├── judgment-research/
+│           └── citation-check/
 ├── README.md
 └── README.zh-TW.md
 ```
