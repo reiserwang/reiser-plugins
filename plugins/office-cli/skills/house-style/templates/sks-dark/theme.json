@@ -1,0 +1,94 @@
+{
+  "name": "SKS Dark",
+  "use": "The dark-field template. Midnight navy field, amber accent, dense read-not-projected pages, for screen-first material shown next to dark UI or video. Geometry measured from sks-dark.pptx; palette sampled from the reference comps.",
+  "dark": true,
+  "canvas_pt": [
+    1440,
+    810
+  ],
+  "colors": {
+    "bg": "#1A293A",
+    "bg_alt": "#213040",
+    "surface": "#213040",
+    "ink": "#F4F1EF",
+    "ink_soft": "#A9B2BB",
+    "ink_invert": "#1A293A",
+    "accent": "#B57319",
+    "accent_text": "#CCA348",
+    "accent_field": "#8A5613",
+    "accent_ink": "#F4F1EF",
+    "rule": "#3E4C5A",
+    "rule_soft": "#273546",
+    "series": [
+      "#B57319",
+      "#CCA348",
+      "#698EB1",
+      "#546D85",
+      "#5FB3AA",
+      "#A79EDA",
+      "#8FB07E",
+      "#5D6874"
+    ]
+  },
+  "fonts": {
+    "heading": "Arial",
+    "heading_alt": "微軟正黑體",
+    "body": "Arial",
+    "body_alt": "微軟正黑體",
+    "mono": "Consolas",
+    "mono_alt": "Menlo"
+  },
+  "geometry": {
+    "radius": 18,
+    "rule_w": 1.5,
+    "rule_w_heavy": 3.0,
+    "shadow": false,
+    "margin": 50,
+    "gutter": 14,
+    "card_fill": true,
+    "rule_w_hair": 0.75,
+    "radius_note": "deck-build takes one radius; the template's own panels run 2.0-26.0pt by role. See references/grid.md."
+  },
+  "discipline": "Built on 60-30-10 by area, inverted onto a dark field. 60% field: #1A293A midnight page with #213040 panel, #273546 callout and #3E4C5A rules, all within 1.2:1 of each other so the tints read as one family — raising a tint too far on a dark ground reads as a lit panel, not a grouping. 30% supporting: #F4F1EF headline ink at 13.13:1, #A9B2BB muted ink at 6.87:1, and #CCA348 gold where the accent is type. 10% accent: #B57319 amber as area — title rules, spines, badges, chart series 1 — plus #8A5613 as the field for bands and dividers. The accent runs in three value steps of one hue because no single warm can be a quiet rule, a small label and a full-bleed field at once: #B57319 is area-only at 3.82:1, #CCA348 carries type at 6.26:1 and takes dark ink at 6.26:1 as a fill, #8A5613 carries #F4F1EF at 5.46:1. Cover, Section Divider and Closing are full-bleed #8A5613 by design and exempt. No shadows, no glows, no coloured field beyond those three layouts. Dense and read-not-projected: type is small for its canvas and hierarchy is carried by weight and colour, not size. Light type on a dark ground blooms — never add bold to compensate.",
+  "never": [
+    "amber #B57319 as text below 24px (3.82:1 on the field — area only)",
+    "steel #698EB1 as body text (4.29:1 — display sizes only)",
+    "the reference grey #727C86 as supporting copy (3.48:1 on the field, 2.94:1 on the callout tint — use #A9B2BB at 5.80)",
+    "light text on a #B57319 fill (3.44:1) — drop the fill to #8A5613 or raise it to #CCA348 with #1A293A ink",
+    "#CCA348 or #B57319 as text in the .docx / .xlsx mapping — 2.36:1 and 3.87:1 on white",
+    "more than one accent as area per page; four amber blocks is decoration, not an accent",
+    "coloured slide fields outside Cover / Section Divider / Closing",
+    "bold body copy to compensate for the dark ground",
+    "drop shadows, bevels or glows",
+    "Calibri, or any theme-default font",
+    "中文 without font.ea set to 微軟正黑體",
+    "any colour outside palette.md",
+    "mixing this identity with ANA Blue, Yukima or Reiser Warm in one file"
+  ],
+  "proportions": {
+    "field_60": [
+      "#1A293A",
+      "#213040",
+      "#273546",
+      "#3E4C5A",
+      "#546D85",
+      "#5D6874"
+    ],
+    "supporting_30": [
+      "#F4F1EF",
+      "#A9B2BB",
+      "#CCA348"
+    ],
+    "accent_10": [
+      "#B57319",
+      "#CCA348",
+      "#8A5613"
+    ],
+    "note": "#CCA348 appears in both bands: as type it is supporting, as area it is accent. #B57319 is accent only — it can never be type below 24px."
+  },
+  "derived": {
+    "#A9B2BB": "lightened from the comp's #727C86, which is 3.48:1 on the field and fails as supporting copy",
+    "#8A5613": "darkened from #B57319 so a full-bleed accent field carries #F4F1EF at 5.46:1",
+    "#8FA9C4": "lightened from the comp's #698EB1 so the steel hue can carry small labels at 6.08:1"
+  }
+}

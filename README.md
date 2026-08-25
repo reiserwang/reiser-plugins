@@ -14,7 +14,7 @@ Two plugins.
 
 | Plugin | What it's for |
 |---|---|
-| `office-cli` | Decks, reports and workbooks in a house style — five skills, three interchangeable design templates. |
+| `office-cli` | Decks, reports and workbooks in a house style — five skills, four interchangeable design templates. |
 | `tw-legal-rag` | Taiwan court judgments and 行政函釋 — semantic retrieval with citation discipline wired in. |
 
 ### office-cli
@@ -32,8 +32,11 @@ Two plugins.
 | **ANA Blue** | white | deep blue `#0B318F` | anything brand-facing — board, regulator, investor, customer, partner |
 | **Yukima 雪間** | cool blue-grey | slate `#4B6F87` | research, ESG and sustainability, long-form analysis |
 | **Reiser Warm** | warm cream | coral `#CC785C` | personal work, drafts, internal thinking documents |
+| **SKS Dark** | midnight navy | amber `#B57319` | screen-first work — on-stage and on-screen decks, product walkthroughs, launch sets, operations views |
 
-All three carry the same 19 named layouts on the same 1440 × 810 pt grid, so switching between them is a restyle, not a rebuild. Each is built on 60-30-10 by area, and every contrast ratio for every palette is generated into `references/contrast-matrix.md` rather than typed by hand.
+All four carry the same 19 named layouts on the same 1440 × 810 pt grid, so switching between them is a restyle, not a rebuild. Each is built on 60-30-10 by area, and every contrast ratio for every palette is generated into `references/contrast-matrix.md` rather than typed by hand.
+
+*SKS Dark* inverts the arrangement onto a dark field: the tints step up from midnight rather than down from white, and its accent runs three value steps of one warm — amber for area, gold for type, deep amber for the full-bleed divider fields — because on a dark ground no single warm can do all three jobs and stay legible.
 
 *Yukima* (雪間) is the early-spring word for bare ground appearing through melting snow — the palette runs snow-blues through fresh greens to warm earth, and its swatches keep their Japanese seasonal names.
 

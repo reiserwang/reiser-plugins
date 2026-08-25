@@ -63,6 +63,38 @@ Surfaces: `#F5F1ED` · `#E8E4DF` · `#F5F3F1` · accent field `#CC785C`
 | `#F5F1ED` | 2.92 | **fill only** |
 | `#B3CBC1` | 1.91 | **fill only** |
 
+## SKS Dark
+
+Surfaces: `#1A293A` · `#213040` · `#273546` · accent field `#8A5613`
+
+| Token | Hex | Band | on `#1A293A` | on `#213040` | on `#273546` | on `#8A5613` | Verdict on page |
+|---|---|---|---|---|---|---|---|
+| midnight | `#1A293A` | field | — | 1.10 | 1.18 | 2.41 | — |
+| panel | `#213040` | field | 1.10 | — | 1.08 | 2.19 | **fill only** |
+| callout | `#273546` | field | 1.18 | 1.08 | — | 2.03 | **fill only** |
+| rule | `#3E4C5A` | field | 1.68 | 1.53 | 1.42 | 1.43 | **fill only** |
+| deep steel | `#546D85` | field | 2.74 | 2.50 | 2.32 | 1.14 | **fill only** |
+| grey | `#5D6874` | field | 2.60 | 2.37 | 2.20 | 1.08 | **fill only** |
+| headline ink | `#F4F1EF` | supporting | 13.13 | 11.96 | 11.09 | 5.46 | any size |
+| muted ink *(derived)* | `#A9B2BB` | supporting | 6.87 | 6.26 | 5.80 | 2.86 | any size |
+| muted ink alt | `#727C86` | supporting | 3.48 | 3.17 | 2.94 | 1.44 | large only |
+| amber | `#B57319` | accent | 3.82 | 3.48 | 3.23 | 1.59 | large only |
+| gold | `#CCA348` | accent | 6.26 | 5.70 | 5.29 | 2.60 | any size |
+| amber deep *(derived)* | `#8A5613` | accent | 2.41 | 2.19 | 2.03 | — | **fill only** |
+| cat steel | `#698EB1` | categorical | 4.29 | 3.91 | 3.63 | 1.78 | large only |
+| cat steel light *(derived)* | `#8FA9C4` | categorical | 6.08 | 5.53 | 5.13 | 2.53 | any size |
+| cat teal | `#5FB3AA` | categorical | 5.99 | 5.45 | 5.06 | 2.49 | any size |
+| cat violet | `#A79EDA` | categorical | 6.01 | 5.47 | 5.08 | 2.50 | any size |
+| cat sage | `#8FB07E` | categorical | 6.10 | 5.56 | 5.15 | 2.54 | any size |
+
+**Reverse text on the accent field.**
+
+| Foreground | on `#8A5613` | Verdict |
+|---|---|---|
+| `#FFFFFF` | 6.14 | any size |
+| `#1A293A` | 2.41 | **fill only** |
+| `#F4F1EF` | 5.46 | any size |
+
 ## Yukima
 
 Surfaces: `#F1F6FA` · `#C8DAE8` · `#F5F3F1` · accent field `#4B6F87`
