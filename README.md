@@ -181,7 +181,8 @@ plugins/office-cli/skills/house-style/
     ├── README.md            how to add another template
     ├── ana-blue/            TEMPLATE.md · palette.md · theme.json · ana-blue.pptx
     ├── yukima/              TEMPLATE.md · palette.md · theme.json · yukima.pptx
-    └── reiser-warm/         TEMPLATE.md · palette.md · theme.json · reiser-warm.pptx
+    ├── reiser-warm/         TEMPLATE.md · palette.md · theme.json · reiser-warm.pptx
+    └── sks-dark/            TEMPLATE.md · palette.md · theme.json · sks-dark.pptx
 ```
 
 Read `SKILL.md`, then exactly one `TEMPLATE.md`. Everything else loads on demand.

@@ -4,9 +4,15 @@ Office document creation and editing through the [OfficeCLI](https://github.com/
 
 ## Why this exists
 
-OfficeCLI addresses `.pptx` / `.docx` / `.xlsx` as a path-addressable DOM (`/slide[1]/shape[@id=100000]`) and can render any document to PNG. That makes two things possible that the python-based Office skills do not do well: **editing an existing file in place**, and **seeing whether the result actually looks right** before delivering it.
+The binary is one npm line away and ships nothing this plugin needs to carry — no vendored executable, no SDK dependency. What OfficeCLI gives you is a path-addressable DOM over `.pptx` / `.docx` / `.xlsx` (`/slide[1]/shape[@id=100000]`) and a PNG renderer: **edit an existing file in place**, and **look at the result** before delivering it. It has no opinion about what a deck should look like.
 
-This plugin wraps that capability and adds the style layer — palette, type scale, slide grid and 19 named layouts, all measured from real template files rather than invented.
+That opinion is the plugin. Three things, in order of what they're worth:
+
+1. **Four design templates.** Four `.pptx` masters, 19 named layouts each on one shared 1440 × 810 pt grid, a `theme.json` per template for `deck-build`, and palettes whose every contrast ratio is *generated* by `scripts/contrast.py` rather than typed. Interchangeable at the folder level, so ANA Blue → SKS Dark is a master swap, not a rebuild. None of this exists upstream.
+2. **Routing.** `house-style` picks the template, then the pipeline. It exists to prevent the two mistakes that cost the most: rebuilding a deck that should have been edited, and running `deck-build` with no spec — which produces a card grid with a title on top, as its own documentation admits.
+3. **Failure modes someone already paid for.** The wrong npm package, the 403 installer, zsh globbing an unquoted `[1]`, the shell eating `$15M`, and officecli's resident documents handing a stale file to whatever reads next. Each is a burned turn or a silently wrong deliverable for a session that hasn't met them before.
+
+The bundled reference docs under `references/` are the weakest part — they drift, and `officecli help` wins. Strip the templates and the routing and what remains is a thin wrapper around that help output, not worth installing.
 
 ## Skills
 
@@ -22,13 +28,14 @@ Each format skill carries the relevant upstream OfficeCLI skills under `referenc
 
 ## Style templates
 
-Three ship today. Each is a folder with the same four files, so adding a fourth changes nothing outside its own directory.
+Four ship today. Each is a folder with the same four files, so adding a fifth changes nothing outside its own directory.
 
 | Template | Field | Accent | Use for |
 |---|---|---|---|
 | `ana-blue` | white `#FFFFFF` | deep blue `#0B318F` | brand-facing: board, regulator, investor, customer, partner |
 | `yukima` 雪間 | cool blue-grey `#F1F6FA` | slate `#4B6F87` | research, ESG and sustainability, long-form analysis |
 | `reiser-warm` | warm cream `#F5F1ED` | coral `#CC785C` | personal work, drafts, internal thinking documents |
+| `sks-dark` | midnight `#1A293A` | amber `#B57319` | screen-first: on-stage and on-screen decks, product walkthroughs, launch sets, operations views |
 
 ```
 skills/house-style/
@@ -40,12 +47,13 @@ skills/house-style/
 └── templates/
     ├── ana-blue/        TEMPLATE.md · palette.md · theme.json · ana-blue.pptx
     ├── yukima/          TEMPLATE.md · palette.md · theme.json · yukima.pptx
-    └── reiser-warm/     TEMPLATE.md · palette.md · theme.json · reiser-warm.pptx
+    ├── reiser-warm/     TEMPLATE.md · palette.md · theme.json · reiser-warm.pptx
+    └── sks-dark/        TEMPLATE.md · palette.md · theme.json · sks-dark.pptx
 ```
 
-Geometry is shared and identical across templates: **1440 × 810 pt** canvas, 56pt margins, 1328pt content band, 16.2pt gutter, 19 layouts with the same names and order in both. Restyling a deck from one template to the other is a master swap, not a rebuild.
+Geometry is shared and identical across templates: **1440 × 810 pt** canvas, 56pt margins, 1328pt content band, 16.2pt gutter, 19 layouts with the same names and order in all four. Restyling a deck from one template to another is a master swap, not a rebuild.
 
-All three palettes are built on **60-30-10 by area** — 60% field and tints, 30% ink, 10% accent — declared in each `palette.md` and machine-readable in each `theme.json`. Where they differ: coral cannot be text, so Reiser Warm's accent band is fills only; ANA Blue's deep blue and Yukima's slate are both text-safe, so each counts as supporting when it is type and accent when it is area. Yukima's source palette had no ink at all, so both of its inks are derived from the accent hue and marked as such.
+All four palettes are built on **60-30-10 by area** — 60% field and tints, 30% ink, 10% accent — declared in each `palette.md` and machine-readable in each `theme.json`. Where they differ: coral cannot be text, so Reiser Warm's accent band is fills only; ANA Blue's deep blue and Yukima's slate are both text-safe, so each counts as supporting when it is type and accent when it is area. Yukima's source palette had no ink at all, so both of its inks are derived from the accent hue and marked as such. SKS Dark inverts the whole arrangement onto a dark field and needs three value steps of one warm — amber for area, gold for type, deep amber for the full-bleed dividers — because on a dark ground no single warm carries all three jobs and stays legible.
 
 Every ratio for every palette lives in `references/contrast-matrix.md`, generated by `scripts/contrast.py`. `--check` verifies that no palette document claims a colour its `.pptx` does not contain.
 

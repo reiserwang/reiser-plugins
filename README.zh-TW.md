@@ -174,14 +174,15 @@ plugins/office-cli/skills/house-style/
 │   ├── layouts.md           全部 19 個版面配置、每個物件、精確座標
 │   ├── pipelines.md         複製範本 · deck-design/deck-build · Word 與 Excel
 │   ├── contrast.md          對比度門檻與各範本的注意事項
-│   └── contrast-matrix.md   程式產生 —— 三套配色的所有對比值
+│   └── contrast-matrix.md   程式產生 —— 四套配色的所有對比值
 ├── scripts/
 │   └── contrast.py          重新產生對比表；--check 驗證色票與 .pptx 是否一致
 └── templates/
     ├── README.md            如何新增範本
     ├── ana-blue/            TEMPLATE.md · palette.md · theme.json · ana-blue.pptx
     ├── yukima/              TEMPLATE.md · palette.md · theme.json · yukima.pptx
-    └── reiser-warm/         TEMPLATE.md · palette.md · theme.json · reiser-warm.pptx
+    ├── reiser-warm/         TEMPLATE.md · palette.md · theme.json · reiser-warm.pptx
+    └── sks-dark/            TEMPLATE.md · palette.md · theme.json · sks-dark.pptx
 ```
 
 先讀 `SKILL.md`，再讀其中一個 `TEMPLATE.md`。其餘檔案依需要載入即可。
