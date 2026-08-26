@@ -36,6 +36,8 @@ The **scoped** name is mandatory. Two things break here otherwise:
 
 npm registry access works, so the scoped package is the only reliable route. Install once per session — the cloud container is ephemeral, so a fresh session needs it again.
 
+The npm package is a small shim: its postinstall downloads the native binary for the platform. An install that succeeds but leaves `officecli --version` failing means that download was blocked — a proxy, an air-gapped machine, or `npm --ignore-scripts`. Nothing in this plugin can substitute for it; the binary is not vendored.
+
 ### The user's Mac (`device_bash`, or their local Claude Code)
 
 `device_bash` has **no network access** — it cannot install anything. Check whether it is already present:
