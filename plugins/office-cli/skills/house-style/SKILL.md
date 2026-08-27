@@ -119,6 +119,7 @@ Two content failure modes to watch for regardless of the source:
 - [`references/layouts.md`](references/layouts.md) — all 19 layouts, every shape, exact coordinates
 - [`references/pipelines.md`](references/pipelines.md) — the `deck-design` → `deck-build` pipeline, and the Word / Excel path
 - [`references/contrast.md`](references/contrast.md) — the contrast gate and the traps that matter per template
-- [`references/contrast-matrix.md`](references/contrast-matrix.md) — every colour against every surface, in all three palettes. Generated; do not hand-edit.
+- [`references/contrast-matrix.md`](references/contrast-matrix.md) — every colour against every surface, in all four palettes. Generated; do not hand-edit.
+- [`references/palettes.zh-TW.html`](references/palettes.zh-TW.html) — 繁中色票表. A standalone swatch sheet for all four palettes: every token grouped by band, with its measured ratios against that palette's own three surfaces, and three miniature layouts per template showing the palette in use. Open it in a browser; nothing else loads it.
 - [`scripts/contrast.py`](scripts/contrast.py) — regenerates the matrix (`--write`) and verifies tokens against the `.pptx` files (`--check`)
 - Sibling skills: `pptx-cli`, `docx-cli`, `xlsx-cli`, `officecli-setup`
