@@ -1,0 +1,88 @@
+{
+  "name": "SKS Blue",
+  "use": "The product-facing template, light field. White page, #2F55F0 accent, for product and platform material that has to sit next to the live SPACES site. Geometry measured from sks-blue.pptx; palette read from the prototype.",
+  "dark": false,
+  "canvas_pt": [
+    1440,
+    810
+  ],
+  "provenance": "Hexes were read off the SPACES prototype by eye, not sampled — the Figma file is not shared with the account wired into this toolchain and the prototype renders to an unreadable WebGL canvas. Ratios are exact for the hexes as written. Reconcile against the real design variables when access is granted.",
+  "pairs_with": "theme.dark.json",
+  "colors": {
+    "bg": "#FFFFFF",
+    "bg_alt": "#F1F4FC",
+    "surface": "#F1F4FC",
+    "surface_lifted": "#E5E9F6",
+    "ink": "#101623",
+    "ink_soft": "#444E60",
+    "ink_invert": "#FFFFFF",
+    "accent": "#2F55F0",
+    "accent_text": "#2F55F0",
+    "accent_field": "#1B3585",
+    "accent_ink": "#FFFFFF",
+    "rule": "#C9D2EA",
+    "rule_soft": "#E5E9F6",
+    "muted_fill": "#A9B6D6",
+    "series": [
+      "#3D6AFF",
+      "#1A83A3",
+      "#268777",
+      "#218A4B",
+      "#9E7015",
+      "#9C53E6",
+      "#C95624",
+      "#D4446A"
+    ]
+  },
+  "fonts": {
+    "heading": "Arial",
+    "heading_alt": "微軟正黑體",
+    "body": "Arial",
+    "body_alt": "微軟正黑體",
+    "mono": "Consolas",
+    "mono_alt": "Menlo"
+  },
+  "geometry": {
+    "radius": 18,
+    "rule_w": 1.5,
+    "rule_w_heavy": 3.0,
+    "shadow": false,
+    "margin": 50,
+    "gutter": 14,
+    "card_fill": true,
+    "rule_w_hair": 0.75,
+    "radius_note": "deck-build takes one radius; the template's own panels run 2.0-26.0pt by role. See references/grid.md."
+  },
+  "discipline": "Built on 60-30-10 by area. 60% field: #FFFFFF page with #F1F4FC panel, #E5E9F6 callout and #C9D2EA rules, all within 1.25:1 of each other so the tints read as one family. 30% supporting: #101623 headline ink at 18.09:1, #444E60 muted ink at 8.39:1, and #2F55F0 where blue is type at 5.71:1. 10% accent: #2F55F0 as area — title rules, spines, badges, CTA fills. The accent is text-safe on this field, so it occupies both bands and the ceiling governs blue as area, not blue as type. Cover, Section Divider and Closing are full-bleed #1B3585 by design and exempt — and identical to the dark theme's, which is what makes the pair read as one identity. The eight-colour chart ramp is shared with the dark theme and is mark-only in both. No shadows. Dense and read-not-projected.",
+  "never": [
+    "a categorical colour on a text run — the shared ramp is mark-only in both themes",
+    "#2F55F0 as the first chart series (use #3D6AFF; the accent dies on the dark callout tint)",
+    "dark ink on a #2F55F0 fill — 3.17:1; a blue fill takes white at 5.71:1",
+    "more than one accent as area per page",
+    "coloured slide fields outside Cover / Section Divider / Closing",
+    "drop shadows or bevels",
+    "Calibri, or any theme-default font",
+    "中文 without font.ea set to 微軟正黑體",
+    "any colour outside palette.md",
+    "mixing this identity with ANA Blue, Yukima, Reiser Warm or SKS Dark in one file"
+  ],
+  "proportions": {
+    "field_60": [
+      "#FFFFFF",
+      "#F1F4FC",
+      "#E5E9F6",
+      "#C9D2EA",
+      "#A9B6D6"
+    ],
+    "supporting_30": [
+      "#101623",
+      "#444E60",
+      "#2F55F0"
+    ],
+    "accent_10": [
+      "#2F55F0",
+      "#1B3585"
+    ],
+    "note": "#2F55F0 appears in both bands: as type it is supporting, as area it is accent. #1B3585 is accent field only."
+  }
+}

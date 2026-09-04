@@ -1,0 +1,91 @@
+{
+  "name": "SKS Blue Dark",
+  "use": "The product-facing template, dark field. Near-black #080D1A page, same #2F55F0 accent, for screens, stage and anything shown next to the SPACES dark hero. Geometry measured from sks-blue-dark.pptx.",
+  "dark": true,
+  "canvas_pt": [
+    1440,
+    810
+  ],
+  "provenance": "Hexes were read off the SPACES prototype by eye, not sampled — the Figma file is not shared with the account wired into this toolchain and the prototype renders to an unreadable WebGL canvas. Ratios are exact for the hexes as written. Reconcile against the real design variables when access is granted.",
+  "pairs_with": "theme.json",
+  "colors": {
+    "bg": "#080D1A",
+    "bg_alt": "#101832",
+    "surface": "#101832",
+    "surface_lifted": "#16204A",
+    "ink": "#FFFFFF",
+    "ink_soft": "#A8B4CE",
+    "ink_invert": "#080D1A",
+    "accent": "#2F55F0",
+    "accent_text": "#8CB8FF",
+    "accent_field": "#1B3585",
+    "accent_ink": "#FFFFFF",
+    "rule": "#2A3760",
+    "rule_soft": "#16204A",
+    "muted_fill": "#3A4A7A",
+    "series": [
+      "#3D6AFF",
+      "#1A83A3",
+      "#268777",
+      "#218A4B",
+      "#9E7015",
+      "#9C53E6",
+      "#C95624",
+      "#D4446A"
+    ]
+  },
+  "fonts": {
+    "heading": "Arial",
+    "heading_alt": "微軟正黑體",
+    "body": "Arial",
+    "body_alt": "微軟正黑體",
+    "mono": "Consolas",
+    "mono_alt": "Menlo"
+  },
+  "geometry": {
+    "radius": 18,
+    "rule_w": 1.5,
+    "rule_w_heavy": 3.0,
+    "shadow": false,
+    "margin": 50,
+    "gutter": 14,
+    "card_fill": true,
+    "rule_w_hair": 0.75,
+    "radius_note": "deck-build takes one radius; the template's own panels run 2.0-26.0pt by role. See references/grid.md."
+  },
+  "discipline": "The light theme inverted onto a near-black field, same grid, same accent, same ramp. 60% field: #080D1A page with #101832 panel, #16204A callout and #2A3760 rules — the tints step up from the ground, not down, and stay within 1.25:1 so they read as one family. 30% supporting: #FFFFFF headline ink at 19.39:1, #A8B4CE muted ink at 9.31:1, and #8CB8FF where blue is type at 9.62:1 — the prototype's own colour for the Chinese subtitle on its dark hero. 10% accent: #2F55F0 as area only; on this field it is 3.40:1 and on the callout tint 2.75:1, so it is a mark, never a label, and never on the callout tint at all. Cover, Section Divider and Closing are full-bleed #1B3585 — byte-identical to the light theme's, which is the join between the two files. Light type on a dark ground blooms: never add bold to compensate.",
+  "never": [
+    "#2F55F0 as text — 3.40:1 on the field; use #8CB8FF at 9.62:1",
+    "#2F55F0 anywhere on the #16204A callout tint — 2.75:1, below the mark floor",
+    "a categorical colour on a text run — the shared ramp is mark-only in both themes",
+    "#2F55F0 as the first chart series (use #3D6AFF)",
+    "dark ink on a #2F55F0 fill — a blue fill takes white at 5.71:1",
+    "bold body copy to compensate for the dark ground",
+    "more than one accent as area per page",
+    "coloured slide fields outside Cover / Section Divider / Closing",
+    "drop shadows, bevels or glows",
+    "Calibri, or any theme-default font",
+    "中文 without font.ea set to 微軟正黑體",
+    "any colour outside palette.md",
+    "mixing this identity with ANA Blue, Yukima, Reiser Warm or SKS Dark in one file"
+  ],
+  "proportions": {
+    "field_60": [
+      "#080D1A",
+      "#101832",
+      "#16204A",
+      "#2A3760",
+      "#3A4A7A"
+    ],
+    "supporting_30": [
+      "#FFFFFF",
+      "#A8B4CE",
+      "#8CB8FF"
+    ],
+    "accent_10": [
+      "#2F55F0",
+      "#1B3585"
+    ],
+    "note": "On this field the accent is never type. #8CB8FF carries the accent as type and belongs to the 30%."
+  }
+}

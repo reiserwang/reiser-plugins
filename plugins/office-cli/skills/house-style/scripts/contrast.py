@@ -76,6 +76,61 @@ PALETTES = {
         "derived": ["#9D5C47", "#5C5650"],
         "optional": ["#B3CBC1"],
     },
+    "SKS Blue": {
+        "folder": "sks-blue",
+        "surfaces": ["#FFFFFF", "#F1F4FC", "#E5E9F6"],
+        "accent_field": "#1B3585",
+        "tokens": [
+            ("white",            "#FFFFFF", "field",       "page"),
+            ("panel",            "#F1F4FC", "field",       "inset surface"),
+            ("callout",          "#E5E9F6", "field",       "lifted surface"),
+            ("rule",             "#C9D2EA", "field",       "rules and borders"),
+            ("muted fill",       "#A9B6D6", "field",       "inactive states"),
+            ("headline ink",     "#101623", "supporting",  "titles, body"),
+            ("muted ink",        "#444E60", "supporting",  "captions, footers"),
+            ("blue",             "#2F55F0", "accent",      "accent as area; supporting as type"),
+            ("blue deep",        "#1B3585", "accent",      "the full-bleed divider field"),
+            ("cat blue",         "#3D6AFF", "categorical", "series 1 - shared ramp, mark only"),
+            ("cat cyan",         "#1A83A3", "categorical", "series 2 - shared ramp, mark only"),
+            ("cat teal",         "#268777", "categorical", "series 3 - shared ramp, mark only"),
+            ("cat green",        "#218A4B", "categorical", "series 4 - shared ramp, mark only"),
+            ("cat amber",        "#9E7015", "categorical", "series 5 - shared ramp, mark only"),
+            ("cat violet",       "#9C53E6", "categorical", "series 6 - shared ramp, mark only"),
+            ("cat orange",       "#C95624", "categorical", "series 7 - shared ramp, mark only"),
+            ("cat rose",         "#D4446A", "categorical", "series 8 - shared ramp, mark only"),
+        ],
+        "derived": [],
+        "optional": [],
+    },
+    "SKS Blue Dark": {
+        "folder": "sks-blue",
+        "pptx_file": "sks-blue-dark.pptx",
+        "theme_file": "theme.dark.json",
+        "surfaces": ["#080D1A", "#101832", "#16204A"],
+        "accent_field": "#1B3585",
+        "tokens": [
+            ("midnight",         "#080D1A", "field",       "page"),
+            ("panel",            "#101832", "field",       "inset surface"),
+            ("callout",          "#16204A", "field",       "lifted surface"),
+            ("rule",             "#2A3760", "field",       "rules and borders"),
+            ("muted fill",       "#3A4A7A", "field",       "inactive states"),
+            ("headline ink",     "#FFFFFF", "supporting",  "titles, body, reverse ink"),
+            ("muted ink",        "#A8B4CE", "supporting",  "captions, footers"),
+            ("blue light",       "#8CB8FF", "supporting",  "the accent as type on this field"),
+            ("blue",             "#2F55F0", "accent",      "accent as area only - 3.40 on the field"),
+            ("blue deep",        "#1B3585", "accent",      "the full-bleed divider field"),
+            ("cat blue",         "#3D6AFF", "categorical", "series 1 - shared ramp, mark only"),
+            ("cat cyan",         "#1A83A3", "categorical", "series 2 - shared ramp, mark only"),
+            ("cat teal",         "#268777", "categorical", "series 3 - shared ramp, mark only"),
+            ("cat green",        "#218A4B", "categorical", "series 4 - shared ramp, mark only"),
+            ("cat amber",        "#9E7015", "categorical", "series 5 - shared ramp, mark only"),
+            ("cat violet",       "#9C53E6", "categorical", "series 6 - shared ramp, mark only"),
+            ("cat orange",       "#C95624", "categorical", "series 7 - shared ramp, mark only"),
+            ("cat rose",         "#D4446A", "categorical", "series 8 - shared ramp, mark only"),
+        ],
+        "derived": [],
+        "optional": [],
+    },
     "SKS Dark": {
         "folder": "sks-dark",
         "surfaces": ["#1A293A", "#213040", "#273546"],
@@ -186,7 +241,7 @@ def check():
     bad = 0
     notes = []
     for name, p in PALETTES.items():
-        pptx = os.path.join(TEMPLATES, p["folder"], p["folder"] + ".pptx")
+        pptx = os.path.join(TEMPLATES, p["folder"], p.get("pptx_file", p["folder"] + ".pptx"))
         if not os.path.exists(pptx):
             print(f"  MISSING {pptx}")
             bad += 1
@@ -207,7 +262,7 @@ def check():
                 continue
             print(f"  {name}: {band} token {tname} {hexv} is not in {p['folder']}.pptx")
             bad += 1
-        theme = os.path.join(TEMPLATES, p["folder"], "theme.json")
+        theme = os.path.join(TEMPLATES, p["folder"], p.get("theme_file", "theme.json"))
         if os.path.exists(theme):
             j = json.load(open(theme))
             if j.get("name") != name:

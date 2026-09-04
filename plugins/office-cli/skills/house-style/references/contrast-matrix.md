@@ -63,6 +63,71 @@ Surfaces: `#F5F1ED` · `#E8E4DF` · `#F5F3F1` · accent field `#CC785C`
 | `#F5F1ED` | 2.92 | **fill only** |
 | `#B3CBC1` | 1.91 | **fill only** |
 
+## SKS Blue
+
+Surfaces: `#FFFFFF` · `#F1F4FC` · `#E5E9F6` · accent field `#1B3585`
+
+| Token | Hex | Band | on `#FFFFFF` | on `#F1F4FC` | on `#E5E9F6` | on `#1B3585` | Verdict on page |
+|---|---|---|---|---|---|---|---|
+| white | `#FFFFFF` | field | — | 1.10 | 1.21 | 11.08 | — |
+| panel | `#F1F4FC` | field | 1.10 | — | 1.10 | 10.07 | **fill only** |
+| callout | `#E5E9F6` | field | 1.21 | 1.10 | — | 9.14 | **fill only** |
+| rule | `#C9D2EA` | field | 1.51 | 1.37 | 1.25 | 7.33 | **fill only** |
+| muted fill | `#A9B6D6` | field | 2.03 | 1.84 | 1.67 | 5.46 | **fill only** |
+| headline ink | `#101623` | supporting | 18.09 | 16.44 | 14.92 | 1.63 | any size |
+| muted ink | `#444E60` | supporting | 8.39 | 7.62 | 6.91 | 1.32 | any size |
+| blue | `#2F55F0` | accent | 5.71 | 5.19 | 4.71 | 1.94 | any size |
+| blue deep | `#1B3585` | accent | 11.08 | 10.07 | 9.14 | — | any size |
+| cat blue | `#3D6AFF` | categorical | 4.46 | 4.06 | 3.68 | 2.48 | large only |
+| cat cyan | `#1A83A3` | categorical | 4.36 | 3.96 | 3.59 | 2.54 | large only |
+| cat teal | `#268777` | categorical | 4.36 | 3.96 | 3.60 | 2.54 | large only |
+| cat green | `#218A4B` | categorical | 4.37 | 3.97 | 3.61 | 2.53 | large only |
+| cat amber | `#9E7015` | categorical | 4.39 | 3.99 | 3.62 | 2.52 | large only |
+| cat violet | `#9C53E6` | categorical | 4.38 | 3.98 | 3.61 | 2.53 | large only |
+| cat orange | `#C95624` | categorical | 4.34 | 3.94 | 3.58 | 2.55 | large only |
+| cat rose | `#D4446A` | categorical | 4.34 | 3.95 | 3.58 | 2.55 | large only |
+
+**Reverse text on the accent field.**
+
+| Foreground | on `#1B3585` | Verdict |
+|---|---|---|
+| `#FFFFFF` | 11.08 | any size |
+| `#FFFFFF` | 11.08 | any size |
+| `#444E60` | 1.32 | **fill only** |
+
+## SKS Blue Dark
+
+Surfaces: `#080D1A` · `#101832` · `#16204A` · accent field `#1B3585`
+
+| Token | Hex | Band | on `#080D1A` | on `#101832` | on `#16204A` | on `#1B3585` | Verdict on page |
+|---|---|---|---|---|---|---|---|
+| midnight | `#080D1A` | field | — | 1.11 | 1.24 | 1.75 | — |
+| panel | `#101832` | field | 1.11 | — | 1.12 | 1.58 | **fill only** |
+| callout | `#16204A` | field | 1.24 | 1.12 | — | 1.41 | **fill only** |
+| rule | `#2A3760` | field | 1.68 | 1.51 | 1.35 | 1.04 | **fill only** |
+| muted fill | `#3A4A7A` | field | 2.25 | 2.04 | 1.82 | 1.29 | **fill only** |
+| headline ink | `#FFFFFF` | supporting | 19.39 | 17.52 | 15.68 | 11.08 | any size |
+| muted ink | `#A8B4CE` | supporting | 9.31 | 8.41 | 7.53 | 5.32 | any size |
+| blue light | `#8CB8FF` | supporting | 9.62 | 8.69 | 7.77 | 5.50 | any size |
+| blue | `#2F55F0` | accent | 3.40 | 3.07 | 2.75 | 1.94 | large only |
+| blue deep | `#1B3585` | accent | 1.75 | 1.58 | 1.41 | — | **fill only** |
+| cat blue | `#3D6AFF` | categorical | 4.34 | 3.92 | 3.51 | 2.48 | large only |
+| cat cyan | `#1A83A3` | categorical | 4.45 | 4.02 | 3.60 | 2.54 | large only |
+| cat teal | `#268777` | categorical | 4.45 | 4.02 | 3.59 | 2.54 | large only |
+| cat green | `#218A4B` | categorical | 4.43 | 4.01 | 3.58 | 2.53 | large only |
+| cat amber | `#9E7015` | categorical | 4.42 | 3.99 | 3.57 | 2.52 | large only |
+| cat violet | `#9C53E6` | categorical | 4.43 | 4.00 | 3.58 | 2.53 | large only |
+| cat orange | `#C95624` | categorical | 4.47 | 4.04 | 3.61 | 2.55 | large only |
+| cat rose | `#D4446A` | categorical | 4.46 | 4.03 | 3.61 | 2.55 | large only |
+
+**Reverse text on the accent field.**
+
+| Foreground | on `#1B3585` | Verdict |
+|---|---|---|
+| `#FFFFFF` | 11.08 | any size |
+| `#080D1A` | 1.75 | **fill only** |
+| `#A8B4CE` | 5.32 | any size |
+
 ## SKS Dark
 
 Surfaces: `#1A293A` · `#213040` · `#273546` · accent field `#8A5613`

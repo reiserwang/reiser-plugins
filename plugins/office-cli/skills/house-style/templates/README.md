@@ -1,6 +1,6 @@
 # Templates
 
-Each style template lives in its own folder and ships the same four files. Nothing outside the folder needs to change when a template's colours change.
+Each style template lives in its own folder and ships the same four files. `sks-blue` is the one exception: it ships **two fields in one identity**, so its folder carries a second `.pptx` and a second `theme.dark.json` alongside the usual four. `contrast.py` addresses those with the optional `pptx_file` and `theme_file` keys. Nothing outside the folder needs to change when a template's colours change.
 
 ```
 templates/<name>/
@@ -16,10 +16,11 @@ templates/<name>/
 | [`yukima`](yukima/TEMPLATE.md) | cool blue-grey `#F1F6FA` | slate `#4B6F87` | research, ESG and sustainability, long-form analysis |
 | [`reiser-warm`](reiser-warm/TEMPLATE.md) | warm cream `#F5F1ED` | coral `#CC785C` | personal work, drafts, internal thinking documents |
 | [`sks-dark`](sks-dark/TEMPLATE.md) | midnight `#1A293A` | amber `#B57319` | screen-first: on-stage and on-screen decks, product walkthroughs, launch and demo sets, operations views |
+| [`sks-blue`](sks-blue/TEMPLATE.md) | **two fields** — white `#FFFFFF` and midnight `#080D1A` | blue `#2F55F0` | product and platform material that sits next to the live product site |
 
-Geometry is shared across all four — see [`../references/grid.md`](../references/grid.md) and [`../references/layouts.md`](../references/layouts.md). The templates differ **only in colour**, which is what makes restyling a deck from one to the other a master swap rather than a rebuild.
+Geometry is shared across all five — see [`../references/grid.md`](../references/grid.md) and [`../references/layouts.md`](../references/layouts.md). The templates differ **only in colour**, which is what makes restyling a deck from one to the other a master swap rather than a rebuild.
 
-All four are built on **60-30-10 by area**: 60% field and tints, 30% ink, 10% accent, with the three divider layouts exempt. Each `palette.md` declares its own bands, and each `theme.json` carries the same split as a machine-readable `proportions` block.
+All five are built on **60-30-10 by area**: 60% field and tints, 30% ink, 10% accent, with the three divider layouts exempt. Each `palette.md` declares its own bands, and each `theme.json` carries the same split as a machine-readable `proportions` block.
 
 ## Adding a template
 

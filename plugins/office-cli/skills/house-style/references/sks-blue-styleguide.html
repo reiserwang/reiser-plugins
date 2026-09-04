@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SKS Blue Styleguide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+
+</head>
+<body>
+<style>
+/* ── SKS Blue tokens · LIGHT is the base ─────────────────────────── */
+:root{
+  --bg:#FFFFFF; --surface:#F1F4FC; --lifted:#E5E9F6; --rule:#C9D2EA; --mutedfill:#A9B6D6;
+  --ink:#101623; --ink-muted:#444E60;
+  --accent:#2F55F0; --accent-text:#2F55F0; --accent-field:#1B3585; --on-accent:#FFFFFF;
+  --s1:#3D6AFF; --s2:#1A83A3; --s3:#268777; --s4:#218A4B;
+  --s5:#9E7015; --s6:#9C53E6; --s7:#C95624; --s8:#D4446A;
+  --shadow:0 1px 2px rgba(16,22,35,.06),0 10px 30px rgba(16,22,35,.07);
+  --chip-ink:#101623;
+  --display:"Outfit","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --office:Arial,"微軟正黑體","Noto Sans TC","PingFang TC",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#080D1A; --surface:#101832; --lifted:#16204A; --rule:#2A3760; --mutedfill:#3A4A7A;
+    --ink:#FFFFFF; --ink-muted:#A8B4CE;
+    --accent:#2F55F0; --accent-text:#8CB8FF; --accent-field:#1B3585; --on-accent:#FFFFFF;
+    --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.42);
+    --chip-ink:#FFFFFF;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#080D1A; --surface:#101832; --lifted:#16204A; --rule:#2A3760; --mutedfill:#3A4A7A;
+  --ink:#FFFFFF; --ink-muted:#A8B4CE;
+  --accent:#2F55F0; --accent-text:#8CB8FF; --accent-field:#1B3585; --on-accent:#FFFFFF;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.42);
+  --chip-ink:#FFFFFF;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--display);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  transition:background .18s ease,color .18s ease}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+:focus-visible{outline:2px solid var(--accent-text);outline-offset:3px;border-radius:4px}
+h1,h2,h3,h4{text-wrap:balance;margin:0}
+code,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ── bar ──────────────────────────────────────────────────────────── */
+.bar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  display:flex;align-items:center;gap:18px;padding:11px 28px;flex-wrap:wrap}
+.mark{display:flex;align-items:center;gap:9px;font-weight:600;letter-spacing:-.01em;font-size:15px}
+.dia{width:11px;height:11px;background:var(--accent);transform:rotate(45deg);flex:none}
+.bar .sp{flex:1}
+.seg{display:flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden;background:var(--surface)}
+.seg button{appearance:none;border:0;background:transparent;color:var(--ink-muted);cursor:pointer;
+  font-family:var(--display);font-size:12.5px;font-weight:500;letter-spacing:.02em;padding:7px 16px;
+  transition:background .15s ease,color .15s ease}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.jump{display:flex;gap:16px;font-size:12.5px;color:var(--ink-muted)}
+.jump a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;padding-bottom:1px}
+.jump a:hover{color:var(--accent-text);border-color:var(--accent-text)}
+
+/* ── hero ─────────────────────────────────────────────────────────── */
+.hero{padding:72px 0 44px}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent-text);margin:0 0 18px}
+.hero h1{font-size:clamp(40px,7vw,74px);line-height:.98;letter-spacing:-.035em;font-weight:600;
+  max-width:13ch;margin:0 0 22px}
+.lede{font-size:18.5px;line-height:1.62;color:var(--ink-muted);max-width:60ch;font-weight:300}
+.lede strong{color:var(--ink);font-weight:500}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:38px;max-width:620px}
+.fieldcard{border:1px solid var(--rule);padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.fieldcard .sw{height:56px;border:1px solid var(--rule)}
+.fieldcard b{font-size:13px;font-weight:600}
+.fieldcard span{font-family:var(--mono);font-size:11.5px;color:var(--ink-muted)}
+
+/* ── warning ──────────────────────────────────────────────────────── */
+.warn{border:1px solid var(--rule);border-left:3px solid var(--accent);background:var(--surface);
+  padding:18px 22px;margin:40px 0 0;display:flex;flex-direction:column;gap:8px}
+.warn b{font-size:13.5px;font-weight:600}
+.warn p{margin:0;font-size:14.5px;line-height:1.65;color:var(--ink-muted);max-width:74ch;font-weight:300}
+
+/* ── section ──────────────────────────────────────────────────────── */
+section{padding:64px 0;border-top:1px solid var(--rule)}
+.shead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.shead h2{font-size:27px;font-weight:600;letter-spacing:-.02em}
+.snum{font-family:var(--mono);font-size:11.5px;color:var(--ink-muted);letter-spacing:.1em}
+.snote{font-size:15.5px;line-height:1.68;color:var(--ink-muted);max-width:70ch;margin:0 0 30px;font-weight:300}
+h3.band{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-muted);margin:34px 0 14px}
+
+/* ── swatches ─────────────────────────────────────────────────────── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:16px}
+.tok{display:flex;flex-direction:column}
+.tok .sw{height:78px;border:1px solid var(--rule);position:relative}
+.pill{position:absolute;right:7px;bottom:7px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
+  text-transform:uppercase;padding:2px 7px;border-radius:2px;background:var(--bg);color:var(--ink-muted);
+  border:1px solid var(--rule)}
+.pill.ok{color:var(--ink);font-weight:500}
+.tok b{font-size:13px;font-weight:600;margin-top:11px}
+.tok .hx{font-family:var(--mono);font-size:11.5px;color:var(--ink-muted);margin-top:2px}
+.tok .rl{font-size:12px;color:var(--ink-muted);margin-top:5px;line-height:1.45;font-weight:300}
+.tok .rt{font-family:var(--mono);font-size:11.5px;color:var(--ink);margin-top:7px;
+  border-top:1px solid var(--rule);padding-top:6px}
+
+/* ── tables ───────────────────────────────────────────────────────── */
+.tblwrap{overflow-x:auto;border:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:13.5px}
+thead th{background:var(--accent-field);color:#FFFFFF;text-align:left;font-weight:600;
+  padding:10px 14px;font-size:12.5px;letter-spacing:.02em;white-space:nowrap}
+tbody td{padding:9px 14px;border-top:1px solid var(--rule);color:var(--ink);font-weight:300}
+tbody tr:nth-child(even){background:var(--surface)}
+td.m,th.m{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:400}
+tfoot td{padding:10px 14px;border-top:2px solid var(--accent-field);background:var(--lifted);font-weight:600;font-size:13.5px}
+
+/* ── components ───────────────────────────────────────────────────── */
+.compgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+.demo{border:1px solid var(--rule);padding:22px;display:flex;flex-direction:column;gap:14px;background:var(--bg)}
+.demo>.lbl{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-muted)}
+.btn{appearance:none;border:0;cursor:pointer;font-family:var(--display);font-size:14px;font-weight:500;
+  padding:11px 22px;border-radius:999px;display:inline-flex;align-items:center;gap:9px;
+  background:var(--accent);color:var(--on-accent);transition:filter .15s ease}
+.btn:hover{filter:brightness(1.08)}
+.btn.sec{background:transparent;color:var(--accent-text);border:1px solid var(--accent-text)}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--rule)}
+.btnrow{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.card{background:var(--surface);border:1px solid var(--rule);padding:18px}
+.card h4{font-size:15px;font-weight:600;color:var(--accent-text);margin-bottom:8px}
+.card p{margin:0;font-size:13.5px;line-height:1.6;color:var(--ink-muted);font-weight:300}
+.callout{background:var(--lifted);border:1px solid var(--rule);padding:16px 18px;font-size:14px;
+  line-height:1.6;color:var(--ink);font-weight:300}
+.callout b{color:var(--accent-text);font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--rule);padding:14px 16px}
+.kpi .v{font-family:var(--display);font-size:30px;font-weight:600;line-height:1.05;color:var(--accent-text);
+  font-variant-numeric:tabular-nums}
+.kpi .l{font-size:11.5px;color:var(--ink-muted);margin-top:4px;font-weight:300}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:4px 10px;border-radius:999px;
+  border:1px solid var(--rule);color:var(--ink-muted)}
+.badge.solid{background:var(--accent);color:var(--on-accent);border-color:transparent}
+.badge.deep{background:var(--accent-field);color:#FFFFFF;border-color:transparent}
+
+/* chart */
+.chart{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:8px}
+.chart div{flex:1;border-radius:2px 2px 0 0}
+.axis{height:1px;background:var(--rule)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
+.legend span{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--ink-muted);font-weight:300}
+.legend i{width:11px;height:11px;border-radius:2px;display:block}
+
+/* slide minis */
+.slides{display:grid;grid-template-columns:repeat(auto-fit,minmax(292px,1fr));gap:18px}
+.slide{container-type:inline-size;aspect-ratio:16/9;border:1px solid var(--rule);overflow:hidden;
+  display:flex;flex-direction:column;font-family:var(--office)}
+.slide .pad,.slide .ft{font-size:11px;font-size:3.15cqi}
+.slide .pad{padding:1.5em 1.6em 1.2em;flex:1;display:flex;flex-direction:column;min-height:0}
+.slide .eb{font-size:.62em;font-weight:700;letter-spacing:.05em;color:var(--accent-text)}
+.slide .ti{font-size:.95em;font-weight:700;line-height:1.25;margin-top:.35em}
+.slide .rl{height:.055em;min-height:1px;background:var(--accent);margin:.7em 0 .85em}
+.slide .cards{display:grid;grid-template-columns:1fr 1fr;gap:.6em;flex:1;min-height:0}
+.slide .c{background:var(--surface);padding:.6em .66em;display:flex;flex-direction:column;gap:.3em}
+.slide .ch{font-size:.6em;font-weight:700;color:var(--accent-text)}
+.slide .li{height:.05em;min-height:1px;background:var(--ink-muted);opacity:.5}
+.slide .ft{display:flex;justify-content:space-between;font-size:.44em;padding:0 1.6em 1em;color:var(--ink-muted)}
+.slide.cover{background:var(--accent-field);color:#FFFFFF;justify-content:flex-end}
+.slide.cover .pad{justify-content:flex-end}
+.slide.cover .ct{font-size:1.5em;font-weight:700;line-height:1.14}
+.slide.cover .cs{font-size:.62em;margin-top:.5em;opacity:.92}
+.slide.cover .cr{width:3.6em;height:.11em;min-height:2px;background:#FFFFFF;margin:1em 0 .6em}
+.slide.cover .co{font-size:.5em;opacity:.9}
+.slide.body{background:var(--bg);color:var(--ink)}
+.scap{font-size:12px;color:var(--ink-muted);margin-top:8px;font-weight:300}
+.scap b{color:var(--ink);font-weight:600;margin-right:6px}
+
+/* type specimen */
+.spec{border:1px solid var(--rule);padding:0}
+.spec .row{display:grid;grid-template-columns:110px 1fr;gap:20px;padding:14px 20px;
+  border-top:1px solid var(--rule);align-items:baseline}
+.spec .row:first-child{border-top:0}
+.spec .meta{font-family:var(--mono);font-size:11px;color:var(--ink-muted);line-height:1.5}
+.spec .samp{font-family:var(--office);color:var(--ink);line-height:1.25;overflow:hidden}
+
+footer{padding:56px 0 84px;border-top:1px solid var(--rule)}
+footer .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:28px}
+footer p{margin:0;font-size:14.5px;line-height:1.65;color:var(--ink-muted);font-weight:300;max-width:48ch}
+footer b{display:block;color:var(--ink);font-weight:600;font-size:13px;margin-bottom:5px}
+
+@media (max-width:760px){
+  .fields{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr}
+  .jump{display:none}
+  .wrap{padding:0 20px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="bar">
+  <span class="mark"><span class="dia"></span>SKS Blue</span>
+  <nav class="jump">
+    <a href="#tokens">Tokens</a><a href="#type">Type</a><a href="#components">Components</a>
+    <a href="#slides">Slides</a><a href="#office">Word &amp; Excel</a>
+  </nav>
+  <span class="sp"></span>
+  <div class="seg" role="group" aria-label="Theme">
+    <button type="button" id="bL" aria-pressed="false" onclick="setTheme('light')">Light</button>
+    <button type="button" id="bD" aria-pressed="false" onclick="setTheme('dark')">Dark</button>
+  </div>
+</div>
+
+<header class="hero"><div class="wrap">
+  <p class="eyebrow">house-style · templates/sks-blue</p>
+  <h1>One blue, two fields</h1>
+  <p class="lede">The product-facing template — and the only one in the system that ships <strong>two fields</strong>. A white page and a near-black page, sharing one accent, one grid, one type scale and one chart ramp. Read from the SPACES prototype, which does exactly this: a dark hero, then light sections, with the same blue running through both.</p>
+
+  <div class="fields">
+    <div class="fieldcard"><span class="sw" style="background:#FFFFFF"></span><b>Light field</b><span>#FFFFFF · panel #F1F4FC · callout #E5E9F6</span></div>
+    <div class="fieldcard"><span class="sw" style="background:#080D1A"></span><b>Dark field</b><span>#080D1A · panel #101832 · callout #16204A</span></div>
+  </div>
+
+  <div class="warn">
+    <b>The hex values are read, not sampled</b>
+    <p>Every other palette in this system was measured — pixels sampled out of a source deck or a comp. These were read off the SPACES prototype by eye, because the Figma file is not shared with the account wired into this toolchain and the prototype renders to a WebGL canvas whose buffer cannot be read back. Expect each channel within a few points of the brand's real value.</p>
+    <p>The ratios on this page are exact: they are computed from the hexes as written. Correct a hex, re-run the contrast script, and every number follows.</p>
+  </div>
+</div></header>
+
+<section id="tokens"><div class="wrap">
+  <div class="shead"><span class="snum">01</span><h2>Tokens</h2></div>
+  <p class="snote">Grouped the way the system groups everything: 60% field, 30% ink, 10% accent. The ratios shown are against the <em>current theme's</em> three surfaces — flip the switch and they change with it. On the dark field the tints step up from the ground rather than down from it.</p>
+
+  <h3 class="band">60% — the field</h3>
+  <div class="grid" id="g60"></div>
+
+  <h3 class="band">30% — the supporting layer</h3>
+  <div class="grid" id="g30"></div>
+
+  <h3 class="band">10% — the accent</h3>
+  <div class="grid" id="g10"></div>
+
+  <h3 class="band">One blue, three values</h3>
+  <p class="snote">The spine of the palette is a single hue at three values. The only thing that changes between the two themes is which of the three carries type — which is why the three divider layouts are identical in both files, and only the content pages flip.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Value</th><th class="m">Hex</th><th>Light</th><th>Dark</th></tr></thead>
+    <tbody>
+      <tr><td>Blue deep</td><td class="m">#1B3585</td><td>Divider field, white ink at <span class="m">11.08</span></td><td>The same field, same ink, same ratio</td></tr>
+      <tr><td>Blue</td><td class="m">#2F55F0</td><td>Accent as area <em>and</em> as type — <span class="m">5.71</span> on white</td><td>Area only — <span class="m">3.40</span> on the field, <span class="m">2.75</span> on the callout tint</td></tr>
+      <tr><td>Blue light</td><td class="m">#8CB8FF</td><td>Unused</td><td>The accent as type — <span class="m">9.62</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="band">Chart ramp — shared by both themes</h3>
+  <p class="snote">A series must not change hue when a deck is restyled, so the eight categorical colours are pitched at one luminance and clear <strong>≥ 3.5:1 on all six surfaces</strong> — three light tints and three dark. The cost is that none of them is text-safe in either theme: a single hue cannot be legible against both white and near-black. Set series labels in ink or muted ink and let a legend swatch carry the colour.</p>
+  <div class="grid" id="gcat"></div>
+  <p class="snote" style="margin-top:22px"><strong>Series 1 is #3D6AFF, not the accent.</strong> #2F55F0 falls to 2.75:1 on the dark callout tint and would disappear inside a callout band. The ramp's blue is one value step up and holds everywhere. There is no approved alert colour — orange and rose here are categorical hues, not status marks.</p>
+</div></section>
+
+<section id="type"><div class="wrap">
+  <div class="shead"><span class="snum">02</span><h2>Type</h2></div>
+  <p class="snote">Arial for Latin, 微軟正黑體 for 中文, in every template and both themes. Bold is the only weight variation — no italics, no letter-spacing tricks, no all-caps runs longer than three words. Sizes below are on the 1440 × 810 pt canvas; on a conventional 960pt canvas they are two-thirds of these numbers. The upstream pptx skill's ≥36pt title rule assumes a projected deck and does not apply here.</p>
+  <div class="spec" id="spec"></div>
+  <p class="snote" style="margin-top:22px">On the dark file, do not add bold to body copy to compensate for the ground. Light type on dark blooms — strokes read heavier than they measure. If a line is not reading, it is a colour problem, not a weight problem.</p>
+</div></section>
+
+<section id="components"><div class="wrap">
+  <div class="shead"><span class="snum">03</span><h2>Components</h2></div>
+  <p class="snote">Every mark below is drawn from the tokens above, and nothing changes shape between the themes — only which token each part reaches for. A component that sets a blue <em>label</em> uses <code>--accent-text</code>; one that sets a blue <em>area</em> uses <code>--accent</code>. Reaching for <code>--accent</code> as a text colour passes in light and fails in dark.</p>
+
+  <div class="compgrid">
+    <div class="demo"><span class="lbl">Buttons</span>
+      <div class="btnrow">
+        <button class="btn" type="button">探索六大場景</button>
+        <button class="btn sec" type="button">了解更多</button>
+        <button class="btn ghost" type="button">下載規格</button>
+      </div>
+      <p class="card p" style="margin:0;font-size:13px;color:var(--ink-muted);font-weight:300;background:none;border:0;padding:0">Primary is a <span class="mono">#2F55F0</span> fill with white text — 5.71:1 in both themes. Never dark ink on it (3.17:1).</p>
+    </div>
+
+    <div class="demo"><span class="lbl">Badges</span>
+      <div class="badges">
+        <span class="badge solid">上線中</span>
+        <span class="badge deep">董事會</span>
+        <span class="badge">草稿</span>
+        <span class="badge">內部</span>
+      </div>
+      <p style="margin:0;font-size:13px;color:var(--ink-muted);font-weight:300">Filled badges carry white; the outline badge carries muted ink and a rule, never the accent as small type.</p>
+    </div>
+
+    <div class="demo"><span class="lbl">Panel cards</span>
+      <div class="card"><h4>事件概要　Summary</h4><p>三道防線治理模型已於全集團導入，涵蓋 12 家子公司。第二季完成 ISO 27001 內部稽核。</p></div>
+    </div>
+
+    <div class="demo"><span class="lbl">Callout band</span>
+      <div class="callout"><b>重點　</b>四項不符合事項均已於第三季結案，董事會回報頻率由年度改為半年度。</div>
+    </div>
+
+    <div class="demo"><span class="lbl">KPI row</span>
+      <div class="kpis">
+        <div class="kpi"><div class="v">12</div><div class="l">子公司涵蓋數</div></div>
+        <div class="kpi"><div class="v">4</div><div class="l">不符合事項</div></div>
+        <div class="kpi"><div class="v">100%</div><div class="l">結案率</div></div>
+      </div>
+    </div>
+
+    <div class="demo"><span class="lbl">Chart</span>
+      <div class="chart">
+        <div style="height:62%;background:var(--s1)"></div>
+        <div style="height:88%;background:var(--s2)"></div>
+        <div style="height:46%;background:var(--s3)"></div>
+        <div style="height:74%;background:var(--s4)"></div>
+        <div style="height:100%;background:var(--s5)"></div>
+        <div style="height:58%;background:var(--s6)"></div>
+      </div>
+      <div class="axis"></div>
+      <div class="legend">
+        <span><i style="background:var(--s1)"></i>監控</span>
+        <span><i style="background:var(--s2)"></i>防災</span>
+        <span><i style="background:var(--s3)"></i>防盜</span>
+        <span><i style="background:var(--s4)"></i>客製</span>
+        <span><i style="background:var(--s5)"></i>維運</span>
+        <span><i style="background:var(--s6)"></i>其他</span>
+      </div>
+    </div>
+
+    <div class="demo" style="grid-column:1/-1"><span class="lbl">Table</span>
+      <div class="tblwrap"><table>
+        <thead><tr><th>項次</th><th>事項</th><th>負責人</th><th class="m">完成期限</th><th class="m">狀態</th></tr></thead>
+        <tbody>
+          <tr><td class="m">01</td><td>ISO 27001 內部稽核結案</td><td>資安治理組</td><td class="m">2026-03-31</td><td class="m">100%</td></tr>
+          <tr><td class="m">02</td><td>子公司資安政策對齊</td><td>商研中心</td><td class="m">2026-05-15</td><td class="m">72%</td></tr>
+          <tr><td class="m">03</td><td>雲端維運監控上線</td><td>Cloud Ops</td><td class="m">2026-06-30</td><td class="m">40%</td></tr>
+          <tr><td class="m">04</td><td>董事會半年度回報機制</td><td>資安治理組</td><td class="m">2026-07-31</td><td class="m">15%</td></tr>
+        </tbody>
+        <tfoot><tr><td colspan="4">整體進度</td><td class="m">57%</td></tr></tfoot>
+      </table></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="slides"><div class="wrap">
+  <div class="shead"><span class="snum">04</span><h2>Slides</h2></div>
+  <p class="snote">Three of the nineteen layouts, at thumbnail size, in the current theme. The Cover is the join between the two files: full-bleed <span class="mono">#1B3585</span> with white ink, identical in light and dark. Flip the switch and watch only the content pages change.</p>
+  <div class="slides">
+    <div>
+      <div class="slide cover"><div class="pad">
+        <div class="ct">年度資安報告</div>
+        <div class="cs">Annual Information Security Report · FY2026</div>
+        <div class="cr"></div>
+        <div class="co">{{ORG}} · {{UNIT}}</div>
+      </div></div>
+      <p class="scap"><b>封面</b>滿版 #1B3585，反白墨色 —— 兩個主題完全相同。</p>
+    </div>
+    <div>
+      <div class="slide body"><div class="pad">
+        <div class="eb">風險 · RISK</div>
+        <div class="ti">三道防線治理模型　Three Lines of Defence</div>
+        <div class="rl"></div>
+        <div class="cards">
+          <div class="c"><div class="ch">現況　Before</div><div class="li" style="width:100%"></div><div class="li" style="width:92%"></div><div class="li" style="width:97%"></div><div class="li" style="width:64%;opacity:.3"></div></div>
+          <div class="c"><div class="ch">調整後　After</div><div class="li" style="width:100%"></div><div class="li" style="width:88%"></div><div class="li" style="width:95%"></div><div class="li" style="width:58%;opacity:.3"></div></div>
+        </div>
+      </div><div class="ft"><span>{{ORG}}　|　{{DECK_TITLE}}</span><span>07</span></div></div>
+      <p class="scap"><b>內容頁</b>眉標、標題、標題橫線、兩張面板卡、頁尾與頁碼。</p>
+    </div>
+    <div>
+      <div class="slide body"><div class="pad">
+        <div class="eb">數據 · DATA</div>
+        <div class="ti">年度稽核結果　Annual Audit Results</div>
+        <div class="rl"></div>
+        <div style="flex:1;display:flex;align-items:flex-end;gap:.4em;padding:.5em 0 .1em;min-height:0">
+          <div style="flex:1;height:62%;background:var(--s1)"></div>
+          <div style="flex:1;height:88%;background:var(--s2)"></div>
+          <div style="flex:1;height:46%;background:var(--s3)"></div>
+          <div style="flex:1;height:74%;background:var(--s4)"></div>
+          <div style="flex:1;height:100%;background:var(--s5)"></div>
+          <div style="flex:1;height:58%;background:var(--s6)"></div>
+        </div>
+        <div style="height:1px;background:var(--rule)"></div>
+        <div style="background:var(--lifted);padding:.5em .66em;font-size:.55em;margin-top:.7em;line-height:1.5">
+          <b style="color:var(--accent-text)">重點　</b>四項不符合事項均已於第三季結案。</div>
+      </div><div class="ft"><span>{{ORG}}　|　{{DECK_TITLE}}</span><span>12</span></div></div>
+      <p class="scap"><b>數據頁</b>共用圖表色序、提示色帶上的重點句。</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="office"><div class="wrap">
+  <div class="shead"><span class="snum">05</span><h2>Word &amp; Excel</h2></div>
+  <p class="snote">A dark field does not survive a printer, so the document and workbook mappings are the light theme only — use the dark <code>.pptx</code> for screens. Headings take <span class="mono">#1B3585</span> rather than the accent, because a 13pt heading on paper wants the margin that 11.08:1 gives over 5.71:1.</p>
+  <div class="compgrid">
+    <div class="demo"><span class="lbl">.docx</span>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Element</th><th>Spec</th></tr></thead>
+        <tbody>
+          <tr><td>Body</td><td class="m">Arial 10.5pt #101623</td></tr>
+          <tr><td>Heading 1</td><td class="m">Arial 16pt bold #1B3585</td></tr>
+          <tr><td>Heading 2</td><td class="m">Arial 13pt bold #1B3585</td></tr>
+          <tr><td>Heading 3</td><td class="m">Arial 11.5pt bold #444E60</td></tr>
+          <tr><td>Table header</td><td class="m">fill #1B3585, white bold</td></tr>
+          <tr><td>Banding</td><td class="m">#F1F4FC</td></tr>
+          <tr><td>Borders</td><td class="m">#C9D2EA hairline</td></tr>
+          <tr><td>Link</td><td class="m">#2F55F0</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="demo"><span class="lbl">.xlsx</span>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Element</th><th>Spec</th></tr></thead>
+        <tbody>
+          <tr><td>Header row</td><td class="m">fill #1B3585, white bold, frozen</td></tr>
+          <tr><td>Banding</td><td class="m">#F1F4FC</td></tr>
+          <tr><td>Total row</td><td class="m">fill #E5E9F6, top border #1B3585</td></tr>
+          <tr><td>Key metric</td><td class="m">#2F55F0 bold</td></tr>
+          <tr><td>Body</td><td class="m">Arial 10pt #101623</td></tr>
+          <tr><td>Chart series</td><td class="m">the shared ramp, in order</td></tr>
+          <tr><td>Negatives</td><td class="m">#,##0;(#,##0)</td></tr>
+          <tr><td>Currency</td><td class="m">unit in the header</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="fg">
+    <p><b>The gate</b>4.5:1 below 24px, 3.0:1 at or above. Every ratio here is computed from the hex, never estimated — <code>scripts/contrast.py --check</code> verifies the tokens against both <code>.pptx</code> files.</p>
+    <p><b>Two files, one identity</b><code>sks-blue.pptx</code> and <code>sks-blue-dark.pptx</code> carry the same nineteen layouts on the same 1440 × 810 pt grid. Switching between them is a master swap, not a rebuild.</p>
+    <p><b>Never mix templates</b>ANA Blue is the corporate register — board, regulator, investor. SKS Blue is the product register. Different fields, different accents; the mixture reads as a mistake.</p>
+    <p><b>Still to reconcile</b>Share the Figma file with the connected account as an editor, read its design variables, and replace these estimates with the brand's real values.</p>
+  </div>
+</div></footer>
+
+<script>
+const L = {
+  f60:[["White","#FFFFFF","the page, set on the master"],
+       ["Panel","#F1F4FC","inset surface — cards, panels, quiet bands"],
+       ["Callout","#E5E9F6","lifted surface — the prototype's own section field"],
+       ["Rule","#C9D2EA","hairlines, table borders, panel frames"],
+       ["Muted fill","#A9B6D6","deprecated and inactive states"]],
+  f30:[["Headline ink","#101623","titles, body, callout body"],
+       ["Muted ink","#444E60","supporting body, footers, captions"],
+       ["Blue as text","#2F55F0","eyebrows, section titles, panel headings, links"]],
+  f10:[["Blue as area","#2F55F0","title rules, spines, badges, CTA fills"],
+       ["Blue deep","#1B3585","the full-bleed Cover / Section Divider / Closing field"]],
+  surf:[["#FFFFFF","white"],["#F1F4FC","panel"],["#E5E9F6","callout"]]
+};
+const D = {
+  f60:[["Midnight","#080D1A","the page — the prototype's nav bar and hero edge"],
+       ["Panel","#101832","inset surface"],
+       ["Callout","#16204A","lifted surface"],
+       ["Rule","#2A3760","hairlines, borders, frames"],
+       ["Muted fill","#3A4A7A","inactive states"]],
+  f30:[["Headline ink","#FFFFFF","titles, body, reverse ink"],
+       ["Muted ink","#A8B4CE","supporting body, footers, captions"],
+       ["Blue light as text","#8CB8FF","the prototype's own subtitle colour on its dark hero"]],
+  f10:[["Blue as area","#2F55F0","title rules, spines, badges, CTA fills — never type here"],
+       ["Blue deep","#1B3585","the full-bleed Cover / Section Divider / Closing field"]],
+  surf:[["#080D1A","midnight"],["#101832","panel"],["#16204A","callout"]]
+};
+const CAT = [["Blue","#3D6AFF","series 1"],["Cyan","#1A83A3","series 2"],["Teal","#268777","series 3"],
+             ["Green","#218A4B","series 4"],["Amber","#9E7015","series 5"],["Violet","#9C53E6","series 6"],
+             ["Orange","#C95624","series 7 — categorical, not a status mark"],
+             ["Rose","#D4446A","series 8 — categorical, not a status mark"]];
+const TYPE = [["130pt","Quote glyph","“",130],["96pt","Big Number","128",96],["54pt","KPI value","12 家",54],
+              ["40pt","Cover title","年度資安報告",40],["34pt","Section title","三道防線",34],
+              ["30pt","Slide title","資安治理架構",30],["20pt","Eyebrow (bold)","風險 · RISK",20],
+              ["18pt","Body — the workhorse","SPACES 整合智慧監控、IoT 感測與雲端平台。",18],
+              ["13pt","Footer, caption","{{ORG}}　|　{{DECK_TITLE}}",13]];
+
+function lum(h){h=h.replace('#','');let c=[0,2,4].map(i=>parseInt(h.substr(i,2),16)/255)
+  .map(x=>x<=0.03928?x/12.92:Math.pow((x+0.055)/1.055,2.4));
+  return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2];}
+function cr(a,b){const l=[lum(a),lum(b)].sort((x,y)=>y-x);return (l[0]+0.05)/(l[1]+0.05);}
+function verdict(r){return r>=4.5?["text","clears 4.5:1 — legal at any size"]:
+  r>=3?["large","3.0–4.5:1 — display sizes only"]:["fill","below 3.0:1 — fill only"];}
+
+function tok(name,hex,role,surf,showPill){
+  const base=surf[0][0];
+  const same=hex.toUpperCase()===base.toUpperCase();
+  const r=cr(hex,base); const [v,t]=verdict(r);
+  const pill = (same||!showPill)?"":`<span class="pill ${v==='text'?'ok':''}" title="${t}">${v}</span>`;
+  const rats = surf.map(([s,l])=>`${l} ${same&&s===base?'—':cr(hex,s).toFixed(2)}`).join(" · ");
+  return `<article class="tok"><div class="sw" style="background:${hex}">${pill}</div>
+    <b>${name}</b><div class="hx">${hex}</div><div class="rl">${role}</div><div class="rt">${rats}</div></article>`;
+}
+function catTok(name,hex,role,surf){
+  const all=[...L.surf,...D.surf].map(([s])=>cr(hex,s));
+  const worst=Math.min(...all);
+  return `<article class="tok"><div class="sw" style="background:${hex}">
+      <span class="pill" title="worst of all six surfaces">min ${worst.toFixed(2)}</span></div>
+    <b>${name}</b><div class="hx">${hex}</div><div class="rl">${role}</div>
+    <div class="rt">${surf.map(([s,l])=>`${l} ${cr(hex,s).toFixed(2)}`).join(" · ")}</div></article>`;
+}
+function render(){
+  const dark = document.documentElement.dataset.theme
+    ? document.documentElement.dataset.theme==='dark'
+    : matchMedia('(prefers-color-scheme: dark)').matches;
+  const P = dark?D:L;
+  g60.innerHTML = P.f60.map(t=>tok(t[0],t[1],t[2],P.surf,false)).join('');
+  g30.innerHTML = P.f30.map(t=>tok(t[0],t[1],t[2],P.surf,true)).join('');
+  g10.innerHTML = P.f10.map(t=>tok(t[0],t[1],t[2],P.surf,true)).join('');
+  gcat.innerHTML = CAT.map(t=>catTok(t[0],t[1],t[2],P.surf)).join('');
+  spec.innerHTML = TYPE.map(([sz,role,text,px])=>{
+    const cap = Math.min(px, 46);
+    return `<div class="row"><div class="meta">${sz}<br>${role}</div>
+      <div class="samp" style="font-size:${cap}px;font-weight:${px>=20?700:400}">${text}</div></div>`;
+  }).join('');
+  bL.setAttribute('aria-pressed', String(!dark));
+  bD.setAttribute('aria-pressed', String(dark));
+}
+function setTheme(t){ document.documentElement.dataset.theme = t; render(); }
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ()=>{
+  if(!document.documentElement.dataset.theme) render();
+});
+render();
+</script>
+
+</body>
+</html>
