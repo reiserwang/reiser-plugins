@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Five Identities, One Grid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@300;400;500;600&family=Martian+Mono:wght@300;400;500&display=swap">
+
+</head>
+<body>
+<style>
+:root{
+  --ground:#FAFAF8; --raised:#FFFFFF; --sunk:#F2F2EE;
+  --ink:#17181A; --muted:#61646B; --faint:#8B8E94;
+  --hair:#E4E4E0; --hair-soft:#EFEFEB; --accent:#2E323C;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --sans:"Public Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"Martian Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#101113; --raised:#17191C; --sunk:#0B0C0E;
+    --ink:#EDEDEA; --muted:#9A9DA4; --faint:#71747B;
+    --hair:#26282C; --hair-soft:#1D1F22; --accent:#B4B9C4;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#101113; --raised:#17191C; --sunk:#0B0C0E;
+  --ink:#EDEDEA; --muted:#9A9DA4; --faint:#71747B;
+  --hair:#26282C; --hair-soft:#1D1F22; --accent:#B4B9C4;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;font-weight:300;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+
+/* ── header ───────────────────────────────────────────────────────── */
+header{padding:64px 0 0}
+.tag{font-family:var(--mono);font-size:10.5px;font-weight:400;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--faint);margin-bottom:20px}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(46px,7.2vw,86px);line-height:1.02;
+  letter-spacing:-.015em;max-width:15ch}
+h1 em{font-style:italic}
+.thesis{font-size:19px;line-height:1.62;color:var(--muted);max-width:64ch;margin-top:22px}
+.thesis b{color:var(--ink);font-weight:500}
+
+/* identity strip — the page at rest */
+.strip{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--hair);
+  border:1px solid var(--hair);margin-top:44px}
+.ident{background:var(--ground);padding:0}
+.ident .bars{display:flex;height:66px}
+.ident .bars span{flex:1}
+.ident .bars span.f{flex:2.4}
+.ident .meta{padding:12px 13px 15px}
+.ident .nm{font-size:13.5px;font-weight:600;letter-spacing:-.005em;line-height:1.3}
+.ident .us{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+
+/* ── sections ─────────────────────────────────────────────────────── */
+section{padding:74px 0 0}
+.shead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  border-top:1px solid var(--hair);padding-top:26px;margin-bottom:10px}
+.shead h2{font-family:var(--serif);font-weight:400;font-size:34px;letter-spacing:-.01em}
+.shead .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--faint)}
+.lede{font-size:16px;line-height:1.68;color:var(--muted);max-width:70ch;margin-bottom:28px}
+.lede b{color:var(--ink);font-weight:500}
+
+/* ── comparison spine ─────────────────────────────────────────────── */
+.scroller{overflow-x:auto;border:1px solid var(--hair);background:var(--raised)}
+table.cmp{border-collapse:collapse;min-width:1080px;width:100%}
+table.cmp th,table.cmp td{border-bottom:1px solid var(--hair-soft);padding:0;vertical-align:top}
+table.cmp thead th{position:sticky;top:0;background:var(--raised);z-index:2;
+  border-bottom:1px solid var(--hair);padding:13px 14px;text-align:left}
+table.cmp thead th .nm{font-size:13px;font-weight:600;line-height:1.3}
+table.cmp thead th .fl{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-top:2px}
+th.rowlab{position:sticky;left:0;background:var(--raised);z-index:1;text-align:left;
+  padding:11px 16px 11px 14px;font-size:12px;font-weight:500;color:var(--muted);
+  white-space:nowrap;border-right:1px solid var(--hair)}
+thead th.rowlab{z-index:3}
+td.cell{padding:9px 14px}
+.sw{display:flex;align-items:center;gap:9px}
+.sw i{width:20px;height:20px;flex:none;border:1px solid var(--hair);display:block}
+.sw .v{font-family:var(--mono);font-size:10.5px;font-weight:400;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;line-height:1.3}
+.sw .v em{display:block;font-style:normal;color:var(--faint);font-size:9.5px}
+.ramp{display:flex;gap:2px;padding:2px 0}
+.ramp i{width:15px;height:20px;display:block;border:1px solid var(--hair)}
+td.cell.txt{font-size:12.5px;line-height:1.5;color:var(--muted);max-width:230px}
+.drv{font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;color:var(--faint);
+  border:1px solid var(--hair);padding:0 4px;margin-left:5px;white-space:nowrap}
+tr.rule-row td,tr.rule-row th{border-bottom:1px solid var(--hair)}
+
+/* ── plain spec tables ────────────────────────────────────────────── */
+table.spec{border-collapse:collapse;width:100%;min-width:560px}
+table.spec th{text-align:left;font-size:11px;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--faint);padding:0 16px 9px 0;
+  border-bottom:1px solid var(--hair);font-family:var(--mono)}
+table.spec td{padding:9px 16px 9px 0;border-bottom:1px solid var(--hair-soft);
+  font-size:13.5px;vertical-align:top;line-height:1.5}
+table.spec td.m{font-family:var(--mono);font-size:11.5px;font-variant-numeric:tabular-nums;
+  white-space:nowrap}
+table.spec td.k{font-weight:500;color:var(--ink);white-space:nowrap}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:38px}
+
+/* ── layout list ──────────────────────────────────────────────────── */
+.lays{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1px;
+  background:var(--hair);border:1px solid var(--hair)}
+.lay{background:var(--raised);padding:11px 13px;display:flex;gap:10px;align-items:baseline}
+.lay .n{font-family:var(--mono);font-size:10px;color:var(--faint);flex:none}
+.lay .t{font-size:13px;line-height:1.35}
+.lay.ex{background:var(--sunk)}
+.lay.ex .t{color:var(--muted)}
+
+/* ── gates ────────────────────────────────────────────────────────── */
+.gates{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:22px}
+.gate{border-top:2px solid var(--accent);padding-top:14px}
+.gate h3{font-size:14.5px;font-weight:600;margin-bottom:6px}
+.gate code{font-family:var(--mono);font-size:11px;color:var(--ink);display:block;
+  margin-bottom:8px;word-break:break-all;line-height:1.5}
+.gate p{font-size:13px;line-height:1.6;color:var(--muted)}
+
+/* ── notes ────────────────────────────────────────────────────────── */
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;
+  padding-bottom:96px}
+.note b{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px}
+.note p{font-size:13.5px;line-height:1.62;color:var(--muted)}
+code{font-family:var(--mono);font-size:.88em}
+
+@media (max-width:900px){
+  .strip{grid-template-columns:repeat(3,1fr)}
+  .two{grid-template-columns:1fr;gap:30px}
+  .wrap{padding:0 20px}
+  header{padding-top:44px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header><div class="wrap">
+  <p class="tag">office-cli · house-style · v0.11.0</p>
+  <h1>Five identities,<br><em>one</em> grid</h1>
+  <p class="thesis">Five palettes across six PowerPoint files, and that is the only thing separating them. <b>Same 1440 × 810 canvas, same nineteen named layouts, same type scale, same standing furniture.</b> Restyling a deck from one to another is a master swap, not a rebuild — which is why the differences below fit in a table, and everything the templates share is written out as prose underneath it.</p>
+  <div class="strip" id="strip"></div>
+</div></header>
+
+<section><div class="wrap">
+  <div class="shead"><span class="k">what differs</span><h2>The palettes, side by side</h2></div>
+  <p class="lede">Every colour in the system, grouped by the band it belongs to — <b>60% field, 30% ink, 10% accent</b> — with its contrast against its own template's page. A ratio is only meaningful against the surface it sits on, so each column is measured against its own field, never against a common white. <span class="drv">derived</span> marks a value that was not in the source palette: it was walked down or up its own hue until it cleared the gate in the role it was failing.</p>
+  <div class="scroller"><table class="cmp">
+    <thead><tr id="cmphead"></tr></thead>
+    <tbody id="cmpbody"></tbody>
+  </table></div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="shead"><span class="k">shared · type</span><h2>One scale, and a font problem worth naming</h2></div>
+  <p class="lede">Arial for Latin, 微軟正黑體 for 中文, in every template. Bold is the only weight variation — no italics, no letter-spacing tricks, no all-caps runs longer than three words. The sizes are on the 1440pt canvas; on a conventional 960pt canvas they are two-thirds of these numbers, which is why the upstream OfficeCLI rule of ≥36pt titles does not apply here and is overridden on purpose. These are dense documents that get read on a laptop, not projected.</p>
+  <div class="two">
+    <div>
+      <div class="scroller" style="border:0;background:none"><table class="spec">
+        <thead><tr><th>Size</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td class="m">130pt</td><td>Quote opening glyph</td></tr>
+          <tr><td class="m">96pt</td><td>Big Number</td></tr>
+          <tr><td class="m">54pt</td><td>KPI value</td></tr>
+          <tr><td class="m">40pt</td><td>Cover title</td></tr>
+          <tr><td class="m">34pt</td><td>Section / Closing title</td></tr>
+          <tr><td class="m">30pt</td><td>Slide title</td></tr>
+          <tr><td class="m">28pt</td><td>Quote body</td></tr>
+          <tr><td class="m">24pt</td><td>Agenda numeral</td></tr>
+          <tr><td class="m">21pt</td><td>Cover subtitle · takeaway · rationale</td></tr>
+          <tr><td class="m">20pt</td><td>Eyebrow (bold)</td></tr>
+          <tr><td class="m">18pt</td><td>Body, panel heading, table header — the workhorse</td></tr>
+          <tr><td class="m">13pt</td><td>Footer, page number, source line, caption</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div>
+      <div class="scroller" style="border:0;background:none"><table class="spec">
+        <thead><tr><th></th><th>Windows</th><th>macOS</th><th>Web</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Latin</td><td class="m">Arial</td><td class="m">Arial</td><td class="m">Arial</td></tr>
+          <tr><td class="k">中文</td><td class="m">微軟正黑體</td><td class="m">PingFang TC</td><td class="m">—</td></tr>
+          <tr><td class="k">Mono</td><td class="m">Consolas</td><td class="m">Menlo</td><td class="m">—</td></tr>
+        </tbody>
+      </table></div>
+      <p class="lede" style="margin-top:20px"><b>微軟正黑體 ships with Windows only.</b> macOS does not have it and substitutes — PingFang TC is the close equivalent, Heiti TC on older systems — and no browser has it at all. A <code>.pptx</code> run carries exactly one latin face and one east-asian face, with no fallback list, so the decks set <code>latin=Arial, ea=微軟正黑體</code> and let PowerPoint on macOS do the substitution. On the web, use the stack:</p>
+      <p style="font-family:var(--mono);font-size:11.5px;line-height:1.7;color:var(--ink);
+                border-left:2px solid var(--accent);padding-left:14px">
+        Arial, Helvetica, "Liberation Sans", sans-serif<br>
+        "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif<br>
+        Consolas, Menlo, "SF Mono", ui-monospace, monospace</p>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="shead"><span class="k">shared · geometry</span><h2>The canvas and its furniture</h2></div>
+  <p class="lede">Identical in all six files. Fourteen of the nineteen layouts carry all five pieces of standing furniture; omitting any of them on those layouts is an incomplete deliverable, not a minimal one.</p>
+  <div class="two">
+    <div class="scroller" style="border:0;background:none"><table class="spec">
+      <thead><tr><th>Canvas</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Size</td><td class="m">1440 × 810 pt (16:9)</td></tr>
+        <tr><td class="k">Margin</td><td class="m">56pt</td></tr>
+        <tr><td class="k">Content band</td><td class="m">x = 56 → 1384 (1328 wide)</td></tr>
+        <tr><td class="k">Gutter</td><td class="m">16.2pt</td></tr>
+        <tr><td class="k">Body band</td><td class="m">y = 172 → 760</td></tr>
+      </tbody>
+    </table></div>
+    <div class="scroller" style="border:0;background:none"><table class="spec">
+      <thead><tr><th>Furniture</th><th>Position</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Eyebrow</td><td class="m">56, 48 · 20pt bold, accent-as-type</td></tr>
+        <tr><td class="k">Title</td><td class="m">56, 76 · 30pt bold, ink</td></tr>
+        <tr><td class="k">Title rule</td><td class="m">56, 142 · 1328 × 1.5, accent</td></tr>
+        <tr><td class="k">Footer</td><td class="m">56, 772 · 13pt muted</td></tr>
+        <tr><td class="k">Page number</td><td class="m">1324, 772 · 13pt muted, right</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="shead"><span class="k">shared · layouts</span><h2>Nineteen named layouts</h2></div>
+  <p class="lede">Same names, same indices, same geometry in every template, so <code>--layout 'Data Table'</code> resolves anywhere. The five shaded below carry their own furniture instead of the standing set: Cover, Section Divider and Closing are full-bleed accent; Quote and Blank ship deliberately bare.</p>
+  <div class="lays" id="lays"></div>
+  <p class="lede" style="margin-top:24px">Each template ships a catalogue at <code>references/layout-catalogue/&lt;name&gt;-layouts.pptx</code> — one slide per layout with every placeholder labelled by index and geometry, plus a palette page and this type table, generated from the same source as this page.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="shead"><span class="k">shared · gates</span><h2>Four things that must pass</h2></div>
+  <p class="lede">The first three are machine-checkable and none of them reads the argument. The fourth is the one that catches a deck that is correct and still says nothing.</p>
+  <div class="gates">
+    <div class="gate"><h3>Formatting</h3><code>officecli view deck.pptx issues</code>
+      <p>Overflow, collided shapes, stale fields. Must be zero.</p></div>
+    <div class="gate"><h3>Colour</h3><code>python3 scripts/contrast.py --check</code>
+      <p>Every token in every palette is present in its <code>.pptx</code>, and every ratio in the docs is regenerated rather than typed.</p></div>
+    <div class="gate"><h3>Content</h3><code>python3 scripts/check_deck.py deck.pptx --palette '…'</code>
+      <p>Prints the title column to read as one argument. Fails on an unreplaced placeholder, a title promising a number its body contradicts, a wrong typeface, an off-palette colour. Warns on the assembly tells.</p></div>
+    <div class="gate"><h3>A reader who wasn't there</h3><code>Agent → read this deck cold</code>
+      <p>Jumps in the logic, a title that disagrees with its own figure, a page that restates an earlier one. No machine sees these, and neither does the person who wrote the deck.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="shead"><span class="k">honesty</span><h2>What is measured, and what is not</h2></div>
+  <div class="notes">
+    <div class="note"><b>Sampled</b><p>ANA Blue came out of the corporate decks by frequency analysis. Yukima came off a source board. SKS Dark was pixel-read from two reference comps. Reiser Warm's field and coral are its own.</p></div>
+    <div class="note"><b>Read by eye</b><p>SKS Blue is the exception and says so on its own page. The Figma file is not shared with the account wired into this toolchain, and its prototype renders to a WebGL canvas whose buffer cannot be read back — so nothing could be measured. Expect each channel within a few points.</p></div>
+    <div class="note"><b>Derived</b><p>Yukima needed two inks because its source palette contained none: its darkest colour was 4.92:1. Reiser Warm needed one ink and nine text-safe variants. SKS Dark needed three. Each is a value-shift of a source colour, same hue, moved only as far as the gate required.</p></div>
+    <div class="note"><b>The gate</b><p>4.5:1 below 24px, 3.0:1 at or above. Ratios here are computed from the hexes, never estimated, and they are measured against each template's own field — never a common white, which would flatter the dark ones and punish nothing.</p></div>
+  </div>
+</div></section>
+
+<script>
+const T = [
+ {k:"ANA Blue", folder:"ana-blue", use:"Board, regulator, investor, customer, partner, ESG",
+  field:"#FFFFFF", panel:"#F0F6FC", callout:"#E6F2FC", rule:"#C3D6EE",
+  ink:"#1A2230", muted:"#5A6676", area:"#0B318F", type:"#0B318F", afield:"#0B318F",
+  derived:[], prov:"Sampled from the corporate decks",
+  series:["#0B318F","#00A3E6","#2E5BF0","#7C4DB8","#2FA84F","#AFC0D6"]},
+ {k:"Yukima 雪間", folder:"yukima", use:"Research, ESG and sustainability, long-form analysis",
+  field:"#F1F6FA", panel:"#C8DAE8", callout:"#F5F3F1", rule:"#AACEE7",
+  ink:"#22333D", muted:"#3B576A", area:"#4B6F87", type:"#4B6F87", afield:"#4B6F87",
+  derived:["#22333D","#3B576A"], prov:"Source board; both inks derived",
+  series:["#4B6F87","#558860","#86B655","#9A9641","#BD7E1A","#D2AD52"]},
+ {k:"Reiser Warm", folder:"reiser-warm", use:"Personal work, drafts, internal thinking documents",
+  field:"#F5F1ED", panel:"#E8E4DF", callout:"#FBF9F6", rule:"#D4D0C9",
+  ink:"#1F1E1D", muted:"#5C5650", area:"#CC785C", type:"#915542", afield:"#CC785C",
+  derived:["#5C5650","#915542"], prov:"Coral cannot be text; text-safe set re-derived against the inset tint",
+  series:["#CC785C","#5C7B9C","#6B8E5C","#C28E3D","#8B7BAB","#5C9C8E"]},
+ {k:"SKS Dark", folder:"sks-dark", use:"Screen-first — stage, walkthroughs, launch sets, operations",
+  field:"#1A293A", panel:"#213040", callout:"#273546", rule:"#3E4C5A",
+  ink:"#F4F1EF", muted:"#A9B2BB", area:"#B57319", type:"#CCA348", afield:"#8A5613",
+  derived:["#A9B2BB","#8A5613"], prov:"Pixel-read from two reference comps",
+  series:["#B57319","#CCA348","#698EB1","#546D85","#5FB3AA","#A79EDA"]},
+ {k:"SKS Blue", folder:"sks-blue", use:"Product and platform work, beside the live product site",
+  field:"#FFFFFF", panel:"#F1F4FC", callout:"#E5E9F6", rule:"#C9D2EA",
+  ink:"#101623", muted:"#444E60", area:"#2F55F0", type:"#2F55F0", afield:"#1B3585",
+  derived:[], prov:"Read off the prototype by eye — not sampled",
+  series:["#3D6AFF","#1A83A3","#268777","#218A4B","#9E7015","#9C53E6","#C95624","#D4446A"]},
+ {k:"SKS Blue Dark", folder:"sks-blue", use:"The same identity on a near-black field",
+  field:"#080D1A", panel:"#101832", callout:"#16204A", rule:"#2A3760",
+  ink:"#FFFFFF", muted:"#A8B4CE", area:"#2F55F0", type:"#8CB8FF", afield:"#1B3585",
+  derived:[], prov:"Read off the prototype by eye — not sampled",
+  series:["#3D6AFF","#1A83A3","#268777","#218A4B","#9E7015","#9C53E6","#C95624","#D4446A"]},
+];
+
+const LAYOUTS = ["Cover","Agenda","Section Divider","Title and Content","Two-Column Compare",
+ "Big Number","KPI Dashboard","Chart with Takeaway","Chart + Commentary","Data Table",
+ "Diagram Frame","Picture with Caption","Risk Matrix","Incident Detail","Project Status",
+ "Action Items","Quote","Blank","Closing"];
+const EXEMPT = new Set(["Cover","Section Divider","Closing","Quote","Blank"]);
+
+function lum(h){h=h.replace('#','');const c=[0,2,4].map(i=>parseInt(h.substr(i,2),16)/255)
+  .map(x=>x<=0.03928?x/12.92:Math.pow((x+0.055)/1.055,2.4));
+  return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2];}
+function cr(a,b){const l=[lum(a),lum(b)].sort((x,y)=>y-x);return (l[0]+0.05)/(l[1]+0.05);}
+
+/* identity strip */
+document.getElementById('strip').innerHTML = T.map(t=>`
+  <div class="ident">
+    <div class="bars" aria-hidden="true">
+      <span class="f" style="background:${t.field}"></span>
+      <span style="background:${t.ink}"></span>
+      <span style="background:${t.area}"></span>
+    </div>
+    <div class="meta"><div class="nm">${t.k}</div><div class="us">${t.use}</div></div>
+  </div>`).join('');
+
+/* comparison spine */
+document.getElementById('cmphead').innerHTML =
+  '<th class="rowlab"></th>' + T.map(t=>
+    `<th><div class="nm">${t.k}</div><div class="fl">templates/${t.folder}/</div></th>`).join('');
+
+const ROWS = [
+  ["Field","field",false,"rule-row"],
+  ["Panel — inset","panel",true,""],
+  ["Callout — lifted","callout",true,""],
+  ["Rule","rule",true,"rule-row"],
+  ["Headline ink","ink",true,""],
+  ["Muted ink","muted",true,"rule-row"],
+  ["Accent — as area","area",true,""],
+  ["Accent — as type","type",true,""],
+  ["Accent — as field","afield",true,"rule-row"],
+];
+
+function cell(t,key,showRatio){
+  const hex = t[key];
+  const same = hex.toUpperCase() === t.field.toUpperCase();
+  const r = (showRatio && !same) ? cr(hex,t.field).toFixed(2)+" : 1" : "—";
+  const drv = t.derived.includes(hex) ? '<span class="drv">derived</span>' : '';
+  return `<td class="cell"><div class="sw"><i style="background:${hex}"></i>
+    <span class="v">${hex.toUpperCase()}${drv}<em>${r}</em></span></div></td>`;
+}
+
+let body = ROWS.map(([label,key,ratio,cls])=>
+  `<tr class="${cls}"><th class="rowlab">${label}</th>` +
+  T.map(t=>cell(t,key,ratio)).join('') + '</tr>').join('');
+
+body += `<tr class="rule-row"><th class="rowlab">Chart series</th>` + T.map(t=>
+  `<td class="cell"><div class="ramp">${t.series.map(s=>
+    `<i style="background:${s}" title="${s.toUpperCase()}"></i>`).join('')}</div>
+   <span class="v" style="font-family:var(--mono);font-size:9.5px;color:var(--faint)">${t.series.length} steps</span></td>`
+).join('') + '</tr>';
+
+body += `<tr><th class="rowlab">Use for</th>` +
+  T.map(t=>`<td class="cell txt">${t.use}</td>`).join('') + '</tr>';
+body += `<tr><th class="rowlab">Provenance</th>` +
+  T.map(t=>`<td class="cell txt">${t.prov}</td>`).join('') + '</tr>';
+
+document.getElementById('cmpbody').innerHTML = body;
+
+/* layouts */
+document.getElementById('lays').innerHTML = LAYOUTS.map((n,i)=>
+  `<div class="lay${EXEMPT.has(n)?' ex':''}"><span class="n">${String(i+1).padStart(2,'0')}</span>
+   <span class="t">${n}</span></div>`).join('');
+</script>
+
+</body>
+</html>
