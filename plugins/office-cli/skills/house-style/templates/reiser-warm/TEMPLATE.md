@@ -29,7 +29,7 @@ officecli add deck.pptx slide --layout 'Title and Content'
 
 The rule is about *area*, not importance. Sixty percent is the surface you barely notice; ten percent is the thing you notice first.
 
-- **60% field** — `#F5F1ED` cream, `#F5F3F1` lifted, `#E8E4DF` inset, `#D4D0C9` rules. Their separation is deliberately low; cream against warm grey is 1.13:1. The neutrals are one family, and the eye should not be asked to parse them as distinct zones. If you need a hard boundary, use a Stone rule, not a fill change.
+- **60% field** — `#F5F1ED` cream, `#FBF9F6` lifted, `#E8E4DF` inset, `#D4D0C9` rules. Their separation is deliberately low; cream against warm grey is 1.13:1. The neutrals are one family, and the eye should not be asked to parse them as distinct zones. If you need a hard boundary, use a Stone rule, not a fill change.
 - **30% supporting** — charcoal `#1F1E1D` ink, muted `#5C5650`, sage mist `#B3CBC1` as tint.
 - **10% accent** — coral `#CC785C`. One accent per page. Ten percent is a ceiling, not a target: a page with no coral is fine; a page with coral in four places has no accent, only decoration.
 
@@ -41,15 +41,15 @@ Arial for Latin, 微軟正黑體 for 中文. Same scale as `ana-blue` — see [`
 |---|---|---|---|
 | Cover / Section / Closing title | 40 / 34pt | bold | `#1F1E1D` — **charcoal on the coral field** |
 | Slide title | 30pt | bold | `#1F1E1D` |
-| Big Number · KPI value | 96 / 54pt | bold | `#9D5C47` |
-| Eyebrow | 20pt | bold | `#9D5C47` |
-| Quote opening glyph | 130pt | bold | `#9D5C47` |
+| Big Number · KPI value | 96 / 54pt | bold | `#915542` |
+| Eyebrow | 20pt | bold | `#915542` |
+| Quote opening glyph | 130pt | bold | `#915542` |
 | Body | 18pt | regular | `#1F1E1D` body, `#5C5650` supporting |
 | Footer, page number, source | 13pt | regular | `#5C5650` |
 
 ## Two traps — read before using coral
 
-**Coral is a fill colour, not a text colour.** `#CC785C` on the cream field is 2.92:1 and fails at every size. Use `#9D5C47` (4.61:1) when the coral hue must carry text — which is why every eyebrow and big number in this template is `#9D5C47`, not `#CC785C`.
+**Coral is a fill colour, not a text colour.** `#CC785C` on the cream field is 2.92:1 and fails at every size. Use `#915542` (5.22:1 on cream, 4.63:1 on the warm-grey inset tint) when the coral hue must carry text — which is why every eyebrow and big number in this template is `#915542`, not `#CC785C`.
 
 **A coral fill takes charcoal text, not white.** This is the counterintuitive one:
 
@@ -65,13 +65,13 @@ Coral is a mid-tone; it wants dark text. The Cover, Section Divider, Closing and
 
 | Element | Position | Spec |
 |---|---|---|
-| Eyebrow | `56, 48` | 20pt bold `#9D5C47`, bilingual, ` · `-separated, 中文 leading — same strings as `ana-blue` |
+| Eyebrow | `56, 48` | 20pt bold `#915542`, bilingual, ` · `-separated, 中文 leading — same strings as `ana-blue` |
 | Title | `56, 76` | 30pt bold `#1F1E1D` |
 | Title rule | `56, 142`, `1328 × 1.5` | filled rectangle, `#CC785C` |
 | Footer | `56, 772` | 13pt `#5C5650` — `{{ORG}}  \|  {{DECK_TITLE}}` |
 | Page number | `1324, 772` | 13pt `#5C5650`, right-aligned |
 
-Three layouts substitute their own furniture: **Cover**, **Section Divider** and **Closing** are full-bleed `#CC785C` with charcoal `#1F1E1D` text; Cover and Section Divider carry a short **cream `#F5F1ED`** underline rule (`120 × 3` and `100 × 3`), and Closing carries none. Two more ship deliberately bare: **Quote** (warm-grey `#E8E4DF` field, a 130pt `#9D5C47` opening glyph, footer and page number only) and **Blank** (title rule, footer and page number only).
+Three layouts substitute their own furniture: **Cover**, **Section Divider** and **Closing** are full-bleed `#CC785C` with charcoal `#1F1E1D` text; Cover and Section Divider carry a short **cream `#F5F1ED`** underline rule (`120 × 3` and `100 × 3`), and Closing carries none. Two more ship deliberately bare: **Quote** (warm-grey `#E8E4DF` field, a 130pt `#915542` opening glyph, footer and page number only) and **Blank** (title rule, footer and page number only).
 
 One substitution is **not** a straight swap. The Two-Column Compare "Before" band is muted ink `#5C5650`, not the accent — charcoal on it is 2.30:1 and fails, so its label is cream `#F5F1ED` (6.44:1), exactly as ANA Blue uses white there. "Coral takes dark text" applies to the coral band only.
 

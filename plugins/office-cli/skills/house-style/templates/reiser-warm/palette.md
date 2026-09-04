@@ -18,7 +18,7 @@ The `.pptx` theme is named `Reiser Warm`:
 | `accent4` | `#C28E3D` | gold |
 | `accent5` | `#8B7BAB` | violet |
 | `accent6` | `#5C9C8E` | teal |
-| `hlink` | `#9D5C47` | links — the text-safe coral |
+| `hlink` | `#915542` | links — the text-safe coral |
 | `folHlink` | `#5C5650` | visited |
 
 ## 60% — the field
@@ -28,7 +28,7 @@ Four neutrals carry the surface and almost never carry text.
 | Token | Hex | Role | ANA Blue equivalent |
 |---|---|---|---|
 | Warm cream | `#F5F1ED` | The default page, set on the master. Everything else sits on this. | `#FFFFFF` |
-| Cool white | `#F5F3F1` | Lifted surface — a card that reads as *above* the page; callout and takeaway bands. | `#E6F2FC` |
+| Cool white | `#FBF9F6` | Lifted surface — a card that reads as *above* the page; callout and takeaway bands. | `#E6F2FC` |
 | Warm grey | `#E8E4DF` | Inset surface — panels, sidebars, code blocks, quiet bands. | `#F0F6FC` |
 | Stone | `#D4D0C9` | Rules, borders, table gridlines, dividers. | `#C3D6EE` |
 
@@ -49,13 +49,13 @@ Cream against warm grey is 1.13:1. That is deliberate — the neutrals are one f
 | Token | Hex | On cream | Role |
 |---|---|---|---|
 | Coral | `#CC785C` | 2.92 | The one accent. Fills, badges, title rules, the emphasised row, the single highlighted number, chart series 1. **Fill only.** |
-| Coral deep | `#9D5C47` | **4.61** | Derived text-safe variant. Eyebrows, big numbers, KPI values, links — anywhere the coral hue must be text. |
+| Coral deep | `#915542` | **4.61** | Derived text-safe variant. Eyebrows, big numbers, KPI values, links — anywhere the coral hue must be text. |
 
 One accent per page.
 
 ## Two traps
 
-**Coral is a fill colour, not a text colour.** 2.92:1 on the cream field, fails at every size. Use `#9D5C47`.
+**Coral is a fill colour, not a text colour.** 2.92:1 on the cream field, fails at every size. Use `#915542`.
 
 **A coral fill takes charcoal text, not white.**
 
@@ -69,16 +69,29 @@ One accent per page.
 
 For charts and multi-category coding. As *fills* they are all fine — the gate only measures text. As text on cream none clear 4.5:1, so each has a derived text-safe variant.
 
-| Name | Fill | On cream | Text-safe | Variant ratio |
-|---|---|---|---|---|
-| Coral | `#CC785C` | 2.92 | `#9D5C47` | 4.61 |
-| Blue | `#5C7B9C` | 3.92 | `#557190` | 4.50 |
-| Sage | `#6B8E5C` | 3.31 | `#59764C` | 4.54 |
-| Gold | `#C28E3D` | 2.58 | `#8C662C` | 4.61 |
-| Violet | `#8B7BAB` | 3.39 | `#756790` | 4.56 |
-| Teal | `#5C9C8E` | 2.83 | `#46776C` | 4.54 |
-| Mauve | `#B07A9C` | 3.06 | `#8B607B` | 4.61 |
-| Tan | `#8C7355` | 3.98 | `#816A4E` | 4.55 |
+| Name | Fill | On cream | Text-safe | on cream | on warm grey |
+|---|---|---|---|---|---|
+| Coral | `#CC785C` | 2.92 | `#915542` | **5.22** | **4.63** |
+| Blue | `#5C7B9C` | 3.92 | `#4D6782` | **5.22** | **4.64** |
+| Sage | `#6B8E5C` | 3.31 | `#516B45` | **5.28** | **4.69** |
+| Gold | `#C28E3D` | 2.58 | `#825F29` | **5.17** | **4.59** |
+| Violet | `#8B7BAB` | 3.39 | `#6C5F85` | **5.17** | **4.59** |
+| Teal | `#5C9C8E` | 2.83 | `#416E64` | **5.14** | **4.56** |
+| Mauve | `#B07A9C` | 3.06 | `#805871` | **5.26** | **4.67** |
+| Tan | `#8C7355` | 3.98 | `#786249` | **5.13** | **4.56** |
+
+**The text-safe variants were re-derived against the warm-grey inset tint, not the cream field.**
+The original set was derived against cream only and landed at 4.50–4.61 there — which reads as
+passing, and is, on the page. But card and panel text does not sit on the page; it sits on
+`#E8E4DF`, where every one of those values fell to **4.00–4.10 and failed**. The palette said
+they were safe and they were not. Each one has been walked down its own hue until it clears
+4.55 on the worst of the three surfaces, which puts it at 5.13–5.28 on cream — margin rather
+than a value balanced on the gate line.
+
+`#915542` replaces `#9D5C47` for the same reason, and it matters more: coral deep appears 30
+times across the 19 layouts as the accent-as-type — every eyebrow, panel heading and big
+number. At 4.09 on the inset tint, panel headings inside a card were failing in the shipped
+template.
 
 Chart series order: Coral → Blue → Sage → Gold → Violet → Teal. It alternates warm and cool so adjacent series separate. Mauve and Tan are held back for a seventh and eighth category; needing them usually means the chart should be split.
 
@@ -90,16 +103,16 @@ Arial (Latin) + 微軟正黑體 (中文). Sizes on the 1440 × 810 pt canvas:
 
 | Size | Role | Colour |
 |---|---|---|
-| 130pt | Quote opening glyph | `#9D5C47` |
-| 96pt | Big Number | `#9D5C47` |
-| 54pt | KPI value | `#9D5C47` |
+| 130pt | Quote opening glyph | `#915542` |
+| 96pt | Big Number | `#915542` |
+| 54pt | KPI value | `#915542` |
 | 40pt | Cover title | `#1F1E1D` on coral |
 | 34pt | Section / Closing title | `#1F1E1D` on coral |
 | 30pt | Slide title | `#1F1E1D` |
 | 28pt | Quote body | `#1F1E1D` |
-| 24pt | Agenda numeral | `#9D5C47` |
+| 24pt | Agenda numeral | `#915542` |
 | 21pt | Cover subtitle, takeaway, rationale | `#1F1E1D` |
-| 20pt | Eyebrow (bold) | `#9D5C47` |
+| 20pt | Eyebrow (bold) | `#915542` |
 | 18pt | Body, panel heading, table header | `#1F1E1D` / `#5C5650` |
 | 13pt | Footer, page number, source, caption | `#5C5650` |
 
@@ -114,10 +127,10 @@ Bullet ramp on the master: 18 → 16 → 15 → 14 → 13pt, `#1F1E1D` at level 
 | Heading 1 / 2 | `#1F1E1D` — weight carries the hierarchy, not colour |
 | Caption, footnote, source | Arial 9pt `#5C5650` |
 | Table header row | fill `#E8E4DF`, charcoal bold text — *not* a coral fill |
-| Table banding | `#F5F3F1` |
+| Table banding | `#FBF9F6` |
 | Table borders | `#D4D0C9` hairline |
 | Emphasised row / total | fill `#CC785C` with **charcoal** text, or a `#CC785C` top border only |
-| Hyperlink | `#557190` |
+| Hyperlink | `#4D6782` |
 
 Set `font.ea=微軟正黑體` alongside `font.latin=Arial` for any 中文 content.
 
@@ -127,9 +140,9 @@ Set `font.ea=微軟正黑體` alongside `font.latin=Arial` for any 中文 conten
 |---|---|
 | Sheet background | `#F5F1ED` |
 | Header row | fill `#E8E4DF`, Arial 10pt bold `#1F1E1D`, frozen |
-| Banding | `#F5F3F1` alternate rows |
+| Banding | `#FBF9F6` alternate rows |
 | Total / highlight row | fill `#CC785C` with charcoal text, or top border `#CC785C` only |
-| Key metric cells | font `#9D5C47` bold |
+| Key metric cells | font `#915542` bold |
 | Body | Arial 10pt `#1F1E1D` |
 | Borders | `#D4D0C9` thin; no heavy grids |
 | Negative numbers | parentheses, not red — `#,##0;(#,##0)` |

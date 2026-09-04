@@ -119,6 +119,7 @@ Two content failure modes to watch for regardless of the source:
 
 ## References
 
+- [`references/layout-catalogue/`](references/layout-catalogue/) — one `.pptx` per template: 19 slides, one per named layout, every placeholder labelled with its index, name and geometry, plus two reference pages — the 60-30-10 bands with HEX, RGB and measured ratio, and the chart ramp with the Windows / macOS / web type stack. Open one to pick a layout without guessing. Regenerate with `scripts/build_layout_catalogue.py` after any change to a template.
 - [`references/slide-craft.md`](references/slide-craft.md) — **read before writing slides.** Titles, layout, tables, charts, prose and the two review gates: what makes a slide worth showing, as opposed to correctly formatted. Adapted from [consulting-pptx-skill](https://github.com/gozen3ji/consulting-pptx-skill) (MIT).
 - [`references/grid.md`](references/grid.md) — canvas, margins, the column arithmetic, vertical rhythm, unit conversions to `deck-build`
 - [`references/layouts.md`](references/layouts.md) — all 19 layouts, every shape, exact coordinates
@@ -128,5 +129,6 @@ Two content failure modes to watch for regardless of the source:
 - [`references/sks-blue-styleguide.html`](references/sks-blue-styleguide.html) — the SKS Blue styleguide: tokens, type scale, components and slide layouts, switchable between the light and dark field. Open it in a browser.
 - [`references/palettes.zh-TW.html`](references/palettes.zh-TW.html) — 繁中色票表. A standalone swatch sheet for all four palettes: every token grouped by band, with its measured ratios against that palette's own three surfaces, and three miniature layouts per template showing the palette in use. Open it in a browser; nothing else loads it.
 - [`scripts/contrast.py`](scripts/contrast.py) — regenerates the matrix (`--write`) and verifies tokens against the `.pptx` files (`--check`)
+- [`scripts/build_layout_catalogue.py`](scripts/build_layout_catalogue.py) — rebuilds every layout catalogue from the templates and `contrast.py`, so the swatch pages can never drift from the palette they document
 - [`scripts/check_deck.py`](scripts/check_deck.py) — the content and craft gate. Prints the title column; fails on placeholders, title/body number disagreement, wrong typeface, off-palette colour; warns on the assembly tells
 - Sibling skills: `pptx-cli`, `docx-cli`, `xlsx-cli`, `officecli-setup`

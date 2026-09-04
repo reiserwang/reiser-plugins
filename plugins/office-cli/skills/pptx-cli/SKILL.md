@@ -40,6 +40,7 @@ Load on demand — do not read all of them:
 
 | File | When |
 |---|---|
+| `house-style/references/layout-catalogue/<name>-layouts.pptx` | Picking a layout. 19 slides, one per named layout, each placeholder labelled with its index and geometry; plus the palette and type reference pages |
 | `house-style/references/slide-craft.md` | **Read before writing slides.** Titles, layout, tables, charts, prose — what makes a slide worth showing |
 | `references/officecli-core.md` | Command surface, layer model (L1 read → L2 DOM → L3 raw XML), batch semantics |
 | `references/officecli-pptx.md` | Full pptx element schema — shapes, charts, tables, animations, connectors, notes |

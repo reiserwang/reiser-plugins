@@ -42,3 +42,13 @@ No organisation names, unit names, product names, taglines, classification marki
 mkdir -p /tmp/t && cd /tmp/t && unzip -qo <name>.pptx
 grep -rl --include='*.xml' -E '<your org names and product names here>' . || echo clean
 ```
+
+## Seeing a template before you use it
+
+`../references/layout-catalogue/<name>-layouts.pptx` shows every one of the 19 layouts on its own slide, built on the real layout so it inherits the master, theme and standing furniture. Placeholders are labelled with index, name and geometry rather than filled with sample copy, and two further pages carry the palette (60-30-10, with HEX, RGB and the measured ratio against the field) and the chart ramp with the cross-platform type stack.
+
+Rebuild them after changing a template — they are generated, not maintained by hand:
+
+```bash
+python3 scripts/build_layout_catalogue.py
+```

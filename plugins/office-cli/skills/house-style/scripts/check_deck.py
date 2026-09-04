@@ -269,7 +269,7 @@ def main():
     ap.add_argument("deck")
     ap.add_argument("--palette", help="check every slide colour against this contrast.py palette")
     ap.add_argument("--template", action="store_true",
-                    help="a template file: {{placeholders}} are expected, not a defect")
+                    help="a template or layout catalogue: unfilled slides and {{placeholders}} are the point")
     a = ap.parse_args()
 
     prs = Presentation(a.deck)
@@ -301,7 +301,8 @@ def main():
 
         layout = (slide.slide_layout.name or "").strip().lower()
         if layout not in EXEMPT_LAYOUTS:
-            check_fill_ratio(i, body)
+            if not a.template:   # a template or catalogue is unfilled on purpose
+                check_fill_ratio(i, body)
             # the eyebrow, footer and page number live on the layout in this system,
             # so a slide inherits them. Only flag when neither the slide nor its
             # layout carries them — i.e. someone built on Blank or stripped them.
