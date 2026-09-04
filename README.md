@@ -14,7 +14,7 @@ Two plugins.
 
 | Plugin | What it's for |
 |---|---|
-| `office-cli` | Decks, reports and workbooks in a house style — five skills, five interchangeable design templates. |
+| `office-cli` | Decks, reports and workbooks in a house style — five skills, five interchangeable design templates, and a content gate that reads the argument rather than the formatting. |
 | `tw-legal-rag` | Taiwan court judgments and 行政函釋 — semantic retrieval with citation discipline wired in. |
 
 ### office-cli

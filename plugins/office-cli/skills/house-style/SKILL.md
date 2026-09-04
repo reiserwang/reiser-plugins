@@ -106,17 +106,20 @@ Two content failure modes to watch for regardless of the source:
 
 ## 5. Before delivering anything
 
-1. Run the format skill's own verification — `officecli view <file> issues`, `check_deck.py`, `officecli validate`.
-2. **Render it and look at it.** `officecli view <file> screenshot --grid --out contact.png`, then read the PNG. Grid drift and text overflow are invisible in the DOM and obvious in an image.
-3. Confirm eyebrow, title rule, footer and page number are on every content slide.
-4. Confirm no Calibri survived, no off-palette colour crept in, and 中文 has a real CJK face set.
-5. `grep` the file for `{{` — no placeholder may ship.
-6. Check every product, roadmap and market claim against the approved source. This skill does not carry one.
-7. `officecli close <file>` before `SendUserFile` or `device_commit_files` — otherwise you deliver the pre-edit version.
-8. Flag anything you could not verify rather than presenting it as done.
+1. Run the format skill's own verification — `officecli view <file> issues`, `officecli validate`.
+2. **Run the content gate.** `python3 scripts/check_deck.py <file>.pptx --palette '<template name>'` — FAIL must be 0. It reads what `view issues` and `contrast.py` cannot: the title column, the agreement between a number in a title and the body under it, unreplaced placeholders, off-palette colour, and the tells of a deck assembled rather than written. Read every WARN and decide; a WARN is a question, not a defect.
+3. **Render it and look at it.** `officecli view <file> screenshot --grid --out contact.png`, then read the PNG. Grid drift and text overflow are invisible in the DOM and obvious in an image.
+4. Confirm eyebrow, title rule, footer and page number are on every content slide.
+5. Confirm no Calibri survived, no off-palette colour crept in, and 中文 has a real CJK face set.
+6. `grep` the file for `{{` — no placeholder may ship.
+7. Check every product, roadmap and market claim against the approved source. This skill does not carry one.
+8. `officecli close <file>` before `SendUserFile` or `device_commit_files` — otherwise you deliver the pre-edit version.
+9. Flag anything you could not verify rather than presenting it as done.
+10. **Fresh-eye review**, for anything going outside the team. Hand the file to an agent that has not seen the conversation and ask it to read the deck cold. Machine checks cannot see a broken argument, and neither can the person who wrote it. Procedure in [`references/slide-craft.md`](references/slide-craft.md) § 8.
 
 ## References
 
+- [`references/slide-craft.md`](references/slide-craft.md) — **read before writing slides.** Titles, layout, tables, charts, prose and the two review gates: what makes a slide worth showing, as opposed to correctly formatted. Adapted from [consulting-pptx-skill](https://github.com/gozen3ji/consulting-pptx-skill) (MIT).
 - [`references/grid.md`](references/grid.md) — canvas, margins, the column arithmetic, vertical rhythm, unit conversions to `deck-build`
 - [`references/layouts.md`](references/layouts.md) — all 19 layouts, every shape, exact coordinates
 - [`references/pipelines.md`](references/pipelines.md) — the `deck-design` → `deck-build` pipeline, and the Word / Excel path
@@ -125,4 +128,5 @@ Two content failure modes to watch for regardless of the source:
 - [`references/sks-blue-styleguide.html`](references/sks-blue-styleguide.html) — the SKS Blue styleguide: tokens, type scale, components and slide layouts, switchable between the light and dark field. Open it in a browser.
 - [`references/palettes.zh-TW.html`](references/palettes.zh-TW.html) — 繁中色票表. A standalone swatch sheet for all four palettes: every token grouped by band, with its measured ratios against that palette's own three surfaces, and three miniature layouts per template showing the palette in use. Open it in a browser; nothing else loads it.
 - [`scripts/contrast.py`](scripts/contrast.py) — regenerates the matrix (`--write`) and verifies tokens against the `.pptx` files (`--check`)
+- [`scripts/check_deck.py`](scripts/check_deck.py) — the content and craft gate. Prints the title column; fails on placeholders, title/body number disagreement, wrong typeface, off-palette colour; warns on the assembly tells
 - Sibling skills: `pptx-cli`, `docx-cli`, `xlsx-cli`, `officecli-setup`

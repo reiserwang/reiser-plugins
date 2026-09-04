@@ -23,15 +23,16 @@ Do not mix the two on one file in one pass. If both are needed, `officecli close
 
 1. **Setup.** Run the `officecli-setup` skill if `officecli --version` is not a bare semver. Non-negotiable in a fresh Cowork session — the binary is not preinstalled and the documented curl installer is blocked here.
 2. **House style.** For any brand-facing deck, load `house-style` and follow it. Its typography scale **overrides** the ≥36pt title rule in the upstream reference — house decks are dense read-not-projected documents.
-3. **Inspect before editing.** Never edit an existing deck blind:
+3. **Slide craft.** Before writing the first slide, read `house-style/references/slide-craft.md` and write the storyline — one title per slide, in order, with how each will be shown. Everything in this file governs how a deck looks; that one governs whether it says anything. A deck built layout-first reads as a template that was filled in, and no amount of geometry fixes it afterwards.
+4. **Inspect before editing.** Never edit an existing deck blind:
    ```bash
    officecli view deck.pptx outline               # slide-by-slide structure
    officecli get  deck.pptx '/slide[3]' --json    # exact geometry & formatting
    officecli view deck.pptx screenshot --grid --out contact.png   # then read the PNG
    ```
-4. **Edit** with `add` / `set` / `remove` / `move`, or a `batch` array for anything multi-step.
-5. **Verify.** `view issues`, then re-render and read the PNG.
-6. **Flush.** `officecli close deck.pptx` before `SendUserFile` or `device_commit_files`.
+5. **Edit** with `add` / `set` / `remove` / `move`, or a `batch` array for anything multi-step.
+6. **Verify.** `view issues`, then re-render and read the PNG.
+7. **Flush.** `officecli close deck.pptx` before `SendUserFile` or `device_commit_files`.
 
 ## Reference files
 
@@ -39,6 +40,7 @@ Load on demand — do not read all of them:
 
 | File | When |
 |---|---|
+| `house-style/references/slide-craft.md` | **Read before writing slides.** Titles, layout, tables, charts, prose — what makes a slide worth showing |
 | `references/officecli-core.md` | Command surface, layer model (L1 read → L2 DOM → L3 raw XML), batch semantics |
 | `references/officecli-pptx.md` | Full pptx element schema — shapes, charts, tables, animations, connectors, notes |
 | `references/officecli-pitch-deck.md` | Narrative structure for fundraising / investor decks |
@@ -81,7 +83,23 @@ officecli remove new_deck.pptx '/slide[8]'    # trim down
 Render a contact sheet and read it before every handoff. Grid drift, overflowing text boxes, and collided shapes are invisible in the DOM and immediately obvious in the render.
 
 ```bash
-officecli view deck.pptx issues
-officecli view deck.pptx screenshot --grid --out contact.png
+officecli view deck.pptx issues                                   # overflow, stale fields
+python3 <house-style>/scripts/check_deck.py deck.pptx \
+        --palette 'ANA Blue'                                      # content, craft, palette
+officecli view deck.pptx screenshot --grid --out contact.png      # then read the PNG
 officecli close deck.pptx
 ```
+
+`check_deck.py` is the gate the other two cannot cover. It prints the title column for a
+read-through, and fails the deck on an unreplaced `{{placeholder}}`, on a title that promises
+a number its body contradicts, on a title too long for two lines, on a run set in the wrong
+face, and on any colour outside the named palette. It warns on the tells of a deck assembled
+rather than written: label-style titles, one sentence shape repeated across the deck, a body
+filling under 55% of the content band, two spellings of one term, AI register. **FAIL must be 0.**
+Add `--template` when checking a template file, where `{{placeholders}}` are the point.
+
+Then the gate no machine can run: hand the file to an agent that has not seen the conversation
+— the `Agent` tool, or a new session — and ask it to read the deck cold and report awkward
+phrasing, jumps in the logic, a title that disagrees with its own figure, unsupported evaluative
+words, a page that restates an earlier one. Sort the findings into accept / reject with a reason,
+fix the accepted ones, re-run the machine check. `slide-craft.md` § 8 has the full procedure.
