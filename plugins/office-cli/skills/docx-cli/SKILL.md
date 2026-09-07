@@ -19,7 +19,7 @@ description: Create and edit Word documents through the officecli document DOM �
 
 ## Order of operations
 
-1. **Setup.** Run `officecli-setup` if `officecli --version` is not a bare semver.
+1. **Setup.** `bash <officecli-setup>/scripts/setup.sh` — exit 0 and you are ready.
 2. **House style** for anything brand-facing — load `house-style`. Body Arial 10.5pt `#1A2230`; H1 16pt bold `#0B318F`; table headers filled `#0B318F` with white text; banding `#F0F6FC`; footer `{{ORG}}  |  {{DECK_TITLE}}` at 9pt `#5A6676`.
 3. **Inspect before editing:**
    ```bash
@@ -28,19 +28,27 @@ description: Create and edit Word documents through the officecli document DOM �
    officecli get  report.docx '/body/paragraph[12]' --json
    officecli query report.docx 'table' --json
    ```
-4. **Edit** with `add` / `set` / `remove`, or `batch` for multi-step work.
-5. **Verify:** `officecli view report.docx issues`, then `validate`.
+4. **Edit.** Past two or three edits, write a JSON batch and replay it:
+   ```bash
+   bash <officecli-setup>/scripts/ocbuild.sh report.docx build.json
+   ```
+   One atomic pass, no shell quoting, and a rebuild is an edit to the JSON. Single
+   `add` / `set` / `remove` commands are for probing and one-off fixes.
+5. **Verify:** `officecli view report.docx issues`, then `validate`, then the house-style
+   gate below.
 6. **Flush:** `officecli close report.docx` before `SendUserFile` or `device_commit_files`.
 
 ## Reference files
 
-| File | When |
+| Where | When |
 |---|---|
-| `references/officecli-core.md` | Command surface, layer model, batch semantics |
-| `references/officecli-docx.md` | Full docx schema — paragraphs, runs, tables, sections, headers/footers, styles, fields, comments, tracked changes |
-| `references/officecli-word-form.md` | Form fields, content controls, template filling |
+| `officecli help docx <element>` | The docx schema — paragraphs, runs, tables, sections, headers/footers, styles, fields, comments, tracked changes. Authoritative and version-matched |
+| `officecli load_skill word` | Upstream's own docx skill; `word-form` for fillable forms and content controls, `academic-paper` for citations and cross-references |
+| `<officecli-setup>` | Batch shape, resident mode, flushing, the raw-XML escape hatch |
+| `house-style` | Palette, type scale, furniture for anything brand-facing |
 
-Upstream snapshot — drifts from the installed binary. `officecli help docx <element>` is authoritative.
+The binary serves its schema and upstream's skill docs directly, so nothing here is a
+snapshot that can drift from the installed version.
 
 ## Traps
 
@@ -66,3 +74,21 @@ Corporate form templates are often still legacy `.doc` — convert to `.docx` be
 ## Bilingual documents
 
 English leads, 中文 follows. Set `font.ea` to Arial alongside `font.latin`. For mixed-script tables, give CJK columns ~1.3× the width of their English equivalents — 中文 at the same point size occupies more horizontal space per character but fewer characters per phrase, and the net effect on column fit is not intuitive. Render or check `view issues` for overflow.
+
+## Delivering
+
+```bash
+officecli view report.docx issues        # overflow, stale TOC and page fields
+officecli validate report.docx           # OpenXML schema
+officecli close report.docx              # flush before anything else reads it
+python3 <house-style>/scripts/check_doc.py report.docx --palette 'ANA Blue'
+```
+
+`check_doc.py` is the gate the other two cannot cover. It prints the heading outline for
+a read-through, and fails the document on an unreplaced `{{placeholder}}`, on a run set
+in a face that is not house, on any colour outside the named palette, and on 中文 in a
+document where no East Asian font was ever set — the trap above, invisible until it
+renders on a machine without the fallback. It warns on a missing footer, a heading level
+that jumps, an unfilled table header, two spellings of one term, and AI register.
+**FAIL must be 0.** Add `--template` when checking a template, where `{{placeholders}}`
+are the point, and `--font 'Noto Sans TC'` to admit a second house face.

@@ -1,113 +1,143 @@
 ---
 name: officecli-setup
-description: Install, verify, and troubleshoot the officecli binary before any OfficeCLI-based Office document work. Use when officecli is missing or errors with "command not found", when a session starts fresh in the Cowork cloud sandbox, when officecli commands fail with unexpected syntax, or when the user asks to set up / install / update officecli.
+description: Verify the officecli binary and drive the mechanics every OfficeCLI skill shares — schema lookup, JSON batch builds, resident mode, flushing. Use before the first officecli command of a session, when officecli is missing or errors with "command not found", when a session starts fresh in the Cowork cloud sandbox, when a command fails with unexpected syntax, or when building a document from more than a couple of edits.
 ---
 
-# officecli setup
+# officecli — setup and shared mechanics
 
-Run this before the first officecli command of a session. It is idempotent and takes seconds when already installed.
-
-## Step 1 — check
+## 1. Verify
 
 ```bash
-officecli --version
+bash <officecli-setup>/scripts/setup.sh
 ```
 
-Expect a bare semver like `1.0.144`. Proceed straight to the format skill if it prints one.
+Idempotent, a second or two when already installed. It checks the version, catches
+the wrong same-named npm package, and proves the document DOM round-trips with a
+real `create` → `add` → `view text`.
 
-**If it prints a banner about "AI document generation", "hosted credits", "100 free credits", or a `new` / `login` / `whoami` command list — the WRONG package is installed.** See Wrong Package below.
-
-## Step 2 — install by environment
-
-Determine which environment the command will run in, then use the matching path. The two are not interchangeable.
-
-### Cowork cloud sandbox (the `Bash` tool)
-
-```bash
-npm install -g @officecli/officecli
-```
-
-The **scoped** name is mandatory. Two things break here otherwise:
-
-| Trap | What happens |
+| Exit | Meaning |
 |---|---|
-| `curl -fsSL https://d.officecli.ai/install.sh \| bash` | **403.** The upstream docs' primary install path is not on the sandbox network allowlist. GitHub Releases and `api.github.com` are also 403. |
-| `npm install -g officecli` (unscoped) | **Installs an unrelated package.** `officecli` on npm is a different product (officecli.io, UNLICENSED, hosted-credit AI generation TUI). It has no `create`/`add`/`set`/`get`/`view` DOM commands and will silently derail the whole task. |
+| 0 | ready |
+| 1 | not installed — the script prints the install lines for this environment |
+| 2 | wrong package: unscoped `officecli` on npm is a hosted-credit AI TUI, not this tool |
+| 3 | installed but the native binary never downloaded (proxy, air-gap, `--ignore-scripts`) |
 
-npm registry access works, so the scoped package is the only reliable route. Install once per session — the cloud container is ephemeral, so a fresh session needs it again.
+Two environment facts the script cannot fix for you:
 
-The npm package is a small shim: its postinstall downloads the native binary for the platform. An install that succeeds but leaves `officecli --version` failing means that download was blocked — a proxy, an air-gapped machine, or `npm --ignore-scripts`. Nothing in this plugin can substitute for it; the binary is not vendored.
+- **Cowork cloud sandbox** — `npm install -g @officecli/officecli` is the only route.
+  The upstream `curl … install.sh` path, GitHub Releases and `api.github.com` are all
+  403 here. The container is ephemeral, so a fresh session installs again.
+- **`device_bash` (the user's Mac)** — no network at all, so nothing installs from there.
+  Either the user runs `officecli install` in their own terminal, or you stage the file
+  into the sandbox with `device_stage_files`, work there, and `device_commit_files` back.
+  Prefer staging over blocking on a local install.
 
-### The user's Mac (`device_bash`, or their local Claude Code)
+## 2. Ask the binary, never a snapshot
 
-`device_bash` has **no network access** — it cannot install anything. Check whether it is already present:
-
-```bash
-officecli --version || echo "NOT INSTALLED"
-```
-
-If not installed, do not try to install it from `device_bash`. Tell the user to run **one** of these in their own terminal, then continue:
-
-```bash
-curl -fsSL https://d.officecli.ai/install.sh | bash    # upstream installer
-npm install -g @officecli/officecli                    # or via npm
-```
-
-Meanwhile, the fallback that always works: stage the file into the cloud sandbox with `device_stage_files`, do the officecli work there against a copy, and write the result back with `device_commit_files`. Prefer this over blocking on a local install.
-
-## Step 3 — verify the DOM API, not just the version
-
-A version string alone does not prove the right binary. Confirm with a real round-trip:
+The binary serves its own schema and its own skill documentation, always matching the
+installed version. This plugin deliberately vendors neither.
 
 ```bash
-cd /tmp && officecli create _probe.pptx \
-  && officecli add _probe.pptx / --type slide --prop title="probe" \
-  && officecli view _probe.pptx text \
-  && officecli close _probe.pptx && rm -f _probe.pptx
-```
-
-`create` → `add` → `view text` returning `probe` means the document-DOM binary is live.
-
-## Wrong package installed
-
-```bash
-npm uninstall -g officecli
-npm install -g @officecli/officecli
-hash -r
-officecli --version
-```
-
-## Help is authoritative
-
-The bundled reference files in this plugin were captured from an upstream snapshot and **drift from the installed binary**. When a property name, enum value, verb, or alias is uncertain, query the binary instead of guessing:
-
-```bash
-officecli help                        # all commands
 officecli help pptx                   # elements for a format
 officecli help pptx shape             # full schema for one element
 officecli help pptx add shape         # verb-scoped props
 officecli help pptx shape --json      # machine-readable
+
+officecli load_skill                  # upstream's skills and when each applies
+officecli load_skill word             # its SKILL.md + a manifest of reference files
+officecli load_skill excel --path reference/decision-rules.md
 ```
 
+Upstream skills available: `pptx`, `word`, `excel`, `word-form`, `morph-ppt`,
+`morph-ppt-3d`, `pitch-deck`, `academic-paper`, `data-dashboard`, `financial-model`.
 Format aliases: `word`→`docx`, `excel`→`xlsx`, `ppt`/`powerpoint`→`pptx`.
 
-Where help and a reference file disagree, **help wins**. One help query beats a guess-fail-retry loop.
+One help query beats a guess-fail-retry loop.
 
-## Operating notes that prevent most failures
+## 3. Build with a JSON batch, not a command per edit
 
-- **Quote every path.** `"/slide[1]/shape[@id=100000]"` — zsh globs an unquoted `[1]` to `no matches found`.
-- **Single-quote currency.** `--prop text='$15M'`. Double quotes let the shell eat `$1`. Inside an unquoted `batch` heredoc, escape as `\$`. Verify with `view text` afterwards.
-- **Flush before anyone else reads.** officecli keeps documents resident in memory. Run `officecli save <file>` (keeps it warm) or `officecli close <file>` (flush + release) before python-docx/openpyxl, a renderer, `SendUserFile`, or `device_commit_files` touches the file. officecli's own reads always see uncommitted edits — the failure mode is delivering a stale file.
-- **Sheet-scope xlsx selectors.** `officecli set book.xlsx A1` is rejected as a bare selector; use `"/sheet[1]/A1"`.
-- **Clean-slate replay.** `create` refuses to overwrite. Idiom: `close` → `rm` → `create` → `batch` → `close`.
-- **One command, check exit code, continue.** After any structural op (new slide, chart, table), run `get` before stacking more onto it.
+Anything past two or three edits is a batch. Each item is an object whose `command`
+is the bare verb, with the verb's arguments as sibling fields:
 
-## Rendering to check the work
-
-```bash
-officecli view deck.pptx screenshot --page 3 --out s3.png     # one slide
-officecli view deck.pptx screenshot --grid --out contact.png  # contact sheet
-officecli view deck.pptx issues                               # overflow, low contrast, stale fields
+```json
+[
+  {"command":"add","parent":"/","type":"slide","props":{"layout":"Title and Content"}},
+  {"command":"add","parent":"/slide[1]","type":"shape",
+   "props":{"text":"Q3 review","x":"2cm","y":"3cm","width":"20cm","fontSize":"30"}},
+  {"command":"set","path":"/slide[1]/shape[1]","props":{"bold":"true"}}
+]
 ```
 
-Read the PNG back. Layout defects — overflowing text boxes, collided shapes, unreadable contrast — are invisible in the DOM and obvious in the render. Do this before delivering any deck.
+Write that to a file, then:
+
+```bash
+bash <officecli-setup>/scripts/ocbuild.sh deck.pptx build.json
+bash <officecli-setup>/scripts/ocbuild.sh --from <house-style>/templates/yukima/yukima.pptx \
+     deck.pptx build.json          # inherit a template's master, theme and 19 layouts
+```
+
+`ocbuild.sh` runs `close` → `rm` → `create` (or copy the template) → `batch` → `close`
+and checks every exit code. The order is not cosmetic: `create` refuses to overwrite, so
+a rerun that ignores its exit code replays onto the *previous* run's document and every
+`add style` fails with "already exists". The template file is copied, never opened for
+writing. A batch is atomic by default — one bad item rolls the whole thing back, so a
+failed run leaves nothing half-built. Rebuilding is then just editing the JSON and
+running it again, which is also what makes a build reviewable.
+
+To apply a batch to a document you are keeping, that is plain `officecli batch file
+--input patch.json` followed by `officecli save` or `close`.
+
+**Resident mode.** `officecli open <file>` holds the document in memory; subsequent
+commands and batches apply there and the disk write is deferred (adaptive 2–10s idle
+autosave, or `OFFICECLI_RESIDENT_FLUSH=each|auto|<seconds>|off`). For a long build that
+is one process instead of a hundred. officecli's own reads always see uncommitted edits
+— the failure mode is a *different* program reading a stale file, so `save` (flush, keep
+warm) or `close` (flush, release) before python-docx/openpyxl, a renderer, `SendUserFile`
+or `device_commit_files` touches it.
+
+## 4. Notes that prevent most failures
+
+- **Quote every path.** `"/slide[1]/shape[@id=100000]"` — zsh globs an unquoted `[1]` to
+  `no matches found`. A JSON batch sidesteps the shell entirely, which is half of why it
+  is the better default.
+- **Single-quote currency.** `--prop text='$15M'` — double quotes let the shell eat `$1`.
+  Then `view text` and confirm the `$` survived; it fails silently.
+- **`\n` starts a new paragraph, `\v` is a line break within one.** In a JSON batch write
+  the line break as `\u000b` — JSON has no `\v` escape and the file will not parse.
+  `ocbuild.sh` says so by name when it rejects one.
+- **A style must exist before it is used.** `"props":{"style":"Heading1"}` against a
+  document that never defined `Heading1` writes the reference and renders as body text.
+  Nothing errors. `check_doc.py` fails the document on it.
+- **Sheet-scope xlsx selectors.** `officecli set book.xlsx A1` is rejected; use
+  `"/sheet[1]/A1"` or `"/Sheet1/A1"`.
+- **Check after structural ops.** After a new slide, chart or table, `get` it before
+  stacking more onto it.
+- **`raw` / `raw-set` / `add-part`** are the documented escape hatch when the DOM has no
+  property for what you need — raw OpenXML, same file, no rebuild.
+
+## 5. Verify what you built
+
+```bash
+officecli view deck.pptx issues                               # overflow, low contrast, stale fields
+officecli validate report.docx                                # OpenXML schema
+officecli view deck.pptx screenshot --page 3 --out s3.png     # one slide
+officecli view deck.pptx screenshot --grid --out contact.png  # contact sheet
+```
+
+Read the PNG back. Overflowing text boxes, collided shapes and unreadable contrast are
+invisible in the DOM and obvious in the render. Do this before delivering anything.
+House-style deliverables have a further gate — `check_deck.py`, `check_doc.py`,
+`check_book.py` in `house-style/scripts/`; see that skill.
+
+## MCP, if you would rather have tools than a shell
+
+The binary registers itself as an MCP server in Claude Code:
+
+```bash
+officecli mcp claude      # register    (targets: claude, cursor, vscode, lms)
+officecli mcp list        # registration status
+```
+
+That trades shell quoting for structured tool calls, at the cost of the tool definitions
+sitting in context for the whole session. This plugin does not register it for you —
+the skills above are written for the CLI, and both surfaces drive the same DOM.

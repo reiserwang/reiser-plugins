@@ -187,6 +187,22 @@ PALETTES = {
 }
 
 
+def allowed_hexes(name):
+    """Every colour a deliverable on this palette may contain, uppercase, no '#'.
+
+    Palette tokens plus the accent field, plus white and black, which every
+    format writes for defaults regardless of palette. Returns None if the
+    palette name is unknown.
+    """
+    p = PALETTES.get(name)
+    if not p:
+        return None
+    ok = {h.lstrip("#").upper() for _, h, _, _ in p["tokens"]}
+    ok.add(p["accent_field"].lstrip("#").upper())
+    ok |= {"FFFFFF", "000000"}
+    return ok
+
+
 def lum(h):
     h = h.lstrip("#")
     c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]

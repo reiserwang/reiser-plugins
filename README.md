@@ -22,7 +22,7 @@ Two plugins.
 | Skill | What it does |
 |---|---|
 | `house-style` | **The entry point.** Picks the design template, then picks the tool — copy a template, generate a new deck, or edit an existing file. |
-| `officecli-setup` | Installs and verifies the `officecli` binary. Run first in a fresh session. |
+| `officecli-setup` | Verifies the `officecli` binary and drives the shared mechanics — schema lookup, JSON batch builds, resident mode, flushing. Run first in a fresh session. |
 | `pptx-cli` | Slide decks — build, edit, audit, render to PNG. |
 | `docx-cli` | Reports, memos, board papers, approval routing forms, tracked changes. |
 | `xlsx-cli` | Financial models, KPI workbooks, pivots, charts, with live formulas. |
@@ -127,10 +127,14 @@ The `officecli` binary is not preinstalled. Say **"set up officecli"** — or ju
 The fastest and most faithful route, because it inherits the master, theme and all 19 layouts:
 
 ```bash
-cp plugins/office-cli/skills/house-style/templates/ana-blue/ana-blue.pptx deck.pptx
-officecli open deck.pptx
-officecli add  deck.pptx slide --layout 'Cover'
+bash plugins/office-cli/skills/officecli-setup/scripts/ocbuild.sh \
+     --from plugins/office-cli/skills/house-style/templates/ana-blue/ana-blue.pptx \
+     deck.pptx build.json
 ```
+
+`build.json` is a JSON array of `{"command": …}` items applied in one atomic pass; the
+template is copied, never opened for writing. Rebuilding is an edit to that file. Shape of
+the array and the single-command equivalents: `skills/officecli-setup/SKILL.md`.
 
 Layout names, placeholder indices and exact coordinates are in `skills/house-style/references/layouts.md`.
 
@@ -179,13 +183,19 @@ plugins/office-cli/skills/house-style/
 │   ├── contrast.md          the contrast gate and the per-template traps
 │   └── contrast-matrix.md   generated — every ratio in every palette
 ├── scripts/
-│   └── contrast.py          regenerates the matrix; --check verifies tokens
+│   ├── contrast.py          regenerates the matrix; --check verifies tokens
+│   ├── build_layout_catalogue.py   rebuilds every layout catalogue
+│   ├── check_deck.py · check_doc.py · check_book.py   the per-format gates
+│   ├── house_prose.py       shared term-drift and AI-register lists
+│   └── test_checks.py       self-check for the gates
 └── templates/
     ├── README.md            how to add another template
     ├── ana-blue/            TEMPLATE.md · palette.md · theme.json · ana-blue.pptx
     ├── yukima/              TEMPLATE.md · palette.md · theme.json · yukima.pptx
     ├── reiser-warm/         TEMPLATE.md · palette.md · theme.json · reiser-warm.pptx
-    └── sks-dark/            TEMPLATE.md · palette.md · theme.json · sks-dark.pptx
+    ├── sks-dark/            TEMPLATE.md · palette.md · theme.json · sks-dark.pptx
+    └── sks-blue/            TEMPLATE.md · palette.md · theme.json · theme.dark.json
+                             sks-blue.pptx · sks-blue-dark.pptx
 ```
 
 Read `SKILL.md`, then exactly one `TEMPLATE.md`. Everything else loads on demand.
@@ -277,8 +287,8 @@ Then add an entry to the `plugins` array in `.claude-plugin/marketplace.json` �
 
 ## Maintenance note
 
-`office-cli` bundles a snapshot of the upstream OfficeCLI skill files as reference material. They drift from whatever `officecli` binary is installed, and the skills say so — `officecli help <format> <element>` is authoritative at runtime. When bumping the plugin version, that's the moment to re-pull the upstream skills and check whether the schema has moved.
+`office-cli` carries no snapshot of the upstream OfficeCLI documentation. `officecli help <format> <element>` serves the schema and `officecli load_skill <name>` serves upstream's own skills, both from the installed binary, so neither can drift. When bumping the plugin version, re-run `python3 plugins/office-cli/skills/house-style/scripts/test_checks.py` and `bash plugins/office-cli/skills/officecli-setup/scripts/setup.sh` against the new binary.
 
-Bundled reference files under `skills/*/references/officecli-*.md` are from [iOfficeAI/OfficeCLI](https://github.com/iOfficeAI/OfficeCLI), Apache-2.0. See `LICENSE-officecli.txt` and `NOTICE-officecli.txt`.
+`office-cli` wraps [iOfficeAI/OfficeCLI](https://github.com/iOfficeAI/OfficeCLI), Apache-2.0. See `LICENSE-officecli.txt` and `NOTICE-officecli.txt`.
 
-Verified against officecli **1.0.144**.
+Verified against officecli **1.0.147**.

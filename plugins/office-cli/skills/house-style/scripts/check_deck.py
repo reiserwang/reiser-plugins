@@ -23,6 +23,8 @@ import re
 import sys
 import unicodedata
 
+import house_prose
+
 try:
     from pptx import Presentation
     from pptx.util import Emu
@@ -39,29 +41,6 @@ CONTENT_BAND = (172.0, 760.0)          # body lives between these
 TITLE_W, TITLE_PT = 1328.0, 30.0       # title box width, size
 # these five carry their own furniture; the standing-furniture and fill checks skip them
 EXEMPT_LAYOUTS = {"cover", "section divider", "closing", "quote", "blank"}
-
-# ── terminology drift: both spellings in one deck is a WARN (§ one term per deck)
-TERM_PAIRS = [
-    ("使用者", "用戶"), ("網路", "網絡"), ("資訊安全", "資安"),
-    ("軟體", "軟件"), ("硬體", "硬件"), ("影像", "視訊"),
-    ("供應商", "廠商"), ("雲端", "雲"), ("風險評估", "風險盤點"),
-    ("e-mail", "email"), ("web site", "website"), ("data set", "dataset"),
-    ("real time", "real-time"), ("roadmap", "road map"),
-]
-
-# ── AI-smell: high-confidence only. A hit is a prompt to reread, not a verdict.
-AI_SMELL_EN = [
-    "leverage", "utilize", "seamless", "synergy", "robust solution",
-    "cutting-edge", "state-of-the-art", "game-chang", "revolutionary",
-    "in today's fast-paced", "it is worth noting", "delve into",
-    "unlock the power", "at the end of the day", "holistic approach",
-    "best-in-class", "moving forward, we will",
-]
-AI_SMELL_ZH = [
-    "賦能", "抓手", "打造全方位", "全面提升", "深度融合", "生態圈",
-    "數位轉型之旅", "不僅如此", "值得一提的是", "綜上所述",
-    "極大地", "有效地提升", "進一步強化", "持續精進",
-]
 
 # counters that make a number in a title a promise about the body
 COUNTERS = ["段階", "階段", "步驟", "面向", "支柱", "大", "項", "個", "類", "層",
@@ -242,13 +221,10 @@ def check_palette(prs, path, palette_name):
     except Exception as exc:
         WARN(f"palette check skipped — contrast.py not importable ({exc})")
         return
-    p = contrast.PALETTES.get(palette_name)
-    if not p:
+    allowed = contrast.allowed_hexes(palette_name)
+    if allowed is None:
         FAIL(f"unknown palette {palette_name!r} — known: {', '.join(contrast.PALETTES)}")
         return
-    allowed = {h.lstrip('#').upper() for _, h, _, _ in p["tokens"]}
-    allowed.add(p["accent_field"].lstrip('#').upper())
-    allowed |= {"FFFFFF", "000000"}
     import zipfile
     z = zipfile.ZipFile(path)
     stray = {}
@@ -324,13 +300,8 @@ def main():
             WARN(f"{top} of {len(real)} titles share one sentence shape — "
                  f"that is a template being filled in, not a deck being written")
 
-    joined = "\n".join(t for _, t in all_text).lower()
-    for a_, b_ in TERM_PAIRS:
-        if a_.lower() in joined and b_.lower() in joined:
-            WARN(f"both '{a_}' and '{b_}' appear — one term per deck")
-    for w in AI_SMELL_EN + AI_SMELL_ZH:
-        if w.lower() in joined:
-            WARN(f"'{w}' — reads as generated; say the plain thing")
+    for w in house_prose.scan([t for _, t in all_text], "deck"):
+        WARN(w)
 
     if a.palette:
         check_palette(prs, a.deck, a.palette)

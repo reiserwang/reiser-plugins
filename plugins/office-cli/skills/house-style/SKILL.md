@@ -107,7 +107,13 @@ Two content failure modes to watch for regardless of the source:
 ## 5. Before delivering anything
 
 1. Run the format skill's own verification — `officecli view <file> issues`, `officecli validate`.
-2. **Run the content gate.** `python3 scripts/check_deck.py <file>.pptx --palette '<template name>'` — FAIL must be 0. It reads what `view issues` and `contrast.py` cannot: the title column, the agreement between a number in a title and the body under it, unreplaced placeholders, off-palette colour, and the tells of a deck assembled rather than written. Read every WARN and decide; a WARN is a question, not a defect.
+2. **Run the content gate for the format** — FAIL must be 0.
+   ```bash
+   python3 scripts/check_deck.py deck.pptx   --palette '<template name>'   # slides
+   python3 scripts/check_doc.py  report.docx --palette '<template name>'   # Word
+   python3 scripts/check_book.py book.xlsx   --palette '<template name>'   # Excel
+   ```
+   For a deck it reads what `view issues` and `contrast.py` cannot: the title column, the agreement between a number in a title and the body under it, unreplaced placeholders, off-palette colour, and the tells of a deck assembled rather than written. Read every WARN and decide; a WARN is a question, not a defect.
 3. **Render it and look at it.** `officecli view <file> screenshot --grid --out contact.png`, then read the PNG. Grid drift and text overflow are invisible in the DOM and obvious in an image.
 4. Confirm eyebrow, title rule, footer and page number are on every content slide.
 5. Confirm no Calibri survived, no off-palette colour crept in, and 中文 has a real CJK face set.
@@ -131,5 +137,9 @@ Two content failure modes to watch for regardless of the source:
 - [`references/palettes.zh-TW.html`](references/palettes.zh-TW.html) — 繁中色票表. A standalone swatch sheet for all six fields: every token grouped by band, with its measured ratios against that palette's own three surfaces, and three miniature layouts per template showing the palette in use. Open it in a browser; nothing else loads it.
 - [`scripts/contrast.py`](scripts/contrast.py) — regenerates the matrix (`--write`) and verifies tokens against the `.pptx` files (`--check`)
 - [`scripts/build_layout_catalogue.py`](scripts/build_layout_catalogue.py) — rebuilds every layout catalogue from the templates and `contrast.py`, so the swatch pages can never drift from the palette they document
-- [`scripts/check_deck.py`](scripts/check_deck.py) — the content and craft gate. Prints the title column; fails on placeholders, title/body number disagreement, wrong typeface, off-palette colour; warns on the assembly tells
+- [`scripts/check_deck.py`](scripts/check_deck.py) — the deck gate. Prints the title column; fails on placeholders, title/body number disagreement, wrong typeface, off-palette colour; warns on the assembly tells
+- [`scripts/check_doc.py`](scripts/check_doc.py) — the Word gate. Prints the heading outline; fails on placeholders, a non-house face, off-palette colour, and 中文 with no East Asian font set; warns on missing footers, heading jumps, unfilled table headers
+- [`scripts/check_book.py`](scripts/check_book.py) — the Excel gate. Fails on placeholders, evaluated formula errors, an unfrozen header, off-palette colour, red negatives; warns on a column too narrow for its contents
+- [`scripts/house_prose.py`](scripts/house_prose.py) — the shared prose tells (terminology drift, AI register) used by the deck and Word gates
+- [`scripts/test_checks.py`](scripts/test_checks.py) — self-check: builds a broken .docx and .xlsx and asserts each gate still catches its own fixture. Run after touching any checker
 - Sibling skills: `pptx-cli`, `docx-cli`, `xlsx-cli`, `officecli-setup`
