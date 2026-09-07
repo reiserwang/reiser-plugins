@@ -2,8 +2,9 @@
 
 ## consulting-pptx-skill
 
-`skills/house-style/references/slide-craft.md` and `skills/house-style/scripts/check_deck.py`
-are adapted from **consulting-pptx-skill** — https://github.com/gozen3ji/consulting-pptx-skill
+`skills/house-style/references/slide-craft.md` and the checkers under
+`skills/house-style/scripts/` (`check_deck.py`, `check_doc.py`, `check_book.py`,
+`house_prose.py`) are adapted from **consulting-pptx-skill** — https://github.com/gozen3ji/consulting-pptx-skill
 
 The craft rules and the idea of a machine-checkable content gate come from that project's
 `references/slide-rules.md`, a canon accumulated one line at a time from real review feedback,

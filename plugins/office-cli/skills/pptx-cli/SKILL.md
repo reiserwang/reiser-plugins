@@ -21,7 +21,7 @@ Do not mix the two on one file in one pass. If both are needed, `officecli close
 
 ## Order of operations
 
-1. **Setup.** Run the `officecli-setup` skill if `officecli --version` is not a bare semver. Non-negotiable in a fresh Cowork session — the binary is not preinstalled and the documented curl installer is blocked here.
+1. **Setup.** `bash <officecli-setup>/scripts/setup.sh` — exit 0 and you are ready. Non-negotiable in a fresh Cowork session: the binary is not preinstalled and the documented curl installer is blocked here.
 2. **House style.** For any brand-facing deck, load `house-style` and follow it. Its typography scale **overrides** the ≥36pt title rule in the upstream reference — house decks are dense read-not-projected documents.
 3. **Slide craft.** Before writing the first slide, read `house-style/references/slide-craft.md` and write the storyline — one title per slide, in order, with how each will be shown. Everything in this file governs how a deck looks; that one governs whether it says anything. A deck built layout-first reads as a template that was filled in, and no amount of geometry fixes it afterwards.
 4. **Inspect before editing.** Never edit an existing deck blind:
@@ -30,7 +30,13 @@ Do not mix the two on one file in one pass. If both are needed, `officecli close
    officecli get  deck.pptx '/slide[3]' --json    # exact geometry & formatting
    officecli view deck.pptx screenshot --grid --out contact.png   # then read the PNG
    ```
-5. **Edit** with `add` / `set` / `remove` / `move`, or a `batch` array for anything multi-step.
+5. **Edit.** Past two or three edits, write a JSON batch and replay it:
+   ```bash
+   bash <officecli-setup>/scripts/ocbuild.sh --from <house-style>/templates/yukima/yukima.pptx \
+        deck.pptx build.json
+   ```
+   One atomic pass, no shell quoting, and a rebuild is an edit to the JSON. Single `add` /
+   `set` / `remove` / `move` commands are for probing and one-off fixes.
 6. **Verify.** `view issues`, then re-render and read the PNG.
 7. **Flush.** `officecli close deck.pptx` before `SendUserFile` or `device_commit_files`.
 
@@ -38,16 +44,17 @@ Do not mix the two on one file in one pass. If both are needed, `officecli close
 
 Load on demand — do not read all of them:
 
-| File | When |
+| Where | When |
 |---|---|
 | `house-style/references/layout-catalogue/<name>-layouts.pptx` | Picking a layout. 19 slides, one per named layout, each placeholder labelled with its index and geometry; plus the palette and type reference pages |
 | `house-style/references/slide-craft.md` | **Read before writing slides.** Titles, layout, tables, charts, prose — what makes a slide worth showing |
-| `references/officecli-core.md` | Command surface, layer model (L1 read → L2 DOM → L3 raw XML), batch semantics |
-| `references/officecli-pptx.md` | Full pptx element schema — shapes, charts, tables, animations, connectors, notes |
-| `references/officecli-pitch-deck.md` | Narrative structure for fundraising / investor decks |
-| `references/officecli-morph-ppt.md` | Morph transitions and animated sequences |
+| `house-style/references/grid.md`, `layouts.md` | Exact geometry: the canvas grid, and every layout's placeholder indices |
+| `officecli help pptx <element>` | The pptx schema — shapes, charts, tables, animations, connectors, notes. Authoritative and version-matched |
+| `officecli load_skill pptx` | Upstream's own pptx skill. `pitch-deck` for fundraising narrative, `morph-ppt` for morph transitions |
 
-These are an upstream snapshot and **drift from the installed binary**. When a property name or enum is uncertain, `officecli help pptx <element>` is authoritative.
+The binary serves its schema and upstream's skill docs directly, so nothing here is a
+snapshot that can drift from the installed version. `officecli help` wins over any memory
+of a property name.
 
 ## Traps that cost the most time
 
@@ -56,18 +63,21 @@ These are an upstream snapshot and **drift from the installed binary**. When a p
 - **`\n` in `text=` starts a new paragraph; `\v` is a line break within one.**
 - **Set sizes explicitly on every text shape.** Theme defaults drift between masters. Decks that started life in another tool often carry an Office theme with Calibri as its default — anything not explicitly set to Arial comes out wrong.
 - **Check after structural ops.** After adding a slide, chart, or table, `get` it before stacking more on top.
-- **Clean-slate replay:** `close` → `rm` → `create` → `batch` → `close`. `create` refuses to overwrite, and ignoring its exit code silently replays onto the previous run's file.
+- **Clean-slate replay:** `close` → `rm` → `create` → `batch` → `close`, which is what `ocbuild.sh` does. `create` refuses to overwrite, and ignoring its exit code silently replays onto the previous run's file.
 
 ## Starting from a style template
 
 The most reliable way to get an on-style deck is to inherit the master, theme and layouts rather than rebuilding them. `house-style` ships one template file per style, each with 19 named layouts:
 
 ```bash
-cp <house-style-skill>/templates/ana-blue/ana-blue.pptx deck.pptx
-officecli open  deck.pptx
+bash <officecli-setup>/scripts/ocbuild.sh \
+     --from <house-style>/templates/ana-blue/ana-blue.pptx deck.pptx build.json
 officecli query deck.pptx 'slideLayout' --json          # confirm the 19 layouts arrived
-officecli add   deck.pptx slide --layout 'Title and Content'
 ```
+
+`--from` copies the template and replays the batch into the copy — the template file is
+never opened for writing. Without a batch to hand, `cp` it and `officecli add deck.pptx /
+--type slide --prop layout='Title and Content'` per slide does the same thing more slowly.
 
 Fill placeholders by index — the indices and exact geometry are in `house-style/references/layouts.md`, the grid in `house-style/references/grid.md`. Replace `{{ORG}}`, `{{UNIT}}`, `{{DECK_TITLE}}`, `{{DECK_TITLE_EN}}` and `{{CLASSIFICATION}}` before delivery; a file containing `{{` is a defect.
 

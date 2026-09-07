@@ -22,7 +22,7 @@ Claude 外掛市集 — Office 文件工具、版型樣式範本，以及台灣�
 | Skill | 用途 |
 |---|---|
 | `house-style` | **進入點。** 先選設計範本，再選工具 —— 複製範本、產生新簡報，或直接編輯現有檔案。 |
-| `officecli-setup` | 安裝並驗證 `officecli` 執行檔。全新工作階段請先執行。 |
+| `officecli-setup` | 驗證 `officecli` 執行檔，並負責各 skill 共用的機制 —— schema 查詢、JSON batch 建置、常駐模式、寫回磁碟。全新工作階段請先執行。 |
 | `pptx-cli` | 簡報 —— 建立、編輯、檢查、輸出 PNG。 |
 | `docx-cli` | 報告、備忘錄、董事會文件、核決表單、追蹤修訂。 |
 | `xlsx-cli` | 財務模型、KPI 工作表、樞紐分析、圖表，並支援公式即時運算。 |
@@ -127,10 +127,12 @@ export CLAUDE_CODE_PLUGIN_KEEP_MARKETPLACE_ON_FAILURE=1   # 保留既有複本�
 這是最快也最忠於原樣的做法，因為會直接繼承母片、主題與全部 19 個版面配置：
 
 ```bash
-cp plugins/office-cli/skills/house-style/templates/ana-blue/ana-blue.pptx deck.pptx
-officecli open deck.pptx
-officecli add  deck.pptx slide --layout 'Cover'
+bash plugins/office-cli/skills/officecli-setup/scripts/ocbuild.sh \
+     --from plugins/office-cli/skills/house-style/templates/ana-blue/ana-blue.pptx \
+     deck.pptx build.json
 ```
+
+`build.json` 是一組 `{"command": …}` 項目的 JSON 陣列，以單一不可分割的批次套用；範本只會被複製，不會被開啟寫入。要重做就改這個檔案。陣列格式與逐一下指令的等價寫法見 `skills/officecli-setup/SKILL.md`。
 
 版面配置名稱、版面配置區索引與精確座標，請見 `skills/house-style/references/layouts.md`。
 
@@ -177,15 +179,21 @@ plugins/office-cli/skills/house-style/
 │   ├── layouts.md           全部 19 個版面配置、每個物件、精確座標
 │   ├── pipelines.md         複製範本 · deck-design/deck-build · Word 與 Excel
 │   ├── contrast.md          對比度門檻與各範本的注意事項
-│   └── contrast-matrix.md   程式產生 —— 四套配色的所有對比值
+│   └── contrast-matrix.md   程式產生 —— 五套配色的所有對比值
 ├── scripts/
-│   └── contrast.py          重新產生對比表；--check 驗證色票與 .pptx 是否一致
+│   ├── contrast.py          重新產生對比表；--check 驗證色票與 .pptx 是否一致
+│   ├── build_layout_catalogue.py   重建各範本的版面型錄
+│   ├── check_deck.py · check_doc.py · check_book.py   三種格式的交付門檻
+│   ├── house_prose.py       用詞漂移與 AI 腔調的共用清單
+│   └── test_checks.py       門檻腳本自我檢查
 └── templates/
     ├── README.md            如何新增範本
     ├── ana-blue/            TEMPLATE.md · palette.md · theme.json · ana-blue.pptx
     ├── yukima/              TEMPLATE.md · palette.md · theme.json · yukima.pptx
     ├── reiser-warm/         TEMPLATE.md · palette.md · theme.json · reiser-warm.pptx
-    └── sks-dark/            TEMPLATE.md · palette.md · theme.json · sks-dark.pptx
+    ├── sks-dark/            TEMPLATE.md · palette.md · theme.json · sks-dark.pptx
+    └── sks-blue/            TEMPLATE.md · palette.md · theme.json · theme.dark.json
+                             sks-blue.pptx · sks-blue-dark.pptx
 ```
 
 先讀 `SKILL.md`，再讀其中一個 `TEMPLATE.md`。其餘檔案依需要載入即可。
@@ -277,8 +285,8 @@ mkdir -p plugins/new-plugin/.claude-plugin
 
 ## 維護說明
 
-`office-cli` 隨附上游 OfficeCLI skill 檔案的快照作為參考資料。它們會與實際安裝的 `officecli` 執行檔逐漸產生落差，各 skill 內也已註明 —— 執行時應以 `officecli help <format> <element>` 為準。更新外掛版本時，正是重新拉取上游 skill、確認 schema 是否變動的時機。
+`office-cli` 不再隨附上游 OfficeCLI 文件的快照。`officecli help <format> <element>` 提供 schema，`officecli load_skill <name>` 提供上游自己的 skill，兩者都由實際安裝的執行檔即時輸出，因此不會產生版本落差。更新外掛版本時，請對新的執行檔重跑 `python3 plugins/office-cli/skills/house-style/scripts/test_checks.py` 與 `bash plugins/office-cli/skills/officecli-setup/scripts/setup.sh`。
 
-`skills/*/references/officecli-*.md` 底下的參考檔案來自 [iOfficeAI/OfficeCLI](https://github.com/iOfficeAI/OfficeCLI)，採用 Apache-2.0 授權。詳見 `LICENSE-officecli.txt` 與 `NOTICE-officecli.txt`。
+`office-cli` 封裝 [iOfficeAI/OfficeCLI](https://github.com/iOfficeAI/OfficeCLI)，採用 Apache-2.0 授權。詳見 `LICENSE-officecli.txt` 與 `NOTICE-officecli.txt`。
 
-已針對 officecli **1.0.144** 驗證。
+已針對 officecli **1.0.147** 驗證。

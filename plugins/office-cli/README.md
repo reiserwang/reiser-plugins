@@ -8,27 +8,44 @@ The binary is one npm line away and ships nothing this plugin needs to carry —
 
 That opinion is the plugin. Three things, in order of what they're worth:
 
-1. **Four design templates.** Four `.pptx` masters, 19 named layouts each on one shared 1440 × 810 pt grid, a `theme.json` per template for `deck-build`, and palettes whose every contrast ratio is *generated* by `scripts/contrast.py` rather than typed. Interchangeable at the folder level, so ANA Blue → SKS Dark is a master swap, not a rebuild. None of this exists upstream.
+1. **Five design templates.** Six `.pptx` masters — SKS Blue ships a light and a dark field on one accent — 19 named layouts each on one shared 1440 × 810 pt grid, a `theme.json` per template for `deck-build`, and palettes whose every contrast ratio is *generated* by `scripts/contrast.py` rather than typed. Interchangeable at the folder level, so ANA Blue → SKS Dark is a master swap, not a rebuild. None of this exists upstream.
 2. **Routing.** `house-style` picks the template, then the pipeline. It exists to prevent the two mistakes that cost the most: rebuilding a deck that should have been edited, and running `deck-build` with no spec — which produces a card grid with a title on top, as its own documentation admits.
 3. **Failure modes someone already paid for.** The wrong npm package, the 403 installer, zsh globbing an unquoted `[1]`, the shell eating `$15M`, and officecli's resident documents handing a stale file to whatever reads next. Each is a burned turn or a silently wrong deliverable for a session that hasn't met them before.
 
-The bundled reference docs under `references/` are the weakest part — they drift, and `officecli help` wins. Strip the templates and the routing and what remains is a thin wrapper around that help output, not worth installing.
+What this plugin deliberately does **not** carry is documentation of the binary. `officecli help <format> <element>` and `officecli load_skill <name>` serve the schema and upstream's own skill docs from the installed binary, always version-matched; a vendored snapshot of them could only drift. Strip the templates, the routing and the gates and what remains is a thin wrapper around that help output, not worth installing.
 
 ## Skills
 
 | Skill | Purpose |
 |---|---|
 | `house-style` | **Start here.** Picks the style template, then routes the request: copy the template `.pptx`, run `deck-design` → `deck-build`, or edit in place. Hosts one folder per template under `skills/house-style/templates/`. |
-| `officecli-setup` | Install and verify the binary. Handles the two environment-specific traps below. Run first in any fresh session. |
+| `officecli-setup` | Verify the binary and drive the mechanics the other skills share — schema lookup, JSON batch builds, resident mode, flushing. Handles the two environment-specific traps below. Run first in any fresh session. |
 | `pptx-cli` | Decks — build, edit, audit, render. |
 | `docx-cli` | Reports, memos, board papers, approval routing forms, template merges, tracked changes. |
 | `xlsx-cli` | Financial models, KPI workbooks, pivots, charts, with live formula evaluation. |
 
-Each format skill carries the relevant upstream OfficeCLI skills under `references/` for the full element schema, loaded on demand.
+The format skills carry no vendored schema. They point at `officecli help <format> <element>` for the element schema and `officecli load_skill <name>` for upstream's own skills (`pptx`, `word`, `excel`, `word-form`, `morph-ppt`, `pitch-deck`, `academic-paper`, `data-dashboard`, `financial-model`), both served by the installed binary.
+
+## Scripts, not just prose
+
+Everything a session would otherwise retype as shell is a script:
+
+| Script | Does |
+|---|---|
+| `skills/officecli-setup/scripts/setup.sh` | Version check, wrong-package detection, and a real `create` → `add` → `view` round-trip. Distinct exit codes for missing / wrong package / broken binary |
+| `skills/officecli-setup/scripts/ocbuild.sh` | Clean-slate JSON batch replay — `close` → `rm` → `create` → `batch` → `close`, every exit code checked. `--from <template>` inherits a template's master, theme and layouts without opening the template for writing |
+| `skills/house-style/scripts/check_deck.py` | The deck gate — title column, placeholders, palette, typeface, assembly tells |
+| `skills/house-style/scripts/check_doc.py` | The Word gate — heading outline, placeholders, palette, non-house faces, 中文 with no East Asian font set |
+| `skills/house-style/scripts/check_book.py` | The Excel gate — placeholders, evaluated formula errors, unfrozen headers, palette, red negatives, columns that will render `######` |
+| `skills/house-style/scripts/contrast.py` | Regenerates the contrast matrix; `--check` verifies tokens against the `.pptx` files |
+| `skills/house-style/scripts/build_layout_catalogue.py` | Rebuilds every layout catalogue from the templates |
+| `skills/house-style/scripts/test_checks.py` | Self-check: builds a broken `.docx` and `.xlsx` and asserts each gate still catches its own fixture |
+
+A batch is atomic by default, so a build is one reviewable JSON file that either applies or does not — and a rebuild is an edit to that file rather than a hundred re-typed commands.
 
 ## Style templates
 
-Four ship today. Each is a folder with the same four files, so adding a fifth changes nothing outside its own directory.
+Five ship today. Each is a folder with the same four files, so adding a sixth changes nothing outside its own directory.
 
 | Template | Field | Accent | Use for |
 |---|---|---|---|
@@ -36,24 +53,27 @@ Four ship today. Each is a folder with the same four files, so adding a fifth ch
 | `yukima` 雪間 | cool blue-grey `#F1F6FA` | slate `#4B6F87` | research, ESG and sustainability, long-form analysis |
 | `reiser-warm` | warm cream `#F5F1ED` | coral `#CC785C` | personal work, drafts, internal thinking documents |
 | `sks-dark` | midnight `#1A293A` | amber `#B57319` | screen-first: on-stage and on-screen decks, product walkthroughs, launch sets, operations views |
+| `sks-blue` | white `#FFFFFF` **and** near-black `#080D1A` | blue `#2F55F0` | product and platform material that has to sit next to the live site — two fields, one accent, one grid |
 
 ```
 skills/house-style/
 ├── SKILL.md
 ├── references/          grid.md · layouts.md · pipelines.md · contrast.md
 │                        contrast-matrix.md   (generated — every ratio, all palettes)
-├── scripts/
-│   └── contrast.py      regenerates the matrix; --check verifies tokens vs the .pptx
+├── scripts/             contrast.py · build_layout_catalogue.py · house_prose.py
+│                        check_deck.py · check_doc.py · check_book.py · test_checks.py
 └── templates/
     ├── ana-blue/        TEMPLATE.md · palette.md · theme.json · ana-blue.pptx
     ├── yukima/          TEMPLATE.md · palette.md · theme.json · yukima.pptx
     ├── reiser-warm/     TEMPLATE.md · palette.md · theme.json · reiser-warm.pptx
-    └── sks-dark/        TEMPLATE.md · palette.md · theme.json · sks-dark.pptx
+    ├── sks-dark/        TEMPLATE.md · palette.md · theme.json · sks-dark.pptx
+    └── sks-blue/        TEMPLATE.md · palette.md · theme.json · theme.dark.json
+                         sks-blue.pptx · sks-blue-dark.pptx
 ```
 
-Geometry is shared and identical across templates: **1440 × 810 pt** canvas, 56pt margins, 1328pt content band, 16.2pt gutter, 19 layouts with the same names and order in all four. Restyling a deck from one template to another is a master swap, not a rebuild.
+Geometry is shared and identical across templates: **1440 × 810 pt** canvas, 56pt margins, 1328pt content band, 16.2pt gutter, 19 layouts with the same names and order in every one. Restyling a deck from one template to another is a master swap, not a rebuild.
 
-All four palettes are built on **60-30-10 by area** — 60% field and tints, 30% ink, 10% accent — declared in each `palette.md` and machine-readable in each `theme.json`. Where they differ: coral cannot be text, so Reiser Warm's accent band is fills only; ANA Blue's deep blue and Yukima's slate are both text-safe, so each counts as supporting when it is type and accent when it is area. Yukima's source palette had no ink at all, so both of its inks are derived from the accent hue and marked as such. SKS Dark inverts the whole arrangement onto a dark field and needs three value steps of one warm — amber for area, gold for type, deep amber for the full-bleed dividers — because on a dark ground no single warm carries all three jobs and stays legible.
+All five palettes are built on **60-30-10 by area** — 60% field and tints, 30% ink, 10% accent — declared in each `palette.md` and machine-readable in each `theme.json`. Where they differ: coral cannot be text, so Reiser Warm's accent band is fills only; ANA Blue's deep blue and Yukima's slate are both text-safe, so each counts as supporting when it is type and accent when it is area. Yukima's source palette had no ink at all, so both of its inks are derived from the accent hue and marked as such. SKS Dark inverts the whole arrangement onto a dark field and needs three value steps of one warm — amber for area, gold for type, deep amber for the full-bleed dividers — because on a dark ground no single warm carries all three jobs and stays legible. SKS Blue runs one accent across both a white and a near-black field, so its dark master inverts the `clrMap` rather than redefining the palette.
 
 Every ratio for every palette lives in `references/contrast-matrix.md`, generated by `scripts/contrast.py`. `--check` verifies that no palette document claims a colour its `.pptx` does not contain.
 
@@ -81,6 +101,6 @@ The templates carry geometry and colour only. Organisation names, unit names, pr
 
 ## Attribution
 
-Bundled reference files under `skills/*/references/officecli-*.md` are from [iOfficeAI/OfficeCLI](https://github.com/iOfficeAI/OfficeCLI), Apache-2.0. See `LICENSE-officecli.txt` and `NOTICE-officecli.txt`. They are a snapshot and drift from whatever binary is installed — `officecli help <format> <element>` is always authoritative.
+This plugin wraps [iOfficeAI/OfficeCLI](https://github.com/iOfficeAI/OfficeCLI), Apache-2.0 — see `LICENSE-officecli.txt` and `NOTICE-officecli.txt`. Earlier versions vendored a snapshot of its reference docs; they were removed in 0.12.0 in favour of `officecli help` and `officecli load_skill`, which the installed binary serves version-matched.
 
-Verified against officecli **1.0.144**.
+Verified against officecli **1.0.147**.
