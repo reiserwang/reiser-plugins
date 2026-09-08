@@ -56,6 +56,21 @@ def xlsx_fixture(tmp):
     return path
 
 
+def pptx_fixture(tmp):
+    """A deck the way one is actually built: the shipped template, one slide added,
+    and the starter blank slide left behind. Both defects it carries are inherited
+    from the layout, which is exactly the class the per-slide scan cannot see."""
+    from pptx import Presentation
+    prs = Presentation(HERE.parent / "templates" / "yukima" / "yukima.pptx")
+    lay = next(l for l in prs.slide_layouts if (l.name or "") == "Title and Content")
+    slide = prs.slides.add_slide(lay)
+    if slide.shapes.title is not None:
+        slide.shapes.title.text = "Incidents fell 40% after the MFA rollout"
+    path = tmp / "deck.pptx"
+    prs.save(path)
+    return path
+
+
 def main():
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
@@ -89,6 +104,18 @@ def main():
                         HERE.parent / "references" / "layout-catalogue" / "yukima-layouts.pptx",
                         "--template", "--palette", "Yukima")
         assert code == 0, f"the Yukima catalogue should pass its own palette:\n{out}"
+
+        deck = pptx_fixture(tmp)
+        code, out = run("check_deck.py", deck, "--palette", "Yukima")
+        assert code == 1, f"a deck with an unreplaced footer and a leftover blank slide passed:\n{out}"
+        expect(out,
+               "{{ORG}} was never replaced",
+               "{{DECK_TITLE}} was never replaced",
+               "it is on the layout",
+               "p1: no shapes of its own")
+
+        code, out = run("check_deck.py", deck, "--template")
+        assert code == 0, f"--template should exempt an unfilled deck:\n{out}"
 
     print("all checks pass")
 

@@ -75,13 +75,22 @@ def shape_text(sh):
 
 
 def classify(slide, sw, sh_h):
-    """Return (title_shape, eyebrow_shape, footer_shapes, body_shapes)."""
-    title = eyebrow = None
+    """Return (title_shape, eyebrow_shape, footer_shapes, body_shapes).
+
+    A real title placeholder outranks geometry. `officecli add slide --prop
+    title=…` stamps stock PowerPoint geometry over the layout's slot, and a title
+    recognised only by where it sits would disappear from this gate at exactly the
+    moment it is in the wrong place — the slide would read as having no title at
+    all instead of a misplaced one.
+    """
+    title = eyebrow = ph_title = None
     footers, body = [], []
     for shp in slide.shapes:
         y, h = pt(shp.top), pt(shp.height)
         txt = shape_text(shp)
-        if y >= FOOTER_Y - 12:
+        if txt and shp.is_placeholder and "TITLE" in str(shp.placeholder_format.type):
+            ph_title = shp
+        elif y >= FOOTER_Y - 12:
             footers.append(shp)
         elif abs(y - 48) < 14 and txt:
             eyebrow = shp
@@ -90,7 +99,7 @@ def classify(slide, sw, sh_h):
                 title = shp
         elif y >= CONTENT_BAND[0] - 20:
             body.append(shp)
-    return title, eyebrow, footers, body
+    return (ph_title or title), eyebrow, footers, body
 
 
 def title_lines(text):
@@ -240,6 +249,38 @@ def check_palette(prs, path, palette_name):
         FAIL(f"#{col} is not in {palette_name} — on slide(s) {', '.join(map(str, sorted(pages)))}")
 
 
+def check_inherited_placeholders(prs):
+    """{{…}} that live on a layout rather than a slide.
+
+    In this system the footer, eyebrow and cover furniture sit on the layout, so
+    a deck inherits `{{ORG}} | {{DECK_TITLE}}` and renders it on every page while
+    the slide's own shapes stay clean — invisible to the per-slide scan, and to
+    anyone reading the DOM instead of the render. Only layouts a slide actually
+    uses are checked; the other layouts in the template never render.
+    """
+    # officecli addresses layouts as /slidelayout[N] in presentation order, which is
+    # the order python-pptx lists them in — so the FAIL can name the exact path
+    # rather than leaving the reader to guess N and clobber the wrong shape.
+    nth = {l.part.partname: n for n, l in enumerate(prs.slide_layouts, 1)}
+    where, pages = {}, {}
+    for i, slide in enumerate(prs.slides, 1):
+        lay = slide.slide_layout
+        text = "\n".join(s.text_frame.text for s in lay.shapes if s.has_text_frame)
+        for ph in set(re.findall(r"\{\{[^}]*\}\}", text)):
+            where.setdefault(ph, set()).add(
+                f"/slidelayout[{nth.get(lay.part.partname, '?')}] {lay.name or ''}".strip())
+            pages.setdefault(ph, []).append(i)
+    for ph in sorted(where):
+        pp = pages[ph]
+        shown = ", ".join(f"p{n}" for n in pp[:8]) + ("…" if len(pp) > 8 else "")
+        FAIL(f"{ph} was never replaced — it is on the layout, not the slide, so it "
+             f"renders on {shown} while every slide-level check reads clean. It "
+             f"lives on {'; '.join(sorted(where[ph]))}. List that layout's shapes "
+             f"and set the one that carries it:  officecli get <deck> "
+             f"'/slidelayout[N]' --json   then   officecli set <deck> "
+             f"'/slidelayout[N]/shape[@id=…]' --prop text=…")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("deck")
@@ -262,6 +303,11 @@ def main():
         page_text = "\n".join(shape_text(s) for s in slide.shapes)
         all_text.append((i, page_text))
 
+        if not a.template and not slide.shapes:
+            FAIL(f"p{i}: no shapes of its own — an empty slide. Every template ships "
+                 f"a starter blank slide; remove it once the deck is built:  "
+                 f"officecli remove <deck> '/slide[{i}]'")
+
         if not a.template and "{{" in page_text:
             left = sorted(set(re.findall(r"\{\{[^}]*\}\}", page_text)))
             FAIL(f"p{i}: unreplaced placeholder(s) {' '.join(left)}")
@@ -276,6 +322,14 @@ def main():
         check_fonts(i, slide.shapes)
 
         layout = (slide.slide_layout.name or "").strip().lower()
+        if title_shp is not None and layout not in EXEMPT_LAYOUTS and not a.template:
+            ty, tw = pt(title_shp.top), pt(title_shp.width)
+            if abs(ty - TITLE_Y) > 20 or abs(tw - TITLE_W) > 24:
+                FAIL(f"p{i}: the title box is {tw:.0f}pt wide at y={ty:.0f}pt, not "
+                     f"{TITLE_W:.0f}pt at y={TITLE_Y} — it is off the house grid. "
+                     f"`add slide --prop title=…` stamps stock geometry over the "
+                     f"layout slot; add the placeholder instead:  officecli add "
+                     f"<deck> '/slide[{i}]' --type placeholder --prop phType=title")
         if layout not in EXEMPT_LAYOUTS:
             if not a.template:   # a template or catalogue is unfilled on purpose
                 check_fill_ratio(i, body)
@@ -302,6 +356,11 @@ def main():
 
     for w in house_prose.scan([t for _, t in all_text], "deck"):
         WARN(w)
+
+    if not a.template:
+        if not prs.slides:
+            FAIL("the deck has no slides")
+        check_inherited_placeholders(prs)
 
     if a.palette:
         check_palette(prs, a.deck, a.palette)

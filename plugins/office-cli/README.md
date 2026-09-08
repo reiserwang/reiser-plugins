@@ -34,12 +34,12 @@ Everything a session would otherwise retype as shell is a script:
 |---|---|
 | `skills/officecli-setup/scripts/setup.sh` | Version check, wrong-package detection, and a real `create` → `add` → `view` round-trip. Distinct exit codes for missing / wrong package / broken binary |
 | `skills/officecli-setup/scripts/ocbuild.sh` | Clean-slate JSON batch replay — `close` → `rm` → `create` → `batch` → `close`, every exit code checked. `--from <template>` inherits a template's master, theme and layouts without opening the template for writing |
-| `skills/house-style/scripts/check_deck.py` | The deck gate — title column, placeholders, palette, typeface, assembly tells |
+| `skills/house-style/scripts/check_deck.py` | The deck gate — title column, palette, typeface, assembly tells, and the three defects a template-built deck inherits rather than contains: `{{placeholders}}` living on the layout, a title box off the house grid, the starter blank slide left in |
 | `skills/house-style/scripts/check_doc.py` | The Word gate — heading outline, placeholders, palette, non-house faces, 中文 with no East Asian font set |
 | `skills/house-style/scripts/check_book.py` | The Excel gate — placeholders, evaluated formula errors, unfrozen headers, palette, red negatives, columns that will render `######` |
 | `skills/house-style/scripts/contrast.py` | Regenerates the contrast matrix; `--check` verifies tokens against the `.pptx` files |
 | `skills/house-style/scripts/build_layout_catalogue.py` | Rebuilds every layout catalogue from the templates |
-| `skills/house-style/scripts/test_checks.py` | Self-check: builds a broken `.docx` and `.xlsx` and asserts each gate still catches its own fixture |
+| `skills/house-style/scripts/test_checks.py` | Self-check: builds a broken `.docx`, `.xlsx` and `.pptx` and asserts each gate still catches its own fixture |
 
 A batch is atomic by default, so a build is one reviewable JSON file that either applies or does not — and a rebuild is an edit to that file rather than a hundred re-typed commands.
 

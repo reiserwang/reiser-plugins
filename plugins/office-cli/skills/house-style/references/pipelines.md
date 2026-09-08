@@ -15,7 +15,7 @@ officecli query deck.pptx 'slideLayout' --json          # confirm the 19 layouts
 officecli add  deck.pptx slide --layout 'Title and Content'
 ```
 
-Then fill placeholders by index — the indices are in [`layouts.md`](layouts.md). Replace `{{ORG}}`, `{{UNIT}}`, `{{DECK_TITLE}}`, `{{DECK_TITLE_EN}}` and `{{CLASSIFICATION}}` on the layouts you use, and delete the starter blank slide when the deck is built.
+Then add each slot as a placeholder — `--type placeholder --prop phType=title|body|…` — so it inherits that layout's slot geometry from [`layouts.md`](layouts.md) rather than stock PowerPoint geometry; the `add slide --prop title=` shorthand does not. Replace `{{ORG}}`, `{{UNIT}}`, `{{DECK_TITLE}}`, `{{DECK_TITLE_EN}}` and `{{CLASSIFICATION}}` on the layouts you use, and delete the starter blank slide when the deck is built. `check_deck.py` fails all three.
 
 Confirm property names against `officecli help pptx shape` before trusting `line.color`, `valign` or `align` — those aliases are the ones most likely to have drifted from the bundled reference.
 

@@ -1,6 +1,6 @@
 {
   "name": "office-cli",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Office document toolkit — routes decks to a style template, deck-design/deck-build or the OfficeCLI document DOM, with five interchangeable house-style templates (ANA Blue, Yukima 雪間, Reiser Warm, SKS Dark, SKS Blue) applied by default. Setup, batch builds and per-format delivery gates run as scripts.",
   "keywords": [
     "officecli",

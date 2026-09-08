@@ -62,6 +62,10 @@ of a property name.
 - **Single-quote currency.** `--prop text='$15M'`; inside an unquoted batch heredoc escape as `\$`. Then `view text` and confirm the `$` survived — this fails silently.
 - **`\n` in `text=` starts a new paragraph; `\v` is a line break within one.**
 - **Set sizes explicitly on every text shape.** Theme defaults drift between masters. Decks that started life in another tool often carry an Office theme with Calibri as its default — anything not explicitly set to Arial comes out wrong.
+- **A new slide has no shapes.** `add slide --prop layout=…` sets metadata; it does not
+  materialise the layout's slots. `set '/slide[N]/shape[1]'` on a fresh slide fails with
+  "Shape 1 not found (total: 0)" — and because a batch is atomic, that one item rolls back
+  the entire build. Add placeholders explicitly.
 - **Check after structural ops.** After adding a slide, chart, or table, `get` it before stacking more on top.
 - **Clean-slate replay:** `close` → `rm` → `create` → `batch` → `close`, which is what `ocbuild.sh` does. `create` refuses to overwrite, and ignoring its exit code silently replays onto the previous run's file.
 
@@ -79,7 +83,47 @@ officecli query deck.pptx 'slideLayout' --json          # confirm the 19 layouts
 never opened for writing. Without a batch to hand, `cp` it and `officecli add deck.pptx /
 --type slide --prop layout='Title and Content'` per slide does the same thing more slowly.
 
-Fill placeholders by index — the indices and exact geometry are in `house-style/references/layouts.md`, the grid in `house-style/references/grid.md`. Replace `{{ORG}}`, `{{UNIT}}`, `{{DECK_TITLE}}`, `{{DECK_TITLE_EN}}` and `{{CLASSIFICATION}}` before delivery; a file containing `{{` is a defect.
+### Fill the slots as placeholders, not as text boxes
+
+A layout's slots are **not** materialised when the slide is added — `layout` is metadata
+only, and a fresh slide has zero shapes. Add each slot as a placeholder and it arrives
+carrying that layout's geometry and type:
+
+```json
+[
+ {"command":"add","parent":"/","type":"slide","props":{"layout":"Title and Content"}},
+ {"command":"add","parent":"/slide[2]","type":"placeholder",
+  "props":{"phType":"title","text":"Incidents fell 40% after the MFA rollout"}},
+ {"command":"add","parent":"/slide[2]","type":"placeholder",
+  "props":{"phType":"body","text":"Takeovers dropped from 25 to 15 a month.\nThe rest sit in contractor accounts."}}
+]
+```
+
+`phType`: `title`, `body`, `subtitle`, `picture`, `chart`, `table`, `diagram`, `media`,
+`date`, `footer`, `slidenum`, `header`, `obj`, `clipart`. The title lands at y=76pt,
+1328pt wide; the body at y=172 — the grid in `layouts.md`, inherited rather than retyped,
+which is the whole reason to start from a template. Address them afterwards by role:
+`'/slide[2]/shape[@phType=title]'`.
+
+**Do not** reach for the `add slide --prop title=… --prop text=…` shorthand on a house
+deck. It emits the two placeholders with *stock PowerPoint* geometry — 828pt wide at
+y=29 — written explicitly onto the slide, which overrides the layout slot. It renders
+close enough to look right and wraps at the wrong width. `check_deck.py` fails it.
+
+Every template ships a **starter blank slide**. Content therefore begins at `/slide[2]`,
+and the blank one must go before delivery: `officecli remove deck.pptx '/slide[1]'`.
+
+The five `{{placeholders}}` — `{{ORG}}`, `{{UNIT}}`, `{{DECK_TITLE}}`, `{{DECK_TITLE_EN}}`,
+`{{CLASSIFICATION}}` — live on the **layouts**, not on any slide, so they render on every
+page while the slide's own shapes read clean. Replace them on each layout the deck uses:
+
+```bash
+officecli get deck.pptx '/slidelayout[4]' --json     # find the shape carrying it
+officecli set deck.pptx '/slidelayout[4]/shape[@id=104]' --prop text='新光保全  |  Q3 資安回顧'
+```
+
+A delivered file containing `{{` is a defect; `check_deck.py` now fails on it and names
+the layout path.
 
 When starting from an **existing** deck instead, trim rather than rebuild:
 
@@ -95,11 +139,16 @@ Render a contact sheet and read it before every handoff. Grid drift, overflowing
 
 ```bash
 officecli view deck.pptx issues                                   # overflow, stale fields
+officecli save deck.pptx                                          # FIRST — see below
 python3 <house-style>/scripts/check_deck.py deck.pptx \
         --palette 'ANA Blue'                                      # content, craft, palette
 officecli view deck.pptx screenshot --grid --out contact.png      # then read the PNG
 officecli close deck.pptx
 ```
+
+`save` before the gate is not optional. `check_deck.py` reads the file with python-pptx,
+so it sees the last flushed state, not the resident's. Skip it and you are grading the
+previous version of the deck — a green run on a file that no longer exists.
 
 `check_deck.py` is the gate the other two cannot cover. It prints the title column for a
 read-through, and fails the deck on an unreplaced `{{placeholder}}`, on a title that promises

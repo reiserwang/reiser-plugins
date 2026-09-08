@@ -62,11 +62,18 @@ is the bare verb, with the verb's arguments as sibling fields:
 ```json
 [
   {"command":"add","parent":"/","type":"slide","props":{"layout":"Title and Content"}},
-  {"command":"add","parent":"/slide[1]","type":"shape",
-   "props":{"text":"Q3 review","x":"2cm","y":"3cm","width":"20cm","fontSize":"30"}},
-  {"command":"set","path":"/slide[1]/shape[1]","props":{"bold":"true"}}
+  {"command":"add","parent":"/slide[1]","type":"placeholder",
+   "props":{"phType":"title","text":"Q3 review"}},
+  {"command":"set","path":"/slide[1]/shape[@phType=title]","props":{"bold":"true"}}
 ]
 ```
+
+Note what the second item is **not**: a `shape` with hand-written coordinates. A slide
+added with `layout` has zero shapes — the layout's slots are metadata until a placeholder
+materialises them — so `set '/slide[1]/shape[1]'` here would fail with "Shape 1 not found
+(total: 0)" and, a batch being atomic, take the whole build down with it. A placeholder
+arrives carrying its layout slot's geometry, which is how a deck stays on the grid without
+a single coordinate in the JSON.
 
 Write that to a file, then:
 
@@ -93,7 +100,9 @@ autosave, or `OFFICECLI_RESIDENT_FLUSH=each|auto|<seconds>|off`). For a long bui
 is one process instead of a hundred. officecli's own reads always see uncommitted edits
 — the failure mode is a *different* program reading a stale file, so `save` (flush, keep
 warm) or `close` (flush, release) before python-docx/openpyxl, a renderer, `SendUserFile`
-or `device_commit_files` touches it.
+or `device_commit_files` touches it. **The `check_*.py` gates are such a program.** Run
+`save` before them or they grade the last flushed version and pass a deck you have since
+changed.
 
 ## 4. Notes that prevent most failures
 
