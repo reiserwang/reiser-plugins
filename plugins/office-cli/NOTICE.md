@@ -35,3 +35,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## diagram-design
+
+`skills/diagram-design/references/` and `skills/diagram-design/scripts/self_check.py`,
+`drawio_extract.py`, `mermaid_extract.py` are vendored verbatim from **diagram-design** v2.6 —
+https://github.com/cathrynlavery/diagram-design
+
+`skills/diagram-design/scripts/make_profile.py` is new work for this system: it derives a
+diagram-design style guide from a `house-style` template's `theme.json` so the palettes cannot
+drift apart. Upstream's `assets/` (158 example HTML files) is not bundled — upstream's own style
+guide notes they were built under an earlier skin.
+
+```
+MIT License
+
+Copyright (c) 2025 Cathryn Lavery
+```

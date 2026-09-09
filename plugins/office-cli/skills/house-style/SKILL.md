@@ -54,6 +54,7 @@ Adding a template means adding a folder with those four files and one row to the
 | **Edit / restyle / audit an existing** `.pptx` | `pptx-cli` directly. Never rebuild a deck that already exists. |
 | A **report, memo, board paper, meeting record** | `docx-cli` ([`references/pipelines.md`](references/pipelines.md) § B) |
 | A **financial model, KPI workbook, budget** | `xlsx-cli` |
+| A **diagram** — architecture, process, risk, data flow, hierarchy, timeline | [`diagram-design`](../diagram-design/SKILL.md). Generate the profile from this template's `theme.json` first: `python3 ../diagram-design/scripts/make_profile.py <template>`. |
 | "Which layout should this be?" | [`references/layouts.md`](references/layouts.md) — 19 named layouts with exact geometry |
 
 Two routing mistakes account for most wasted work:
